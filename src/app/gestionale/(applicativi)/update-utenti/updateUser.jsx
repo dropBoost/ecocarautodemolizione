@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 
 export default function UpdateUser({ user }) {
     
-  const [displayName, setDisplayName] = useState(user.user_metadata?.display_name ?? '')
+  const [displayName, setDisplayName] = useState(user.raw_user_meta_data?.display_name ?? '')
   const [ruolo, setRuolo] = useState(user.user_metadata?.ruolo ?? '')
   const [telefono, setTelefono] = useState(user.user_metadata?.telefono ?? '')
 
