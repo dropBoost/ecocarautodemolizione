@@ -249,10 +249,10 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 								</div>
 							</div>
 						</div>
-						{/* INSERIMENTO AUTISTA */}
+						{/* INSERIMENTO AUTISTA
 						<div className="flex flex-col gap-4 w-full bg-neutral-950 p-5 rounded-2xl">
 							ciaoii
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</>
