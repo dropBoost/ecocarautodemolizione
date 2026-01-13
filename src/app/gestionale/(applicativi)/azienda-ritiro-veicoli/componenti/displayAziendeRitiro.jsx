@@ -12,7 +12,7 @@ import { FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient"
 
-export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato, sdi, email, tel, mobile, autista, sedeLegale, rules, setStatusAziende}) {
+export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato, sdi, email, tel, mobile, sedeLegale, rules, setStatusAziende}) {
     
     const [statoAzienda, setStatoAzienda] = useState(stato)
 
@@ -70,7 +70,6 @@ export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato
                 <div className="flex flex-wrap justify-start items-center h-full gap-1 lg:border-s lg:ps-3">
                     <LinkComponentContact label="telefono" icon={<BsFillTelephoneFill/>} info={tel} linkHref={`tel:`}/>
                     <LinkComponentContact label="mobile" icon={<TbBrandWhatsappFilled/>} info={mobile} linkHref={`https://wa.me/`}/>
-                    <LinkComponentContact label="autista" icon={<GiSteeringWheel/>} info={autista} linkHref={`tel:`}/>
                     <LinkComponentContact label="email" icon={<MdEmail/>} info={email} linkHref={`mailto:`}/>
                 </div>
             </div>

@@ -4,9 +4,14 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'mouyhnbinwslyzwhtmye.supabase.co',
+        hostname: 'swyuqlczsuplabrzhbnj.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: "https",
+        hostname: "ecocarautodemolizione.it",
+        pathname: "/**",
       },
     ],
   },

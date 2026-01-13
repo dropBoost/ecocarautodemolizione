@@ -144,7 +144,7 @@ export default function ElencoAziende({ onDisplay, statusAziende, setStatusAzien
             <DisplayAziendeRitiro key={uuid}
             ragioneSociale={a?.ragione_sociale_arv} piva={a?.piva_arv} sdi={a?.sdi_arv} uuid={uuid}
             sedeLegale={`${a?.indirizzo_legale_arv} - ${a?.cap_legale_arv} ${a?.citta_legale_arv} ${a?.provincia_legale_arv}`}
-            tel={a?.telefono_arv} mobile={a?.mobile_arv} autista={a?.mobile_autista_arv} email={a?.email_arv}
+            tel={a?.telefono_arv} mobile={a?.mobile_arv} email={a?.email_arv}
             rules={a.ruolo.alias_rules} stato={a?.attiva_arv} setStatusAziende={setStatusAziende}
             />
           );

@@ -45,7 +45,6 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
     email: "",
     telefono: "",
     mobile: "",
-    mobileAutista: "",
     rules:"",
     piva:"",
     password:"",
@@ -238,7 +237,6 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
       provincia_operativa_arv: formData.provinciaOperativa || null,
       indirizzo_operativa_arv: formData.indirizzoOperativa || null,
       mobile_arv: formData.mobile || null,
-      mobile_autista_arv: formData.mobileAutista || null,
       email_arv: formData.email || null,
       telefono_arv: formData.telefono || null,
       attiva_arv: formData.attiva,
@@ -320,7 +318,6 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
         email: "",
         telefono: "",
         mobile: "",
-        mobileAutista: "",
         rules: "",
         piva: "",
         attiva: false,
@@ -384,7 +381,6 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
         <FormField nome="email" label='Email' value={formData.email} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChange} type='email'/>
         <FormField nome="telefono" label='Telefono' value={formData.telefono} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChangeNumerico} type='tel'/>
         <FormField nome="mobile" label='Mobile' value={formData.mobile} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChangeNumerico} type='tel'/>
-        <FormField nome="mobileAutista" label='Mobile Autista' value={formData.mobileAutista} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChangeNumerico} type='tel'/>
         <FormField nome="password" label='Password' value={formData.password} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChange} type='text'/>
         </div>
         <div className="col-span-12 flex justify-end">
