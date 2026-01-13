@@ -277,7 +277,7 @@ export default function RitiroVeicoloDOC(props) {
                     <View style={styles.sectionCol}>
                       <Text style={styles.value}>
                         Per verificare lo stato d'avanzemento della tua pratica e per scaricare il certificato di demolizione una volta completata
-                        scansiona il QR oppure visita il sito ecocarautodemolizioni.it e clicca sulla apposita area dedicata ed inserisci i dati richiesti.</Text>
+                        scansiona il QR oppure visita il sito ecocarautodemolizione.it e clicca sulla apposita area dedicata ed inserisci i dati richiesti.</Text>
                       {qrDataUrl ? <Image style={styles.qrImg} src={qrDataUrl} /> : null}
                     </View>
                   </View>
