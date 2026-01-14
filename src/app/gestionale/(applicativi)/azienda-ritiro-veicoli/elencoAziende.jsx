@@ -72,7 +72,6 @@ export default function ElencoAziende({ onDisplay, statusAziende, setStatusAzien
         email_arv,
         telefono_arv,
         mobile_arv,
-        mobile_autista_arv,
         attiva_arv,
         created_at_arv,
         uuid_rules,
@@ -93,15 +92,18 @@ export default function ElencoAziende({ onDisplay, statusAziende, setStatusAzien
 
       const { data, error, count } = await query
       if (error) {
-        console.error("Errore:", error)
-        setAziendaRitiroVeicoli([])
-        setTotalCount(0)
-        return
+        console.error("Errore (message):", error.message);
+        console.error("Errore (details):", error.details);
+        console.error("Errore (hint):", error.hint);
+        console.error("Errore (code):", error.code);
+        console.error("Errore (raw):", error); // lascialo comunque
+        setAziendaRitiroVeicoli([]);
+        setTotalCount(0);
+        return;
       }
       setAziendaRitiroVeicoli(data ?? [])
       setTotalCount(count ?? 0)
 
-      // se filtro/pagina porta fuori range, riporta a ultima pagina valida
       if ((count ?? 0) > 0 && page > Math.ceil((count ?? 0) / pageSize)) {
         setPage(1)
       }
@@ -111,6 +113,8 @@ export default function ElencoAziende({ onDisplay, statusAziende, setStatusAzien
   }, [dataSearchSubmit, page, pageSize, from, to, statusAziende])
 
   const iconaCestino = <FaUserSlash/>
+
+  console.log(aziendaRitiroVeicoli)
 
   return (
     <div className={`${onDisplay === 'on' ? '' : 'hidden'}

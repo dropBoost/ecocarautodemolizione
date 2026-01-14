@@ -10,9 +10,8 @@ export default function UpdateUtentiClient({ users }) {
     return <p className="text-sm text-muted-foreground">Verifica permessi…</p>
   }
 
-  const ruoloCorrente = utente?.user_metadata?.ruolo || utente?.ruolo
+  const ruoloCorrente = utente?.user_metadata?.ruolo
 
-  // opzionale: blocco accesso se non admin/superadmin
   if (ruoloCorrente !== 'superadmin') {
     return <p className="text-sm text-red-500">Non sei autorizzato a gestire gli utenti.</p>
   }

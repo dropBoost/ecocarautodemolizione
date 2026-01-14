@@ -48,8 +48,7 @@ export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato
     function onOff() {
     
     }
-
-    console.log(statoAzienda, "onOff")
+    
     return (
         <>
         <div className="flex flex-col min-h-0 w-full border justify-between border-neutral-200 dark:border-neutral-700 rounded-xl p-3 gap-2">
