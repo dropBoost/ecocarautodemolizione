@@ -76,19 +76,9 @@ export const moduliGestionale = [
     {name:'ritiri-demolizioni', link:'/gestionale/ritiri-demolizioni', linkActive:'ritiri-demolizioni', icon: ICON3, label:'Ritiri Demolizioni', attivo:true, level:['admin', 'superadmin', 'company']},
     {name:'gestione-trasporto', link:'/gestionale/gestione-trasporto', linkActive:'gestione-trasporto', icon: ICON2, label:'Gestione Trasporto', attivo:true, level:['admin', 'superadmin']},
     {name:'trasporto-veicoli', link:'/gestionale/trasporto-veicoli', linkActive:'trasporto-veicoli', icon: ICON13, label:'Trasporto Veicoli', attivo:true, level:['transporter','admin','superadmin']},
-    {name:'demolizioni', link:'/gestionale/certificati-demolizione', linkActive:'demolizioni', icon: ICON4, label:'Certificati Demolizione', attivo:true, level:['admin', 'superadmin']},
+    {name:'demolizioni', link:'/gestionale/certificati-demolizione', linkActive:'demolizioni', icon: ICON4, label:'Certificati Demolizione', attivo:true, level:['admin', 'superadmin', 'company']},
     {name:'veicoli', link:'/gestionale/modelli-veicoli', linkActive:'modelli-veicoli', icon: ICON6, label:'Veicoli', attivo:true, level:['admin', 'superadmin']},
     {name:'utenti', link:'/gestionale/update-utenti', linkActive:'update-utenti', icon: ICON11, label:'Utenti', attivo:false, level:['superadmin']},
-  ]
-
-export const moduliAccount = [
-    {name:'ritiri-demolizioni', link:'/account/ritiri-demolizioni', linkActive:'ritiri-demolizioni', icon: ICON3, label:'Ritiri Demolizioni', attivo:true, level:['company', 'superadmin']},
-    {name:'veicoli-ritirati', link:'/account/veicoli-ritirati', linkActive:'veicoli-ritirati', icon: ICON4, label:'Veicoli Ritirati', attivo:true, level:['company', 'superadmin']},
-    {name:'aiuto', link:'/account/aiuto', linkActive:'aiuto', icon: ICON4, label:'Aiuto', attivo:true, level:['company', 'superadmin']},
-  ]
-
-export const moduliTrasportatori = [
-    {name:'trasporto-veicoli', link:'/account/ritiro-veicoli', linkActive:'ritiro-veicoli', icon: ICON3, label:'Ritiro Veicoli', attivo:true, level:['transporter', 'superadmin']},
   ]
 
 // MODULI INFO 

@@ -18,39 +18,49 @@ export function AdminProvider({ children }) {
   const [azienda, setAzienda] = useState(null)
   const [checking, setChecking] = useState(true)
 
-  useEffect(() => {
-    async function checkAuth() {
-      const { data, error } = await supabase.auth.getSession()
+useEffect(() => {
+  let alive = true;
 
-      if (error) {
-        console.error(error)
-        setChecking(false)
-        return
-      }
+  async function checkAuth() {
+    const { data, error } = await supabase.auth.getSession();
 
-      if (!data.session) {
-        setChecking(false)
-        router.push('/admin/login')
-        return
-      }
+    if (!alive) return;
 
-      setUtente(data.session.user)
-      setChecking(false)
-
-      const rules = data?.session.user.user_metadata.ruolo
-
-      if (rules !== 'company' && rules !== 'admin' && rules !== 'superadmin' && rules !== 'transporter') {
-        router.push('/admin/login')
-        return
-      } else if (rules == 'company'){
-        router.push('/gestionale')
-      } else if (rules == 'admin' && rules == 'superadmin' && rules == 'transporter'){
-        router.push('/gestionale')
-      } 
+    if (error) {
+      console.error(error);
+      setChecking(false);
+      return;
     }
 
-    checkAuth()
-  }, [router])
+    if (!data.session) {
+      setUtente(null);
+      setChecking(false);
+      router.push('/admin/login');
+      return;
+    }
+
+    const user = data.session.user;
+    const ruolo = user?.user_metadata?.ruolo;
+
+    // ✅ ruoli ammessi
+    const allowed = ['company', 'admin', 'superadmin', 'transporter'];
+
+    if (!allowed.includes(ruolo)) {
+      setUtente(null);
+      setChecking(false);
+      router.push('/admin/login');
+      return;
+    }
+
+    // ✅ ok: non redirectare qui
+    setUtente(user);
+    setChecking(false);
+  }
+
+  checkAuth();
+
+  return () => { alive = false; };
+}, [router]);
 
   // DATI AZIENDA
   useEffect(() => {

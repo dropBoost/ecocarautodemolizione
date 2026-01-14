@@ -6,14 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 import DisplayAziendeElencoDemolizioni from "./componenti/displayAziendeElencoDemolizioni";
+import { useAdmin } from "@/app/admin/components/AdminContext";
 
 export default function ElencoCertificatiDemolizione({ onDisplay, statusAziende, setStatusAziende }) {
   const [aziendaRitiroVeicoli, setAziendaRitiroVeicoli] = useState([])
   const [praticheAperte, setPraticheAperte] = useState([])
+	const utente = useAdmin()
+	const role = utente?.utente?.user_metadata?.ruolo;
+	const uuidUtente = utente?.utente?.id;
+	const [ruoliUtente, setRuoliUtente] = useState([]);
+
   // ricerca
   const [dataSearch, setDataSearch] = useState("")        // testo digitato
   const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
-
   const [countDemolizione, setCountDemolizione] = useState()
 
   // paginazione
@@ -48,37 +53,77 @@ export default function ElencoCertificatiDemolizione({ onDisplay, statusAziende,
     setPage(1)
   }
 
+  // CARICAMENTO RUOLI
   useEffect(() => {
-    const fetchData = async () => {
-      let query = supabase
-        .from("azienda_ritiro_veicoli")
-        .select(`
-        uuid_azienda_ritiro_veicoli,
-        ragione_sociale_arv,
-        piva_arv
-        `, { count: "exact" })
-        .order("ragione_sociale_arv", { ascending: false })
-        .range(from, to)
+    (async () => {
+      const { data: ruoliData, error } = await supabase
+        .from("rules_user")
+        .select("*")
+        .order("alias_rules", { ascending: false });
 
-      if (dataSearchSubmit) {
-        const q = escapeLike(dataSearchSubmit)
-        query = query.or(
-          `ragione_sociale_arv.ilike.%${q}%,piva_arv.ilike.%${q}%`
-        );
-      }
-
-      const { data, error, count } = await query
       if (error) {
-        console.error("Errore:", error)
-        setAziendaRitiroVeicoli([])
-        return
+        console.error(error);
+        toast.error("Errore nel caricamento personal Trainer");
+        return;
       }
-      setAziendaRitiroVeicoli(data ?? [])
+      setRuoliUtente(ruoliData ?? []);
+    })();
+  }, []);
 
-    }
+	const isAdmin = role === "admin" || role === "superadmin";
+  const isCompany = role === "company";
 
-    fetchData()
-  }, [dataSearchSubmit, page, pageSize, from, to, statusAziende])
+	useEffect(() => {
+		if (!role) return;
+		if (!uuidUtente) return;
+
+		const fetchData = async () => {
+			let query = supabase
+				.from("azienda_ritiro_veicoli")
+				.select(
+					`
+					uuid_azienda_ritiro_veicoli,
+					ragione_sociale_arv,
+					piva_arv
+					`,
+					{ count: "exact" }
+				)
+				.order("ragione_sociale_arv", { ascending: false })
+				.range(from, to);
+
+			if (isCompany) {
+				query = query.eq("uuid_azienda_ritiro_veicoli", uuidUtente);
+			}
+
+			if (dataSearchSubmit) {
+				const q = escapeLike(dataSearchSubmit);
+				query = query.or(
+					`ragione_sociale_arv.ilike.*${q}*,piva_arv.ilike.*${q}*`
+				);
+			}
+
+			const { data, error, count } = await query;
+
+			if (error) {
+				console.error("Errore aziende:", error.message ?? error);
+				setAziendaRitiroVeicoli([]);
+				setTotalCount?.(0);
+				return;
+			}
+
+			setAziendaRitiroVeicoli(data ?? []);
+		};
+
+		fetchData();
+	}, [
+		role,
+		uuidUtente,
+		isCompany,
+		dataSearchSubmit,
+		statusAziende,
+		from,
+		to,
+	]);
 
   //PRATICHE APERTE
   useEffect(() => {
@@ -100,7 +145,7 @@ export default function ElencoCertificatiDemolizione({ onDisplay, statusAziende,
 
   }, [statusAziende]);
 
-  //CERTIFICATI DEMOLIZIONE
+  //CERTIFICATI DEMOLIZIONE COUNT
   useEffect(() => {
 
     (async () => {

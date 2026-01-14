@@ -21,8 +21,7 @@ export default function CertificatoDemolizione ({
     altroDocDemolizione,
     datiV,
     uuidDemolizione,
-    sSPage,
-    sPage
+    setRefreshKey
   }) {
 
   // 🔹 Stato form per UPDATE
@@ -174,11 +173,10 @@ export default function CertificatoDemolizione ({
     console.log("Aggiornato:", data)
     alert("Demolizione aggiornata con successo!")
 
-    sSPage(prev=>!prev)
-
+    setRefreshKey(k => k + 1);
   }
 
-  async function handleRemoveDocumento(url, type) {
+  async function handleRemoveDocumento(url, type, uuidVeicolo) {
 
     const extracted = extractBucketAndPath(url)
 
@@ -232,7 +230,7 @@ export default function CertificatoDemolizione ({
       return
     }
 
-    sSPage(prev=>!prev)
+    setRefreshKey(k => k + 1);
 
     console.log("Aggiornato:", data)
 

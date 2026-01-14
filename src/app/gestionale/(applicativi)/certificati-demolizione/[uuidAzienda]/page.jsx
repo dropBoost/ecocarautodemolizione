@@ -19,18 +19,6 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
     const [dataSearch, setDataSearch] = useState("")        // testo digitato
     const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
 
-    // paginazione
-    const [page, setPage] = useState(1)
-    const [pageSize, setPageSize] = useState(20)
-    const [totalCount, setTotalCount] = useState(0)
-
-    // calcolo indici per Supabase range (inclusivo)
-    const { from, to } = useMemo(() => {
-        const start = (page - 1) * pageSize
-        return { from: start, to: start + pageSize - 1 }
-    }, [page, pageSize])
-
-    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
     const escapeLike = (s) => s.replace(/([%_\\])/g, "\\$1")
 
@@ -55,44 +43,59 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
     }, [uuidAzienda])   
 
     //CERTIFICATI DEMOLIZIONE
-    useEffect(() => {
+		useEffect(() => {
+			if (!uuidAzienda) return;
 
-    if (!uuidAzienda) return;
+			(async () => {
+				let query = supabase
+					.from("certificato_demolizione")
+					.select(
+						`
+						*,
+						dati_veicolo_ritirato!inner(
+							uuid_veicolo_ritirato,
+							targa_veicolo_ritirato,
+							vin_veicolo_ritirato,
+							mobile_detentore,
+							email_detentore,
+							created_at_veicolo_ritirato,
+							pratica_completata,
+							uuid_azienda_ritiro_veicoli,
+							azienda_ritiro_veicoli(
+								uuid_azienda_ritiro_veicoli,
+								ragione_sociale_arv,
+								piva_arv,
+								citta_operativa_arv,
+								provincia_operativa_arv,
+								attiva_arv
+							)
+						)
+					`,
+						{ count: "exact" }
+					)
+					.eq("dati_veicolo_ritirato.uuid_azienda_ritiro_veicoli", uuidAzienda)
+					.order("created_at_certificato_demolizione", { ascending: false })
 
-      (async () => {
-        const { data, error } = await supabase
-          .from("certificato_demolizione")
-          .select(`
-            *,
-            dati_veicolo_ritirato!inner(
-              uuid_veicolo_ritirato,
-              targa_veicolo_ritirato,
-              vin_veicolo_ritirato,
-              mobile_detentore,
-              email_detentore,
-              created_at_veicolo_ritirato,
-              pratica_completata,
-              uuid_azienda_ritiro_veicoli,
-              azienda_ritiro_veicoli(
-                uuid_azienda_ritiro_veicoli,
-                ragione_sociale_arv,
-                piva_arv,
-                citta_operativa_arv,
-                provincia_operativa_arv,
-                attiva_arv
-              )
-            )
-          `)
-          .eq("dati_veicolo_ritirato.uuid_azienda_ritiro_veicoli", uuidAzienda)
+				if (dataSearchSubmit) {
+					const q = escapeLike(dataSearchSubmit).replaceAll(",", " ");
 
-        if (error) {
-          console.error("ERRORE CERTIFICATI DEMOLIZIONE:", error)
-          return
-        }
+					// ✅ un solo OR, con prefisso per i campi della tabella inner
+					query = query.ilike("dati_veicolo_ritirato.targa_veicolo_ritirato", `%${q}%`)
+				}
 
-        setCertificatiDemolizione(data ?? [])
-      })()
-    }, [uuidAzienda])
+				const { data, error, count } = await query;
+
+				if (error) {
+					console.error("ERRORE (message):", error.message);
+					console.error("ERRORE (details):", error.details);
+					console.error("ERRORE (hint):", error.hint);
+					console.error("ERRORE (code):", error.code);
+					return;
+				}
+
+				setCertificatiDemolizione(data ?? []);
+			})();
+		}, [uuidAzienda, dataSearchSubmit]);
 
     // handlers ricerca
     function handleChangeSearchBar(e) {
@@ -100,18 +103,15 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
     }
     function handleSearchClick() {
         setDataSearchSubmit(dataSearch.trim())
-        setPage(1) // 🔑 reset pagina quando applichi filtro
     }
     function handleSearchKeyDown(e) {
         if (e.key === "Enter") {
         setDataSearchSubmit(dataSearch.trim())
-        setPage(1)
         }
     }
     function handleReset() {
         setDataSearch("")
         setDataSearchSubmit("")
-        setPage(1)
     }
 
   return (
