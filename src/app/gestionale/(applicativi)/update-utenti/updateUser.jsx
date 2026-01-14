@@ -1,7 +1,7 @@
-// src/app/gestionale/(applicativi)/update-utenti/updateUser.jsx
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { updateUserMetadataById } from './updateUserMetadataById'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
 export default function UpdateUser({ user }) {
-    
+  const router = useRouter()
+
   const [displayName, setDisplayName] = useState(user.user_metadata?.display_name ?? '')
   const [ruolo, setRuolo] = useState(user.user_metadata?.ruolo ?? '')
   const [telefono, setTelefono] = useState(user.user_metadata?.telefono ?? '')
@@ -20,7 +21,11 @@ export default function UpdateUser({ user }) {
     startTransition(async () => {
       try {
         const res = await updateUserMetadataById(formData)
+
         toast.success(`Utente aggiornato: ${res.user?.email ?? ''}`)
+
+        // ✅ Ricarica i Server Components / dati server-side (in prod è fondamentale)
+        router.refresh()
       } catch (err) {
         console.error(err)
         toast.error(err.message ?? 'Errore aggiornamento utente')

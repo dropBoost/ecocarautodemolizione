@@ -1,7 +1,7 @@
-// src/app/gestionale/(applicativi)/update-utenti/updateUserMetadataById.js
 'use server'
 
 import { supabaseAdmin } from '@/lib/supabaseAdminClient'
+import { revalidatePath } from 'next/cache'
 
 export async function updateUserMetadataById(formData) {
   const userId = formData.get('userId')
@@ -9,26 +9,18 @@ export async function updateUserMetadataById(formData) {
   const ruolo = formData.get('ruolo')
   const telefono = formData.get('telefono')
 
-  if (!userId) {
-    throw new Error('userId mancante')
-  }
+  const { data, error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+    user_metadata: {
+      display_name: displayName || undefined,
+      ruolo: ruolo || undefined,
+      telefono: telefono || undefined,
+    },
+  })
 
-  // Aggiorno direttamente l'utente tramite Admin API
-  const { data, error: updateError } =
-    await supabaseAdmin.auth.admin.updateUserById(userId, {
-      user_metadata: {
-        display_name: displayName ?? undefined,
-        ruolo: ruolo ?? undefined,
-        telefono: telefono ?? undefined,
-        // qui puoi aggiungere altre chiavi se vuoi:
-        // uuid_rules: '...',
-      },
-    })
+  if (error) throw new Error(`Errore aggiornamento utente: ${error.message}`)
 
-  if (updateError) {
-    console.error(updateError)
-    throw new Error(`Errore aggiornamento utente: ${updateError.message}`)
-  }
+  // 🔥 fondamentale in produzione (cache App Router)
+  revalidatePath('/gestionale/update-utenti')
 
   return data
 }
