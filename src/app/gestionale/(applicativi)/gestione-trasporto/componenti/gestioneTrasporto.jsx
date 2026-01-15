@@ -94,6 +94,10 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
       const { name, value } = e.target
       setFormDataAutista({ ...formDataAutista, [name]: value.toUpperCase().trim() })
   }
+  function handleChangePsw(e) {
+      const { name, value } = e.target
+      setFormDataAutista({ ...formDataAutista, [name]: value.trim() })
+  }
   async function handleSubmitCamion(e) {
     e.preventDefault()
 
@@ -284,8 +288,8 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
               <FormField nome="cognomeAutista" label='Cognome' value={formDataAutista.cognomeAutista} basis="lg:basis-3/12 basis-6/12 px-2" onchange={handleChangeAutista} type='text'/>
               <FormField nome="numeroPatateAutista" label='N° Patente' value={formDataAutista.numeroPatateAutista} basis="lg:basis-3/12 basis-6/12 px-2" onchange={handleChangeAutista} type='text'/>
               <FormField nome="mobileAutista" label='Telefono' value={formDataAutista.mobileAutista} basis="lg:basis-3/12 basis-6/12 px-2" onchange={handleChangeAutista} type='text'/>
-              <FormField nome="emailAutista" label='Email' value={formDataAutista.emailAutista} basis="lg:basis-4/12 basis-full px-2" onchange={handleChangeAutista} type='email'/>
-              <FormField nome="passwordAutista" label='Password' value={formDataAutista.passwordAutista} basis="lg:basis-3/12 basis-full px-2" onchange={handleChangeAutista} type='password'/>
+              <FormField nome="emailAutista" label='Email' value={formDataAutista.emailAutista} basis="lg:basis-4/12 basis-full px-2" onchange={handleChangePsw} type='email'/>
+              <FormField nome="passwordAutista" label='Password' value={formDataAutista.passwordAutista} basis="lg:basis-3/12 basis-full px-2" onchange={handleChangePsw} type='password'/>
             </form>
           </div>
         </div>
