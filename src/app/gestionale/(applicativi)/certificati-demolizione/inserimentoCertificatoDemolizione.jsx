@@ -277,7 +277,7 @@ export default function InserimentoCertificatiDemolizione({onDisplay, statusAzie
 							/>
 							<FormFileUpload
 								nome="altroDocumentoDemolizione"
-								label="Altro Documento"
+								label="Radiazione PRA"
 								bucket="documentiveicoli"
 								accept="image/*,application/pdf"
 								campo="altro"

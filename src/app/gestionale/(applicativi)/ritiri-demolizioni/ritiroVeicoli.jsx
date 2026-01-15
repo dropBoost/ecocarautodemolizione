@@ -330,7 +330,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     const twoOk =
       compilato(fd.targa) &&
       fd.targa.length == 7 &&
-      ((fd.vinLeggibile == true && compilato(fd.vin) && fd.vin.length == 17) ||
+      ((fd.vinLeggibile == true && compilato(fd.vin) && fd.vin.length == 5) ||
         fd.vinLeggibile == false) &&
       compilato(fd.anno) &&
       fd.anno > 1900 &&
@@ -601,7 +601,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
                 {anyUploading ? (
                   "Caricamento in corso..."
                 ) : (
-                  <FaPlusSquare className="font-bold text-dark dark:text-white" />
+                  <FaPlusSquare className="font-bold text-white dark:text-white" />
                 )}
               </button>
             </div>
@@ -1176,7 +1176,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
             <button
               type="submit"
               disabled={anyUploading}
-              className="border border-brand hover:bg-brand text-white px-6 py-1 text-xs rounded-xl font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
+              className="border border-brand dark:hover:bg-brand dark:bg-none bg-brand text-white px-6 py-1 text-xs rounded-xl font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
             >
               {anyUploading ? "Caricamento in corso..." : "Inserisci"}
             </button>

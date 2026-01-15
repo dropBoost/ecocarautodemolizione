@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { moduliGestionale } from '../../cosetting'
+import { companyName, moduliGestionale, version } from '../../cosetting'
 import { useAdmin } from '@/app/admin/components/AdminContext'
 import { HomeButton, ThemeToggle, LogoutButton, PlusButton } from '@/app/componenti/button'
 
@@ -76,8 +76,8 @@ export default function LayoutGestionale({ children }) {
         border-t border-neutral-200 dark:border-neutral-800
         dark:bg-neutral-900 bg-white
       ">
-        <span>© {new Date().getFullYear()} – Azienda Demolizioni</span>
-        <span className="text-neutral-500">v1.0.0</span>
+        <span>© {new Date().getFullYear()} – {companyName}</span>
+        <span className="text-neutral-500">v{version}</span>
       </footer>
     </div>
   )

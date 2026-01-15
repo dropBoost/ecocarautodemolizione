@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaPlusSquare, FaCar, FaMinusSquare } from "react-icons/fa";
+import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
+import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import TargaDesign from "@/app/componenti/targaDesign";
 import ButtonDeletePratica from "@/app/componenti/buttonDeletePratica";
@@ -115,9 +116,9 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     const fetchData = async () => {
       let query = supabase
         .from("dati_veicolo_ritirato")
-        .select(
-          `*,
-                aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv)
+        .select(`*,
+                aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv),
+								modelloVeicolo:modello_veicolo(*)
                 )`
         )
         .eq("pratica_completata", false)
@@ -404,14 +405,14 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
       <div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
         <div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
           {/* CRUSCOTTO */}
-          <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
+          {/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
             <div className="flex flex-row justify-between">
               <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
                 CRUSCOTTO
               </h4>
             </div>
-          </div>
-          {/* SELEZIONA CAMION */}
+          </div> */}
+          {/* SELEZIONA CAMION E AUTISTA */}
           <div className="flex flex-row justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border">
             <div className="flex flex-row basis-6/12">
               <FormSelect
@@ -442,17 +443,16 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               </div>
               <div className="flex flex-col gap-2 overflow-auto pe-2">
                 {veicoliDaRitirare?.map((c, i) => (
-                  <div
-                    key={c.uuid_veicolo_ritirato}
-                    className="flex flex-row justify-between border py-2 px-4 rounded-xl"
-                  >
-                    <div className="flex flex-row items-center gap-3">
-                      <div className="w-36">
-                        <TargaDesign targa={c?.targa_veicolo_ritirato} />
-                      </div>
-                      <span className="text-xs">
-                        {c?.aziendaRitiro?.ragione_sociale_arv}
-                      </span>
+                  <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border py-3 px-4 rounded-xl">
+                    <div className="flex flex-col items-start gap-1">
+                      <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
+											<div className="flex flex-wrap gap-1 pe-5">
+												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
+												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
+												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaUser className="text-orange-500"/>{c?.nome_detentore} {c?.cognome_detentore}</div>
+												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBarcode className="text-orange-500"/>{c?.cf_detentore}</div>
+											</div>
+											<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
                     </div>
                     <div className="flex items-center">
                       <ButtonRitiraVeicolo
@@ -529,7 +529,7 @@ export function ButtonRitiraVeicolo({ onClick }) {
   return (
     <>
       <button onClick={onClick}>
-        <FaPlusSquare />
+        <FaPlusSquare className="dark:text-white text-brand"/>
       </button>
     </>
   );

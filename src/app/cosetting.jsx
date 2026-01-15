@@ -36,7 +36,7 @@ const ICON13 = <FaCarOn/>
 // FOOTER SIGN
 
 export const poweredBy = "powered 💜 dropboost.it"
-export const version = "0.0.1"
+export const version = "1.0.2"
 
 // PERSONALIZZAZIONI
 

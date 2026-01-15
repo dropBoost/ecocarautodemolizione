@@ -215,19 +215,19 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
   return (
       <>
       <div className={`${onDisplay === true ? '' : 'hidden'} w-full h-full`}>
-        <div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
+        <div className="flex lg:flex-row flex-col flex-wrap gap-y-3 w-full min-h-0">
           {/* CRUSCOTTO */}
-          <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
+          {/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
             <div className="col-span-12 flex flex-row justify-between">
               <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">CRUSCOTTO</h4>
             </div>
-          </div>
+          </div> */}
           {/* ELENCO CAMION */}
-          <div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1 h-60 overflow-auto">
-            <div className="border p-3 rounded-2xl h-full">
-              <div className="col-span-12 flex flex-row justify-between">
-                  <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">ELENCO CAMION</h4>
-              </div>
+          <div className="flex flex-col gap-2 xl:basis-6/12 w-full p-1 h-60">
+						<div className="col-span-12 flex flex-row justify-between">
+								<h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">ELENCO CAMION</h4>
+						</div>
+            <div className="border px-3 pb-4 pt-1 rounded-2xl h-full overflow-auto">
               <div className="flex flex-wrap  gap-2 w-full mt-2">
                 {camion.map((c, i) => (
                   <div key={c.uuid_camion_trasporto_veicoli} className="w-36">
@@ -238,11 +238,11 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
             </div>
           </div>
           {/* ELENCO AUTISTI */}
-          <div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1 h-60 overflow-auto">
-            <div className="border p-3 rounded-2xl h-full">
-              <div className="col-span-12 flex flex-row justify-between">
-                  <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">ELENCO AUTISTI</h4>
-              </div>
+          <div className="flex flex-col gap-2 xl:basis-6/12 w-full p-1 h-60">
+						<div className="col-span-12 flex flex-row justify-between">
+							<h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">ELENCO AUTISTI</h4>
+						</div>
+            <div className="border px-3 pb-4 pt-1 rounded-2xl h-full overflow-auto">
               <div className="flex flex-col gap-2 text-xs mt-2">
                 {autisti.map((a, i) => (
                   <div key={i} className="flex flex-row border w-fit px-2 py-1 rounded-lg gap-1">
@@ -254,7 +254,7 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
             </div>
           </div>                 
           {/* INSERIMENTO CAMION */}
-          <div className="flex flex-col gap-4 w-full bg-neutral-950 p-5 rounded-2xl">    
+          <div className="flex flex-col gap-4 w-full dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">    
             <div className="col-span-12 flex flex-row justify-between">
                 <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">INSERIMENTO CAMION</h4>
                 <button
@@ -262,7 +262,7 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
                 type="submit"
                 disabled={anyUploading}
                 className=' bg-brand px-3 py-2 w-fit rounded-xl h-full'>
-                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-dark dark:text-white'/>}
+                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-white'/>}
                 </button>
             </div>
             <form id="inserimentoCamion" onSubmit={handleSubmitCamion} className="flex lg:flex-row flex-col lg:gap-4 gap-2">
@@ -272,7 +272,7 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
             </form>
           </div>
           {/* INSERIMENTO AUTISTA */}
-          <div className="flex flex-col gap-4 w-full bg-neutral-950 p-5 rounded-2xl">    
+          <div className="flex flex-col gap-4 w-full dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">  
             <div className="col-span-12 flex flex-row justify-between">
                 <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">INSERIMENTO AUTISTA</h4>
                 <button
@@ -280,7 +280,7 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
                 type="submit"
                 disabled={anyUploading}
                 className=' bg-brand px-3 py-2 w-fit rounded-xl h-full'>
-                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-dark dark:text-white'/>}
+                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-white'/>}
                 </button>
             </div>
             <form id="inserimentoAutista" onSubmit={handleSubmitAutista} className="flex flex-wrap gap-y-2">

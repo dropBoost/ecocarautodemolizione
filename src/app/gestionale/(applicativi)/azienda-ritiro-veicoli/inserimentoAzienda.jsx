@@ -346,7 +346,7 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
             type="submit"
             disabled={anyUploading}
             className=' bg-brand px-3 py-2 w-fit rounded-xl h-full'>
-              {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-dark dark:text-white'/>}
+              {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-white'/>}
             </button>
         </div>
         <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full bg-neutral-100 dark:bg-neutral-950/40'>

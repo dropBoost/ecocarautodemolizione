@@ -15,26 +15,23 @@ export default function DisplayCertificatiDemolizioniAzienda ({
 
     return (
         <>
-        <div className="flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start border-neutral-700 rounded-xl p-3 gap-2 shadow-xl">
+        <div className="flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start rounded-xl p-3 gap-2">
             <div className="flex lg:flex-row flex-col lg:w-fit w-full justify-start lg:items-start items-start gap-1 min-h-0 h-full overflow-auto">
                 <div className="flex flex-col xl:flex-row justify-between w-full h-full">
                     <div className="flex flex-col justify-start items-start lg:min-w-[16rem] h-full gap-1">
                         <div className={`flex flex-row gap-1 items-center border border-neutral-500 w-fit rounded-md px-2`}>
-                            <span className={`text-xs text-neutral-400`}>{data}</span>
+                            <span className={`text-xs dark:text-neutral-400`}>{data}</span>
                         </div>
                         <div className="flex flex-col gap-1">
                             <TargaDesign targa={targa}/>
                             <div className="flex flex-row gap-1 items-center border border-brand w-fit rounded-lg px-2">
                                 <FaCarAlt className="text-brand text-xs"/> 
-                                <span className={`text-xs text-neutral-400 font-semibold truncate text-ellipsis`}>VIN: <font className="text-xs text-neutral-500 font-medium italic uppercase">{telaio}</font></span> 
+                                <span className={`text-xs dark:text-neutral-400 font-semibold truncate text-ellipsis`}>VIN: <font className="text-xs dark:text-neutral-500 font-medium italic uppercase">{telaio}</font></span> 
                             </div>
-                        </div>
-                        <div className={`flex flex-row gap-1 items-center border border-neutral-500 w-fit rounded-md px-2`}>
-                            <span className={`text-xs text-neutral-400 uppercase`}>{tipologiaDemolizione}</span>
                         </div>
                         {note == "" ? "" :
                         <div className={`flex flex-row gap-1 items-center w-fit rounded-md px-2`}>
-                            <p className={`text-xs text-neutral-400 `}><font className="text-red-600">Note:</font> {note}</p>
+                            <p className={`text-xs dark:text-neutral-400 `}><font className="text-red-600">Note:</font> {note}</p>
                         </div>
                         }
                     </div>
@@ -44,7 +41,7 @@ export default function DisplayCertificatiDemolizioniAzienda ({
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row justify-end items-start lg:gap-3 gap-3 lg:w-fit w-full lg:p-1 p-2 lg:border-t-0 border-t bg-brand lg:bg-neutral-900">
+            <div className="flex flex-row justify-end items-start lg:gap-3 gap-3 lg:w-fit w-full lg:p-1 p-2">
                 <ButtonLinkDisplayDownloadDOC targetType={`_blank`} linkHref={docDemolizione} info={"DEMOLIZIONE"} icon={<FaFileDownload/>}/>
                 {altroDocDemolizione ? <ButtonLinkDisplayDownloadDOC targetType={`_blank`} linkHref={altroDocDemolizione} info={"ALTRO"} icon={<FaFileDownload/>}/> : ""}
                 <ButtonLinkDisplayDownloadDOC targetType={`_self`} linkHref={`./${uuidAzienda}/${uuidCD}`} info={"VISUALIZZA"} icon={<RiEyeCloseLine/>}/>

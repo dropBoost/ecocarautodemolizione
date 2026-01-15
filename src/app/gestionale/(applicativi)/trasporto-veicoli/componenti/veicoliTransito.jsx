@@ -186,16 +186,16 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 	if (role == "admin" || role == "superadmin") {
 		return (
 			<>
-				<div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
+				<div className={`${onDisplay === true && veicoliInConsegna.length > 0 ? "" : "hidden"} w-full h-full`}>
 					<div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
 						{/* CRUSCOTTO */}
-						<div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
+						{/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
 							<div className="flex flex-row justify-between">
 								<h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
 									CRUSCOTTO
 								</h4>
 							</div>
-						</div>
+						</div> */}
 						{/* VEICOLI DA CONSEGNARE */}
 						<div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1 h-60 overflow-auto">
 							<div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
@@ -268,7 +268,7 @@ export function ButtonRitiraVeicolo({ onClick }) {
   return (
     <>
       <button onClick={onClick}>
-        <FaSquare />
+        <FaSquare  className="text-white dark:border-none border border-brand rounded-sm"/>
       </button>
     </>
   );
@@ -278,7 +278,7 @@ export function ButtonEliminaRitira({ onClick }) {
   return (
     <>
       <button onClick={onClick} className="text-brand">
-        <FaCheckSquare />
+        <FaCheckSquare/>
       </button>
     </>
   );

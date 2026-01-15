@@ -121,15 +121,15 @@ export default function InserimentoModelliVeicoli({onDisplay, setStatusAziende})
                 type="submit"
                 disabled={anyUploading}
                 className=' bg-brand px-3 py-2 w-fit rounded-xl h-full'>
-                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-dark dark:text-white'/>}
+                {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-white'/>}
                 </button>
             </div>
-            <form id="inserimentoCamion" onSubmit={handleSubmit} className="flex flex-col gap-4 bg-neutral-950 p-5 rounded-2xl">
+            <form id="inserimentoCamion" onSubmit={handleSubmit} className="flex flex-col gap-4 border dark:border-none dark:bg-neutral-950 p-5 rounded-2xl">
               <FormField nome="marchioVeicolo" label='Marchio' value={formData.marchioVeicolo} colspan="col-span-12" mdcolspan="lg:col-span-4" onchange={handleChange} type='text'/>
               <FormField nome="modelloVeicolo" label='Modello' value={formData.modelloVeicolo} colspan="col-span-12" mdcolspan="lg:col-span-4" onchange={handleChange} type='text'/>
             </form>
             {marchiAuto.length > 0 ? 
-            <div className="flex flex-col gap-4 border border-neutral-700 p-5 rounded-2xl">
+            <div className="flex flex-col gap-4 border border-brand p-5 rounded-2xl">
               <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl uppercase">Modello Presente in Archivio</h4>
               <div className="flex flex-row flex-wrap w-full">
                 {marchiAuto.map(ma => (
