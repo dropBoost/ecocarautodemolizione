@@ -444,15 +444,19 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               <div className="flex flex-col gap-2 overflow-auto pe-2">
                 {veicoliDaRitirare?.map((c, i) => (
                   <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border py-3 px-4 rounded-xl">
-                    <div className="flex flex-col items-start gap-1">
-                      <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
-											<div className="flex flex-wrap gap-1 pe-5">
-												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
-												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
+                    <div className="flex flex-wrap items-start gap-1">
+                      <div className="flex flex-wrap gap-2">
+                        <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
+                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
+											</div>
+                      <div className="flex flex-wrap gap-1">
 												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaUser className="text-orange-500"/>{c?.nome_detentore} {c?.cognome_detentore}</div>
 												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBarcode className="text-orange-500"/>{c?.cf_detentore}</div>
 											</div>
-											<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
+                      <div className="flex flex-wrap gap-1 pe-5">
+                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
+                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
+                      </div>
                     </div>
                     <div className="flex items-center">
                       <ButtonRitiraVeicolo
