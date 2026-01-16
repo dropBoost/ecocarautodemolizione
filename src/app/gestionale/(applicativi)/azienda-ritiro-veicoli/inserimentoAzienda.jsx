@@ -177,19 +177,16 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
     const digitsOnly = value.trim().replace(/\D/g, "")
     setFormData(prev => ({ ...prev, [name]: digitsOnly }))
   }
-
   function handleChangePiva(e) {
     const { name, value } = e.target
     const digitsOnly = value.trim().replace(/\D/g, "").slice(0, 11).toUpperCase()
     setFormData(prev => ({ ...prev, [name]: digitsOnly }))
   }
-
   function handleChangeRagioneSociale(e) {
     const { name, value } = e.target
     value.toUpperCase()
     setFormData({ ...formData, [name]: value.toUpperCase() })
   }
-
   function handleChangeCheckbox(e) {
   const { name, checked } = e.target
   setFormData(prev => ({ ...prev, [name]: checked }))
