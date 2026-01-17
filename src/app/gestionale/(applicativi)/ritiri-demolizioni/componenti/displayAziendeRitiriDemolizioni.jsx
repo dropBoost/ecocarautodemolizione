@@ -6,9 +6,9 @@ export default function DisplayAziendeRitiriDemolizioni ({uuid, n, pl, ar, ragio
 
     return (
         <>
-        <div className="flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start border-neutral-200 dark:border-neutral-700 rounded-xl p-3 gap-2">
-            <div className="flex lg:flex-row flex-col justify-between items-center gap-3">
-                <div className="flex flex-col justify-center items-center lg:w-fit h-fit">
+        <div className={`flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start ${n > 0 ? `border-red-700` : `border-neutral-200 dark:border-neutral-700` } rounded-xl p-3 gap-1`}>
+            <div className="flex lg:flex-row flex-col justify-start items-start lg:items-center gap-1 flex-1">
+                <div className="flex flex-col justify-start items-center w-fit me-2 h-fit">
                     {n == 0
                     ?
                     <div className="flex lg:flex-col flex-row gap-1 lg:items-center lg:justify-between justify-between w-full"> 
@@ -33,7 +33,7 @@ export default function DisplayAziendeRitiriDemolizioni ({uuid, n, pl, ar, ragio
                     <span className="flex items-center justify-start text-[0.6rem] font-bold"> Attesa Ritiro: {ar}</span>
                 </div>
             </div>
-            <div className="flex flex-row items-start lg:gap-3 gap-3 rounded-md lg:p-1 p-2">
+            <div className="flex flex-row items-start lg:gap-3 gap-1 rounded-md lg:p-1 p-2">
                 <div className="flex flex-col justify-center items-start w-fit h-full">
                     <Link className="lg:p-2 p-1 bg-brand/70 rounded-md hover:bg-brand text-xs" href={`ritiri-demolizioni/${uuid}`}><FaFileDownload /></Link>
                 </div>
