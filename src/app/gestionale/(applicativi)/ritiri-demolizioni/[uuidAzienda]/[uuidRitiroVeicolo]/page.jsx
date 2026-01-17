@@ -307,46 +307,44 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
       </div>
       <div className="w-full border rounded-xl p-5">
         <div id="mainImagecontainergridtwo" className="flex flex-row">
-
-            {datiDemolizione.length ? datiDemolizione.map((dem, index) => {
-              return (
-                <>
-                <div id="rowImageContainer" className="grid grid-cols-4 w-full gap-2" key={`${dem.uuid_veicolo_ritirato ?? index}`}>
-                  {dem.documento_demolizione ? 
-                  <div className="lg:col-span-1 col-start-1 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="relative w-full h-[200px] overflow-hidden rounded">
-                      <Image src="/pdf_placeholder.webp" fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
-                      </div>
-                      <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
-                        <Link href={`${dem.documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-demolizione.jpg`} target="_blank">
-                          DOCUMENTO DEMOLIZIONE
-                        </Link>
-                      </button>
+          {datiDemolizione.length ? datiDemolizione.map((dem, index) => {
+            return (
+              <>
+              <div id="rowImageContainer" className="grid grid-cols-4 w-full gap-2" key={`${dem.uuid_veicolo_ritirato ?? index}`}>
+                {dem.documento_demolizione ? 
+                <div className="lg:col-span-1 col-start-1 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="relative w-full h-[200px] overflow-hidden rounded">
+                    <Image src="/pdf_placeholder.webp" fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
                     </div>
-                  </div> : null
-                  }
-                  {dem.altro_documento_demolizione !== "" ? 
-                  <div className="lg:col-span-1 col-start-3 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="relative w-full h-[200px] overflow-hidden rounded">
-                      <Image src={dem.altro_documento_demolizione} fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
-                      </div>
+                    <Link href={`${dem.documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-demolizione.jpg`} target="_blank">
                       <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
-                        <Link href={`${dem.altro_documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-altro.jpg`} target="_blank">
-                          ALTRO DOCUMENTO
-                        </Link>
+                      DOCUMENTO DEMOLIZIONE
                       </button>
+                    </Link>
+                  </div>
+                </div> : null
+                }
+                {dem.altro_documento_demolizione !== "" ? 
+                <div className="lg:col-span-1 col-start-3 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="relative w-full h-[200px] overflow-hidden rounded">
+                    <Image src={dem.altro_documento_demolizione} fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
                     </div>
-                  </div> : null
-                  }
-                </div>
-                </>
-              )
-            }) : (
-              <div className="h-fit text-center">NESSUNA DEMOLIZIONE INSERITA</div>
-            )}
-          
+                    <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+                      <Link href={`${dem.altro_documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-altro.jpg`} target="_blank">
+                        ALTRO DOCUMENTO
+                      </Link>
+                    </button>
+                  </div>
+                </div> : null
+                }
+              </div>
+              </>
+            )
+          }) : (
+            <div className="h-fit text-center">NESSUNA DEMOLIZIONE INSERITA</div>
+          )}
         </div>
       </div>
       {/* STATUS PRATICA */}

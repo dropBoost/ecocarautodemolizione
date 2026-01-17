@@ -4,15 +4,25 @@ import { RiEyeCloseLine } from "react-icons/ri";
 import { FaCarAlt } from "react-icons/fa";
 import TargaDesign from "@/app/componenti/targaDesign";
 import ButtonScaricaRitiroPDF from "@/app/componenti/pdf/buttonScaricaRitiroPDF";
+import DeleteRecordWithBucketsButton from "@/app/componenti/DeleteRecordButton";
+import { useAdmin } from "@/app/admin/components/AdminContext";
 
 export default function DisplayVeicoliRitirati ({
-	uuid, targa, modelloVeicolo, telaio, nome, cognome, mobileDetentore,completata,tipologiaD,ragioneSociale, piva, cf, email, documento, data,
+	uuid, uuidAzienda, targa, modelloVeicolo, telaio, nome, cognome, mobileDetentore,completata,tipologiaD,ragioneSociale, piva, cf, email, documento, data,
 	veicoloConsegnato, veicoloRitirato, demolizioneApprovata, formaLegale, vinLeggibile, documentoDetentore, nDocDetentore, indirizzo, gravami,
-	iDocVeicoloF, iDocVeicoloR, iDocDetentoreF, iDocDetentoreR, iComplementareF, iComplementareR
+	iDocVeicoloF, iDocVeicoloR, iDocDetentoreF, iDocDetentoreR, iComplementareF, iComplementareR, setUpdateList
 	}) {
 	
+	const utente = useAdmin()
+	const role = utente?.utente?.user_metadata?.ruolo
+	const isAdmin = role === "admin" || role === "superadmin";
+
 	const statoDemolizione = demolizioneApprovata == null ? "pratica in attesa" : (demolizioneApprovata ? "demolizione approvata" : "demolizione non approvata")
 	const statoTrasporto = demolizioneApprovata ? (veicoloConsegnato ? "veicolo consegnato" : (veicoloRitirato ? "veicolo in transito" : "veicolo non ritirato")) : null
+	
+	const targaNormalizzata = String(targa ?? "").trim().toLowerCase();
+	const folderVeicoli = `public/${uuidAzienda}/${targaNormalizzata}`;
+	const folderDetentori = `public/${uuidAzienda}/${targaNormalizzata}`;
 
 	return (
 		<>
@@ -91,6 +101,20 @@ export default function DisplayVeicoliRitirati ({
 					iComplementareR:iComplementareR,
 				}}/>
 				<Link className="p-2 bg-brand/70 rounded-md hover:bg-brand" href={`ritiri-demolizioni/${uuid}`}><RiEyeCloseLine/></Link>
+				{isAdmin ? 
+				<DeleteRecordWithBucketsButton
+					table="dati_veicolo_ritirato"
+					idColumn="uuid_veicolo_ritirato"
+					uuid={uuid}
+					label = "Elimina"
+					targa={targa}
+					storage={[
+						{ bucket: "documentiveicoli", folder:folderVeicoli },
+						{ bucket: "documentidetentori", folder:folderDetentori },
+					]}
+					onDeleted={() => setUpdateList((p) => !p)}
+				/>
+				: null }
 			</div>
 		</div>
 		</>

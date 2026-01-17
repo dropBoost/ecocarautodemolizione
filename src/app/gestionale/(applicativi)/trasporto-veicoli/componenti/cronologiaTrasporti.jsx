@@ -3,26 +3,18 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
-import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
+import { FaPlusSquare, FaCar, FaMinusSquare, FaUser, FaClock, FaCalendar, FaCloudDownloadAlt } from "react-icons/fa";
+import { RiEyeCloseLine, RiMapPinUserFill } from "react-icons/ri";
+import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck, FaTruckMoving } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
-import TargaDesign from "@/app/componenti/targaDesign";
-import ButtonDeletePratica from "@/app/componenti/buttonDeletePratica";
+import Link from "next/link";
+import ExportExcelButton from "@/app/componenti/excel/exportExcel";
 
 export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende, statusAziende }) {
   const utente = useAdmin();
   const role = utente?.utente?.user_metadata.ruolo;
-  const uuidUtente = utente?.utente?.id;
-  const [updateList, setUpdateList] = useState(true);
-  const [veicoliDaRitirare, setVeicoliDaRitirare] = useState([]);
   const [veicoliRitirati, setVeicoliRitirati] = useState([]);
-  const [camion, setCamion] = useState([]);
-  const [autisti, setAutisti] = useState([]);
-  const [formData, setFormData] = useState({
-    camionRitiro: "",
-    autistaRitiro: "",
-    filtroData: dataOggiItalia(),
-  });
+
   const isAdmin = role === "admin" || role === "superadmin";
   const isTrasporter = role === "transporter";
   const isCompany = role === "company";
@@ -37,19 +29,20 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
       day: "2-digit",
     }).format(new Date());
   }
+  const dataOggi = dataOggiItalia()
 
   function DataFormat(value) {
     if (!value) return '—'
     const d = new Date(value)
     if (isNaN(d)) return '—'
-    return d.toLocaleString('it-IT', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-    })
+    return (
+      <>
+      <div className="w-full flex flex-row gap-2 justify-start">
+        <div className="flex flex-row items-center gap-2"><FaCalendar className="text-brand"/>{d.toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' })} </div>
+        <div className="flex flex-row items-center gap-2"><FaClock className="text-brand"/>{d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', second:'2-digit' })}</div>
+      </div>
+      </>
+    )
   } 
 
   //CARICAMENTO VEICOLI RITIRATI CRONOLOGIA
@@ -63,9 +56,12 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
           autista:autista_camion_trasporto_veicoli(nome_autista,cognome_autista),
           veicoloRitirato:dati_veicolo_ritirato!inner(
             targa_veicolo_ritirato,
+            vin_veicolo_ritirato,
             veicolo_consegnato,
+            uuid_modello_veicolo,
             uuid_azienda_ritiro_veicoli,
-            aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv)
+            aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv),
+            modelloVeicolo:modello_veicolo(modello,marca)
             )
           `
         )
@@ -81,6 +77,30 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
 
     fetchData();
   }, []);
+  
+  const columns = [
+    { header: "Codice Pratica", key: "codice", width: 42 },
+    { header: "Targa Veicolo Ritirato", key: "targa", width: 24 },
+    { header: "Modello Veicolo", key: "modello_veicolo", width: 34 },
+    { header: "VIN Veicolo", key: "vin_veicolo", width: 28 },
+    { header: "Azienda Ritiro Veicolo", key: "azienda_ritiro", width: 34 },
+    { header: "Camion", key: "camion", width: 16 },
+    { header: "Autista", key: "autista", width: 30 },
+    { header: "Data Ritiro", key: "data", width: 20, type: "datetime" },
+  ];
+
+  const rows = veicoliRitirati.map(v => ({
+    codice: v?.uuid_veicolo_ritirato,
+    targa: v?.veicoloRitirato?.targa_veicolo_ritirato ?? "",
+    modello_veicolo: `${v?.veicoloRitirato?.modelloVeicolo?.marca} ${v?.veicoloRitirato?.modelloVeicolo?.modello}` ?? "",
+    vin_veicolo: v?.veicoloRitirato?.vin_veicolo_ritirato ?? "",
+    azienda_ritiro: v?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv ?? "",
+    camion: v?.camion?.targa_camion ?? "",
+    autista:`${v?.autista?.cognome_autista} ${v?.autista?.nome_autista}`,
+    data: v?.created_at_log_trasporto_veicolo ? new Date(v?.created_at_log_trasporto_veicolo) : null,
+  }));
+
+console.log("veicoliR", veicoliRitirati)
 
   async function StatusUpdate(uuidVeicolo, uuidStatoAvanzamento) {
 
@@ -185,83 +205,46 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
 
   return (
     <>
+      {isAdmin ? 
       <div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
         <div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
-          {/* CRUSCOTTO */}
-          {/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
-            <div className="flex flex-row justify-between">
-              <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                CRUSCOTTO
-              </h4>
-            </div>
-          </div> */}
-          {/* VEICOLI DA RITIRARE */}
-          {/* <div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1">
-            <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
-              <div className="flex flex-row justify-between">
-                <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                  VEICOLI DA RITIRARE
-                </h4>
-              </div>
-              <div className="flex flex-col gap-2 overflow-auto pe-2">
-                {veicoliDaRitirare?.map((c, i) => (
-                  <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border py-3 px-4 rounded-xl">
-                    <div className="flex flex-wrap items-start gap-1">
-                      <div className="flex flex-wrap gap-2">
-                        <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaUser className="text-orange-500"/>{c?.nome_detentore} {c?.cognome_detentore}</div>
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBarcode className="text-orange-500"/>{c?.cf_detentore}</div>
-                      </div>
-                      <div className="flex flex-wrap gap-1 pe-5">
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <ButtonRitiraVeicolo
-                        onClick={() =>
-                          RitiroVeicolo(
-                            c?.uuid_veicolo_ritirato,
-                            formData?.camionRitiro,
-                            formData?.autistaRitiro
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div> */}
           {/* VEICOLI RITIRATI */}
-          <div className="flex flex-col gap-2 xl:basis-12/12 w-full p-1 bg-neutral-950/50 rounded-xl">
-            <div className="flex flex-col  p-5 rounded-2xl h-full gap-3">
-              <div className="flex flex-row justify-between items-start">
-                <h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                  CRONOLOGIA VEICOLI RITIRATI
-                </h4>
-              </div>
+          <div className="flex flex-col gap-2 xl:basis-12/12 w-full">
+            <div className="flex flex-row justify-between items-start">
+              <h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
+                CRONOLOGIA VEICOLI RITIRATI
+              </h4>
+              <ExportExcelButton
+                columns={columns}
+                rows={rows}
+                filename={`Veicoli_transito_${dataOggi}.xlsx`}
+                sheetName={`VT-${dataOggi}`}
+                className="flex flex-row items-center gap-1 h-fit text-[0.6rem] font-bold text-white border hover:bg-brand bg-brand/50 transition px-3 py-2 w-fit rounded-xl"
+              ><FaCloudDownloadAlt/> ESPORTA </ExportExcelButton>
+            </div>
+            <div className="flex flex-col p-5 h-full gap-3 bg-neutral-950/50 rounded-xl">
               <div className="flex flex-col gap-2 overflow-auto pe-2">
                 {veicoliRitirati?.length > 0 ? veicoliRitirati?.map((vr, i) => (
-                  <div key={vr.uuid_log_trasporto_veicolo} className="flex flex-row justify-between border-b pb-2 border-brand/20">
-                    <div className="flex flex-wrap items-center justify-start gap-1">
-                      <span className="bg-white text-blue-900 font-bold text-xs rounded-md px-3">{vr?.veicoloRitirato?.targa_veicolo_ritirato}</span>
-                      <span className="border text-xs rounded-md px-3 font-medium">{ vr?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv}</span>
-                      <span className=" bg-brand/30 text-xs rounded-md px-3">{vr?.autista?.nome_autista} {vr?.autista?.cognome_autista} / {vr?.camion?.targa_camion}</span>
+                  <div key={vr.uuid_log_trasporto_veicolo} className="flex flex-row justify-between border-b pb-2 border-brand/20 h-full gap-3">
+                    <div className="flex flex-wrap flex-1 items-center justify-start gap-1 border-e pe-5">
+                      <span className="bg-white text-blue-900 font-bold text-xs rounded-md px-2 py-1">{vr?.veicoloRitirato?.targa_veicolo_ritirato}</span>
+                      <span className="text-white bg-blue-900 font-bold text-xs rounded-md px-2 py-1">{vr?.veicoloRitirato?.modelloVeicolo?.marca} {vr?.veicoloRitirato?.modelloVeicolo?.modello}</span>
+                      <span className="border text-xs rounded-md px-2 py-1 font-medium">{vr?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv}</span>
+                      <span className="flex flex-row items-center gap-1 bg-brand/50 text-xs rounded-md px-2 py-1"><RiMapPinUserFill/> {vr?.autista?.nome_autista} {vr?.autista?.cognome_autista}</span>
+                      <span className="flex flex-row items-center gap-1 bg-brand/50 text-xs rounded-md px-2 py-1"><FaTruckMoving/>{vr?.camion?.targa_camion}</span>
+                      {vr?.veicoloRitirato?.vin_veicolo_ritirato ? <span className="flex flex-row items-center gap-1 bg-orange-700 text-xs rounded-md px-2 py-1 italic"><FaBarcode/> {vr?.veicoloRitirato?.vin_veicolo_ritirato}</span> : null}
                     </div>
-                    <div className="flex flex-row items-center justify-center gap-1">
-                      <span className="border text-xs rounded-md px-3">{DataFormat(vr?.created_at_log_trasporto_veicolo)}</span>
+                    <div className="flex flex-row gap-1 h-fit">
+                      <span className="border text-xs rounded-md px-2 py-1">{DataFormat(vr?.created_at_log_trasporto_veicolo)}</span>
+                      <Link className="flex bg-brand/50 rounded-md transition-all hover:bg-brand items-center text-center justify-center text-xs p-2 aspect-square" href={`ritiri-demolizioni/${vr?.veicoloRitirato?.uuid_azienda_ritiro_veicoli}/${vr?.uuid_veicolo_ritirato}`}><RiEyeCloseLine/></Link>
                     </div>
                   </div>
-                )) : null}
+                )) : "... nessun veicolo ritirato"}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div> : "non hai l'autorizzazione per accedere a quest'area" }
     </>
   );
 }

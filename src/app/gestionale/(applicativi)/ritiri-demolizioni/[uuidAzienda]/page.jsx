@@ -9,10 +9,8 @@ import { FaUserSlash } from "react-icons/fa";
 import { FaCircle, FaDotCircle } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
 import Link from "next/link";
-import ButtonDeleteRow from "@/app/componenti/buttonDeleteSup";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { RiEyeCloseLine } from "react-icons/ri";
-import ButtonDeletePratica from "@/app/componenti/buttonDeletePratica";
 import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
 
   export default function PraticheAzienda() {
@@ -20,7 +18,9 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
     const params = useParams();
     const uuidAzienda = params?.uuidAzienda;
     const [listPraticheAzienda, setListPraticheAzienda] = useState([])  
-    const [datiAzienda, setDatiAzienda] = useState([])  
+    const [datiAzienda, setDatiAzienda] = useState([])
+		const [updateList, setUpdateList] = useState(true)
+
     // ricerca
     const [dataSearch, setDataSearch] = useState("")        // testo digitato
     const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
@@ -86,7 +86,7 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
         }
         setListPraticheAzienda(praticheData ?? [])
         })()
-    }, [uuidAzienda])  
+    }, [uuidAzienda, updateList])  
 
     // handlers ricerca
     function handleChangeSearchBar(e) {
@@ -107,7 +107,7 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
         setDataSearchSubmit("")
         setPage(1)
     }
-		console.log(listPraticheAzienda)
+		console.log("ddd",listPraticheAzienda)
   return (
   <>
       <div className={`${listPraticheAzienda ? '' : 'hidden'} w-full min-h-0 flex-1 flex flex-col gap-4`}>
@@ -152,6 +152,7 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
             <DisplayVeicoliRitirati
             key={lpa?.uuid_veicolo_ritirato}
             uuid={lpa?.uuid_veicolo_ritirato}
+            uuidAzienda={lpa?.uuid_azienda_ritiro_veicoli}
             data={DataFormat(lpa?.created_at_veicolo_ritirato)}
 
             modelloVeicolo={`${lpa?.modello.marca} ${lpa?.modello.modello}`}
@@ -186,6 +187,7 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
             iComplementareF={lpa?.foto_complementare_veicolo_ritirato_f}
             iComplementareR={lpa?.foto_complementare_veicolo_ritirato_r}
 
+						setUpdateList={setUpdateList}
             />
           );
           

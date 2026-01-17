@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { FaCheckSquare, FaSquare } from "react-icons/fa";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import TargaDesign from "@/app/componenti/targaDesign";
-import ButtonDeletePratica from "@/app/componenti/buttonDeletePratica";
 import { Select,  SelectContent,  SelectItem,  SelectTrigger,  SelectValue,  SelectGroup } from "@/components/ui/select";
 
 export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, statusAziende }) {

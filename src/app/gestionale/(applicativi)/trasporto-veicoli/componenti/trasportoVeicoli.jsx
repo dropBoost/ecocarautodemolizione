@@ -7,7 +7,7 @@ import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
 import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import TargaDesign from "@/app/componenti/targaDesign";
-import ButtonDeletePratica from "@/app/componenti/buttonDeletePratica";
+
 import {
   Select,
   SelectContent,
