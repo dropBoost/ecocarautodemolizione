@@ -4,14 +4,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function DeleteRecordWithBucketsButton({
-  // DB
   table,
   idColumn = "uuid",
   uuid,
   targa,
   storage = [],
   label,
-  className = "px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700",
+  className = "px-2 py-2 rounded bg-red-600 text-white hover:bg-red-700 text-xs",
   onDeleted,
 }) {
   const [loading, setLoading] = useState(false);

@@ -413,8 +413,8 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
             </div>
           </div> */}
           {/* SELEZIONA CAMION E AUTISTA */}
-          <div className="flex flex-row justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border">
-            <div className="flex flex-row basis-6/12">
+          <div className="flex lg:flex-row flex-col justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border">
+            <div className="flex flex-row lg:basis-6/12 basis-full">
               <FormSelect
                 nome="camionRitiro"
                 label="Camion"
@@ -423,7 +423,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                 options={optionCamion}
               />
             </div>
-            <div className="flex flex-row basis-6/12">
+            <div className="flex flex-row lg:basis-6/12 basis-full">
               <FormSelect
                 nome="autistaRitiro"
                 label="Autista"

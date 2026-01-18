@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { FaFileDownload } from "react-icons/fa";
 import { RiEyeCloseLine } from "react-icons/ri";
-import { FaCarAlt } from "react-icons/fa";
+import { FaCarAlt, FaTrash } from "react-icons/fa";
 import TargaDesign from "@/app/componenti/targaDesign";
 import ButtonScaricaRitiroPDF from "@/app/componenti/pdf/buttonScaricaRitiroPDF";
 import DeleteRecordWithBucketsButton from "@/app/componenti/DeleteRecordButton";
@@ -70,7 +70,7 @@ export default function DisplayVeicoliRitirati ({
 				</div>
 			</div>
 			{/* BOTTONI */}
-			<div className="flex flex-row justify-end items-end h-full gap-1 text-xs">
+			<div className="flex lg:flex-row flex-col justify-end items-end h-full gap-1 text-xs">
 				<ButtonScaricaRitiroPDF payload={{
 					uuidRitiroVeicolo: uuid,
 					vinLeggibile: vinLeggibile,
@@ -106,7 +106,7 @@ export default function DisplayVeicoliRitirati ({
 					table="dati_veicolo_ritirato"
 					idColumn="uuid_veicolo_ritirato"
 					uuid={uuid}
-					label = "Elimina"
+					label = {<FaTrash/>}
 					targa={targa}
 					storage={[
 						{ bucket: "documentiveicoli", folder:folderVeicoli },

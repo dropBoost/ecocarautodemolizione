@@ -37,7 +37,7 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
     if (isNaN(d)) return '—'
     return (
       <>
-      <div className="w-full flex flex-row gap-2 justify-start">
+      <div className="w-full flex lg:flex-row flex-col gap-2 justify-end items-end">
         <div className="flex flex-row items-center gap-2"><FaCalendar className="text-brand"/>{d.toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' })} </div>
         <div className="flex flex-row items-center gap-2"><FaClock className="text-brand"/>{d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', second:'2-digit' })}</div>
       </div>
@@ -234,9 +234,9 @@ console.log("veicoliR", veicoliRitirati)
                       <span className="flex flex-row items-center gap-1 bg-brand/50 text-xs rounded-md px-2 py-1"><FaTruckMoving/>{vr?.camion?.targa_camion}</span>
                       {vr?.veicoloRitirato?.vin_veicolo_ritirato ? <span className="flex flex-row items-center gap-1 bg-orange-700 text-xs rounded-md px-2 py-1 italic"><FaBarcode/> {vr?.veicoloRitirato?.vin_veicolo_ritirato}</span> : null}
                     </div>
-                    <div className="flex flex-row gap-1 h-fit">
+                    <div className="flex lg:flex-row flex-col justify-end items-end gap-1 h-fit">
                       <span className="border text-xs rounded-md px-2 py-1">{DataFormat(vr?.created_at_log_trasporto_veicolo)}</span>
-                      <Link className="flex bg-brand/50 rounded-md transition-all hover:bg-brand items-center text-center justify-center text-xs p-2 aspect-square" href={`ritiri-demolizioni/${vr?.veicoloRitirato?.uuid_azienda_ritiro_veicoli}/${vr?.uuid_veicolo_ritirato}`}><RiEyeCloseLine/></Link>
+                      <Link className="flex bg-brand/50 rounded-md transition-all hover:bg-brand items-center text-center justify-center text-xs p-2 aspect-square w-fit" href={`ritiri-demolizioni/${vr?.veicoloRitirato?.uuid_azienda_ritiro_veicoli}/${vr?.uuid_veicolo_ritirato}`}><RiEyeCloseLine/></Link>
                     </div>
                   </div>
                 )) : "... nessun veicolo ritirato"}

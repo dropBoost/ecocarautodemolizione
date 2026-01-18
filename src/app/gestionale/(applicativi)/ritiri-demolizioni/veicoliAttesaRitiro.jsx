@@ -59,14 +59,12 @@ export default function PAGEveicoliAttesaRitiro({ onDisplay, statusAziende, setS
     <div className={`${onDisplay ? "" : "hidden"} w-full flex-1 min-h-0 flex flex-col md:p-0 md:pe-3 px-4`}>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row rounded-xl gap-3">
-          <div className="flex flex-col basis-4/12 border p-5 rounded-xl gap-2">
+          <div className="flex flex-col w-full border p-5 rounded-xl gap-2">
             <span className="border border-brand px-2 py-1 text-xs rounded-lg w-fit">PRATICHE IN ATTESA DI RITIRO</span>
             <div className="">
               <span className="text-9xl text-brand">{veicoliAttesa.length}</span>
             </div>
           </div>
-          <div className="basis-4/12 border p-2 rounded-xl">quadrante 2</div>
-          <div className="basis-4/12 border p-2 rounded-xl">quadrante 3</div>
         </div>
         <div className="flex flex-wrap border rounded-xl p-5 gap-2 overflow-auto">
           {veicoliAttesa?.length ? 
