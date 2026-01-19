@@ -642,7 +642,7 @@ export function FormSelect({ nome, label, value, onchange, options, anteValue = 
               <SelectItem
                 key={opt.value}
                 value={opt.value}
-                className="data-[state=checked]:bg-brand data-[state=checked]:text-foreground focus:bg-brand"
+                className="data-[state=checked]:bg-brand data-[state=checked]:text-foreground focus:bg-brand truncate"
               >
                 {opt.label}
               </SelectItem>
