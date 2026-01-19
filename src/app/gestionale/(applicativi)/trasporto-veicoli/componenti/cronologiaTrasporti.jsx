@@ -14,6 +14,7 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
   const utente = useAdmin();
   const role = utente?.utente?.user_metadata.ruolo;
   const [veicoliRitirati, setVeicoliRitirati] = useState([]);
+  const [data, setData] = useState()
 
   const isAdmin = role === "admin" || role === "superadmin";
   const isTrasporter = role === "transporter";
@@ -30,6 +31,62 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
     }).format(new Date());
   }
   const dataOggi = dataOggiItalia()
+
+  function toUtcIsoFromRomeLocal(dateStr, timeStr = "00:00:00") {
+    if (!dateStr || typeof dateStr !== "string") return null;
+
+    const partsDate = dateStr.split("-");
+    if (partsDate.length !== 3) return null;
+
+    const [y, m, d] = partsDate.map(Number);
+    if (!y || !m || !d) return null;
+
+    const [hh, mm, ss] = timeStr.split(":").map(Number);
+
+    const naiveUtc = new Date(Date.UTC(y, m - 1, d, hh, mm, ss));
+
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Rome",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    });
+
+    const parts = Object.fromEntries(
+      fmt.formatToParts(naiveUtc).map((p) => [p.type, p.value])
+    );
+    const romeAsIfUtc = Date.UTC(
+      Number(parts.year),
+      Number(parts.month) - 1,
+      Number(parts.day),
+      Number(parts.hour),
+      Number(parts.minute),
+      Number(parts.second)
+    );
+
+    const offsetMs = romeAsIfUtc - naiveUtc.getTime();
+    return new Date(naiveUtc.getTime() - offsetMs).toISOString();
+  }
+
+  function addOneDay(dateStr) {
+    if (!dateStr || typeof dateStr !== "string") return null;
+
+    const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+
+    const y = Number(m[1]);
+    const mo = Number(m[2]);
+    const d = Number(m[3]);
+
+    const dt = new Date(Date.UTC(y, mo - 1, d));
+    dt.setUTCDate(dt.getUTCDate() + 1);
+
+    return dt.toISOString().slice(0, 10);
+  }
 
   function DataFormat(value) {
     if (!value) return '—'
@@ -48,6 +105,16 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
   //CARICAMENTO VEICOLI RITIRATI CRONOLOGIA
   useEffect(() => {
 
+    const day = data
+
+    if (!data){
+      setData(dataOggi)
+    }
+
+    const startIso = toUtcIsoFromRomeLocal(day, "00:00:00");
+    const endIso = toUtcIsoFromRomeLocal(day, "23:59:59");
+    if (!startIso || !endIso) return;
+
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("log_trasporto_veicolo")
@@ -65,6 +132,8 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
             )
           `
         )
+        .gte("created_at_log_trasporto_veicolo", startIso)
+        .lt("created_at_log_trasporto_veicolo", endIso);
 
       if (error) {
         console.error(error);
@@ -76,7 +145,12 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
     };
 
     fetchData();
-  }, []);
+  }, [data]);
+  
+  function handleChangeData(e) {
+    const { name, value } = e.target;
+    setData(value);
+  }
   
   const columns = [
     { header: "Codice Pratica", key: "codice", width: 42 },
@@ -100,109 +174,6 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
     data: v?.created_at_log_trasporto_veicolo ? new Date(v?.created_at_log_trasporto_veicolo) : null,
   }));
 
-console.log("veicoliR", veicoliRitirati)
-
-  async function StatusUpdate(uuidVeicolo, uuidStatoAvanzamento) {
-
-    const payloadStatus = {
-      uuid_veicolo_ritirato: uuidVeicolo,
-      uuid_stato_avanzamento: uuidStatoAvanzamento,
-    };
-
-    const { data, error } = await supabase
-      .from("log_avanzamento_demolizione")
-      .insert(payloadStatus)
-      .select()
-      .single();
-
-    if (error) {
-      console.log("Errore statusUpdate:", error);
-    } else {
-      console.log("Stato aggiornato:", data);
-    }
-
-  }
-  async function StatusDowngrade(uuidVeicolo, uuidStatoAvanzamento) {
-
-    const { data, error } = await supabase
-      .from("log_avanzamento_demolizione")
-      .delete()
-      .eq("uuid_veicolo_ritirato", uuidVeicolo)
-      .eq("uuid_stato_avanzamento", uuidStatoAvanzamento)
-
-    if (error) {
-      console.log("Errore statusUpdate:", error);
-    } else {
-      console.log("Stato aggiornato:", data);
-    }
-
-  }
-  async function EliminaRitiro(uuidVeicolo, uuidLog) {
-    if (!uuidVeicolo) return alert("seleziona un veicolo");
-    if (!uuidLog) return alert("seleziona Log");
-
-    // 1) Controllo: veicolo_consegnato deve essere false su dati_veicolo_ritirato
-    const { data: veicoloRow, error: checkErr } = await supabase
-      .from("dati_veicolo_ritirato")
-      .select("uuid_veicolo_ritirato, veicolo_consegnato")
-      .eq("uuid_veicolo_ritirato", uuidVeicolo)
-      .maybeSingle();
-
-    if (checkErr) {
-      console.error(checkErr);
-      alert(`Errore verifica: ${checkErr.message}`);
-      return;
-    }
-
-    if (!veicoloRow) {
-      alert("Veicolo non trovato.");
-      return;
-    }
-
-    if (veicoloRow.veicolo_consegnato !== false) {
-      alert("Non puoi eliminare: il veicolo risulta consegnato.");
-      return;
-    }
-
-    // 2) Update veicolo_ritirato -> false
-    const { error: vrError } = await supabase
-      .from("dati_veicolo_ritirato")
-      .update({ veicolo_ritirato: false })
-      .eq("uuid_veicolo_ritirato", uuidVeicolo);
-
-    if (vrError) {
-      console.error(vrError);
-      alert(`Errore salvataggio: ${vrError.message}`);
-      return;
-    }
-
-    // 3) Delete log SOLO se appartiene a quel veicolo (extra sicurezza)
-    const { data: trasportoData, error: trasportoError } = await supabase
-      .from("log_trasporto_veicolo")
-      .delete()
-      .eq("uuid_log_trasporto_veicolo", uuidLog)
-      .eq("uuid_veicolo_ritirato", uuidVeicolo)
-      .select()
-      .maybeSingle();
-
-    if (trasportoError) {
-      console.error(trasportoError);
-      alert(`Errore eliminazione trasporto: ${trasportoError.message}`);
-      return;
-    }
-
-    if (!trasportoData) {
-      alert("Nessun log eliminato (log non trovato o non associato al veicolo).");
-      return;
-    }
-
-    await StatusDowngrade(uuidVeicolo, "6adcebac-6465-452a-974d-912e1caab37b"); // IN TRANSITO
-
-    setUpdateList((prev) => !prev);
-    setStatusAziende((prev) => !prev);
-    alert("Trasporto Eliminato");
-  }
-
   return (
     <>
       {isAdmin ? 
@@ -214,13 +185,23 @@ console.log("veicoliR", veicoliRitirati)
               <h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
                 CRONOLOGIA VEICOLI RITIRATI
               </h4>
-              <ExportExcelButton
-                columns={columns}
-                rows={rows}
-                filename={`Veicoli_transito_${dataOggi}.xlsx`}
-                sheetName={`VT-${dataOggi}`}
-                className="flex flex-row items-center gap-1 h-fit text-[0.6rem] font-bold text-white border hover:bg-brand bg-brand/50 transition px-3 py-2 w-fit rounded-xl"
-              ><FaCloudDownloadAlt/> ESPORTA </ExportExcelButton>
+              <div className="flex flex-row items-center justify-center gap-2">
+                <FormField
+                  nome="filtroData"
+                  label="data"
+                  value={data}
+                  onchange={handleChangeData}
+                  type="date"
+                />
+                <ExportExcelButton
+                  columns={columns}
+                  rows={rows}
+                  data={data}
+                  filename={`Veicoli_transito_${data}.xlsx`}
+                  sheetName={`VT-${data}`}
+                  className="flex flex-row items-center gap-1 h-fit text-[0.6rem] font-bold text-white border hover:bg-brand bg-brand/50 transition px-3 py-2 w-fit rounded-xl"
+                ><FaCloudDownloadAlt/> ESPORTA </ExportExcelButton>
+              </div>
             </div>
             <div className="flex flex-col p-5 h-full gap-3 bg-neutral-950/50 rounded-xl">
               <div className="flex flex-col gap-2 overflow-auto pe-2">
@@ -229,7 +210,7 @@ console.log("veicoliR", veicoliRitirati)
                     <div className="flex flex-wrap flex-1 items-center justify-start gap-1 border-e pe-5">
                       <span className="bg-white text-blue-900 font-bold text-xs rounded-md px-2 py-1">{vr?.veicoloRitirato?.targa_veicolo_ritirato}</span>
                       <span className="text-white bg-blue-900 font-bold text-xs rounded-md px-2 py-1">{vr?.veicoloRitirato?.modelloVeicolo?.marca} {vr?.veicoloRitirato?.modelloVeicolo?.modello}</span>
-                      <span className="border text-xs rounded-md px-2 py-1 font-medium">{vr?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv}</span>
+                      <span className="border text-xs rounded-md px-2 py-1 font-medium truncate lg:w-fit w-48">{vr?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv}</span>
                       <span className="flex flex-row items-center gap-1 bg-brand/50 text-xs rounded-md px-2 py-1"><RiMapPinUserFill/> {vr?.autista?.nome_autista} {vr?.autista?.cognome_autista}</span>
                       <span className="flex flex-row items-center gap-1 bg-brand/50 text-xs rounded-md px-2 py-1"><FaTruckMoving/>{vr?.camion?.targa_camion}</span>
                       {vr?.veicoloRitirato?.vin_veicolo_ritirato ? <span className="flex flex-row items-center gap-1 bg-orange-700 text-xs rounded-md px-2 py-1 italic"><FaBarcode/> {vr?.veicoloRitirato?.vin_veicolo_ritirato}</span> : null}
@@ -266,5 +247,21 @@ export function ButtonEliminaRitira({ onClick }) {
         <FaMinusSquare />
       </button>
     </>
+  );
+}
+
+export function FormField({ nome, label, value, onchange, type }) {
+  return (
+    <div className={`w-fit`}>
+      <Input
+        type={type}
+        id={nome}
+        placeholder={label}
+        name={nome}
+        value={value}
+        onChange={onchange}
+        className={`h-fit text-xs appearance-none rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand`}
+      />
+    </div>
   );
 }

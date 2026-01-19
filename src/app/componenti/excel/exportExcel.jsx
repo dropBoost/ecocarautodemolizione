@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "sonner";
+
 export default function ExportExcelButton({
   columns = [],
   rows = [],
@@ -7,10 +9,11 @@ export default function ExportExcelButton({
   sheetName = `Export`,
   className = "",
   children = "Scarica Excel",
+  data
 }) {
   const onExport = async () => {
-    if (!columns.length) return alert("columns è vuoto");
-    if (!rows.length) return alert("rows è vuoto");
+    if (!columns.length) return toast.warning("colonne vuote");
+    if (!rows.length) return toast.warning("nessun dato da esportare");
 
     const res = await fetch("/api/exportExcel", {
       method: "POST",
@@ -34,6 +37,9 @@ export default function ExportExcelButton({
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+
+    toast.success(`dati ${data} esportati con successo`)
+
   };
 
   return (

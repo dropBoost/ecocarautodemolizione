@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function DeleteRecordWithBucketsButton({
   table,
@@ -29,7 +30,7 @@ export default function DeleteRecordWithBucketsButton({
         .map((op) => `- ${op.bucket}/${op.folder ?? (op.filePaths?.[0] ? "(paths)" : "(vuoto)")}`)
         .join("\n");
 
-      const ok = window.confirm(`Confermi eliminazione della pratica ${targa} e i suoi relativi documenti? \n\nFile:\n${lines}`);
+      const ok = window.confirm(`Confermi eliminazione della pratica ${targa} e i suoi relativi documenti allegati?`);
       if (!ok) return;
     }
 
@@ -67,7 +68,7 @@ export default function DeleteRecordWithBucketsButton({
       disabled={loading}
       className={`${className} ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
     >
-      {loading ? "Elimino..." : label}
+      {loading ? <Spinner className="size-2"/> : label}
     </button>
   );
 }

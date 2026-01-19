@@ -536,7 +536,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
 
     if (error) {
       console.error(error);
-      alert(`Errore salvataggio: ${error.message}`);
+      toast.error(`Errore salvataggio: ${error.message}`);
       return;
     }
 
@@ -586,11 +586,12 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     setMarchioSelect("");
     setAziendaScelta("");
     setRitiroInserito(data);
-
-    alert("Pratica inserita con successo!");
+    setGravamiSelect(false)
+    console.log(data)
+    toast.success("Pratica inserita con successo!");
   }
 
-  console.log("az", aziendaScelta, "md", modelloSelect)
+  
 
   return (
     <>

@@ -209,7 +209,12 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
         <div id="mainImagecontainergridtwo" className="flex flex-row">
             {praticaAuto?.length ? praticaAuto.map((pa, index) => {
 
-              const isPdfDetentoreF = pa.foto_documento_detentore_f.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfDetentoreF = pa?.foto_documento_detentore_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfDetentoreR = pa?.foto_documento_detentore_r?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfVeicoloF = pa?.foto_documento_veicolo_ritirato_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfVeicoloR = pa?.foto_documento_veicolo_ritirato_r?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfComplementareF = pa?.foto_complementare_veicolo_ritirato_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfComplementareR = pa?.foto_complementare_veicolo_ritirato_r?.slice(-3).toLowerCase() == "pdf" ? true : false
 
               return (
                 <div id="rowImageContainer" className="flex flex-wrap w-full" key={`${pa.uuid_veicolo_ritirato ?? index}`}>
@@ -231,7 +236,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_documento_detentore_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
+                      {!isPdfDetentoreR ? <Image src={pa.foto_documento_detentore_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
 												<Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank">
@@ -245,7 +250,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_documento_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
+                      {!isPdfVeicoloF ? <Image src={pa.foto_documento_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
 												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank">
@@ -259,7 +264,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_documento_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
+                      {!isPdfVeicoloR ? <Image src={pa.foto_documento_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}  
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
 												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank">
@@ -273,7 +278,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_complementare_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
+                      {!isPdfComplementareF ? <Image src={pa.foto_complementare_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
 												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank">
@@ -287,7 +292,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_complementare_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
+                      {!isPdfComplementareR ? <Image src={pa.foto_complementare_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
 												<Link href={`${pa.foto_complementare_veicolo_ritirato_r}?download`} target="_blank">

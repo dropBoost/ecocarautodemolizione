@@ -19,10 +19,10 @@ export async function POST(req) {
     const sheetName = body?.sheetName || "Export";
 
     if (!columns.length) {
-      return NextResponse.json({ error: "columns è vuoto" }, { status: 400 });
+      return NextResponse.json({ error: "errore colonne vuote" }, { status: 400 });
     }
     if (!rows.length) {
-      return NextResponse.json({ error: "rows è vuoto" }, { status: 400 });
+      return NextResponse.json({ error: "nessun dato da esportare" }, { status: 400 });
     }
 
     const normCols = columns

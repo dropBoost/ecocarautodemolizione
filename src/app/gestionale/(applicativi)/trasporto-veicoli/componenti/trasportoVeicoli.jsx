@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
+import { TiArrowBack } from "react-icons/ti";
 import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import TargaDesign from "@/app/componenti/targaDesign";
@@ -24,6 +25,8 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
   const [updateList, setUpdateList] = useState(true);
   const [veicoliDaRitirare, setVeicoliDaRitirare] = useState([]);
   const [veicoliRitirati, setVeicoliRitirati] = useState([]);
+  const [filterAzienda, setFilterAzienda] = useState("")
+  const [aziende, setAziende] = useState([])
   const [camion, setCamion] = useState([]);
   const [autisti, setAutisti] = useState([]);
   const [formData, setFormData] = useState({
@@ -108,6 +111,12 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     setFormData({ ...formData, [name]: value });
   }
 
+  //GESTIONE FORM
+  function handleChangeFilterAzienda(e) {
+    const { name, value } = e.target;
+    setFilterAzienda(value);
+  }
+
   //CARICAMENTO VEICOLI DA RITIRARE
   useEffect(() => {
     if (!role) return;
@@ -129,6 +138,10 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
         query = query.eq("uuid_azienda_ritiro_veicoli", uuidUtente);
       }
 
+      if ((isAdmin || isTrasporter) && filterAzienda) {
+        query = query.eq("uuid_azienda_ritiro_veicoli", filterAzienda);
+      }
+
       const { data, error } = await query;
 
       if (error) {
@@ -140,7 +153,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     };
 
     fetchData();
-  }, [role, uuidUtente, updateList]);
+  }, [role, uuidUtente, updateList, filterAzienda]);
 
   //CARICAMENTO VEICOLI RITIRATI
   useEffect(() => {
@@ -210,6 +223,23 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     })();
   }, []);
 
+  //CARICAMENTO AZIENDE
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("azienda_ritiro_veicoli")
+        .select("uuid_azienda_ritiro_veicoli, ragione_sociale_arv, attiva_arv")
+        .eq("attiva_arv", true);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setAziende(data);
+    })();
+  }, []);
+
   const optionCamion = (camion ?? []).map((c) => ({
     value: c.uuid_camion_trasporto_veicoli,
     label: c.targa_camion,
@@ -244,8 +274,13 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
   }, [role, uuidUtente]);
 
   const optionAutisti = (autisti ?? []).map((c) => ({
-    value: c.uuid_autista_ctv,
-    label: `${c.cognome_autista} ${c.nome_autista}`,
+    value: c?.uuid_autista_ctv,
+    label: `${c?.cognome_autista} ${c?.nome_autista}`,
+  }));
+
+  const optionAziende = (aziende ?? []).map((a) => ({
+    value: a?.uuid_azienda_ritiro_veicoli,
+    label: `${a?.ragione_sociale_arv}`,
   }));
 
 	async function StatusUpdate(uuidVeicolo, uuidStatoAvanzamento) {
@@ -412,36 +447,67 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               </h4>
             </div>
           </div> */}
-          {/* SELEZIONA CAMION E AUTISTA */}
+          {/* SELEZIONA CAMION E AUTISTA E DATA */}
           <div className="flex lg:flex-row flex-col justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border">
             <div className="flex flex-row lg:basis-6/12 basis-full">
               <FormSelect
                 nome="camionRitiro"
                 label="Camion"
+                anteValue="Camion"
                 value={formData.camionRitiro}
                 onchange={handleChange}
                 options={optionCamion}
               />
             </div>
-            <div className="flex flex-row lg:basis-6/12 basis-full">
+            <div className="flex flex-row lg:basis-5/12 basis-full">
               <FormSelect
                 nome="autistaRitiro"
                 label="Autista"
+                anteValue="Autista"
                 value={formData.autistaRitiro}
                 onchange={handleChange}
                 options={optionAutisti}
               />
             </div>
+            <div className="flex flex-col lg:basis-1/12 basis-full gap-2">
+            <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
+              DATA RITIRO
+            </h4>
+            <FormField
+              nome="filtroData"
+              label="data"
+              value={formData.filtroData}
+              onchange={handleChange}
+              type="date"
+            />
+            </div>
+            
           </div>
           {/* VEICOLI DA RITIRARE */}
-          <div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1">
+          <div className={`flex flex-col gap-4 ${veicoliRitirati.length > 0 ? `xl:basis-6/12 w-full` : `xl:basis-12/12 w-full`}  p-1`}>
             <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
-              <div className="flex flex-row justify-between">
-                <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                  VEICOLI DA RITIRARE
-                </h4>
-              </div>
-              <div className="flex flex-col gap-2 overflow-auto pe-2">
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row justify-between">
+                  <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
+                    VEICOLI DA RITIRARE
+                  </h4>
+                  <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
+                    SELEZIONA AZIENDA
+                  </h4>
+                </div>
+                <div className="flex flex-row justify-between gap-2 items-center">
+                  <FormSelect
+                    nome="aziendaFiltro"
+                    anteValue="Azienda"
+                    classAdd={``}
+                    value={filterAzienda}
+                    onchange={handleChangeFilterAzienda}
+                    options={optionAziende}
+                  />
+                  <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-3 rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                </div>
+              </div>  
+              <div className="flex flex-col gap-2 overflow-auto">
                 {veicoliDaRitirare?.map((c, i) => (
                   <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border py-3 px-4 rounded-xl">
                     <div className="flex flex-wrap items-start gap-1">
@@ -475,6 +541,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
             </div>
           </div>
           {/* VEICOLI RITIRATI */}
+          {veicoliRitirati.length > 0 ? 
           <div className="flex flex-col gap-2 xl:basis-6/12 w-full p-1">
             <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
               <div className="flex flex-row justify-between items-start">
@@ -522,7 +589,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                 )) : null}
               </div>
             </div>
-          </div>
+          </div> : null }
         </div>
       </div>
     </>
@@ -549,21 +616,21 @@ export function ButtonEliminaRitira({ onClick }) {
   );
 }
 
-export function FormSelect({ nome, label, value, onchange, options = [] }) {
+export function FormSelect({ nome, label, value, onchange, options, anteValue = [], classAdd }) {
   const handleValueChange = (val) => {
     onchange?.({ target: { name: nome, value: val } });
   };
   return (
-    <div className={`flex flex-col gap-2 w-full`}>
+    <div className={`flex flex-col gap-2 w-full ${classAdd}`}>
       <label
-        className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl uppercase"
+        className={`${label ? null : `hidden`} text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl uppercase`}
         htmlFor={nome}
       >
-        {label}
+        {label ? label : null}
       </label>
       <Select value={value ?? ""} onValueChange={handleValueChange}>
         <SelectTrigger id={nome} className="w-full rounded-lg">
-          <SelectValue placeholder={`-- Seleziona ${label} --`} />
+          <SelectValue placeholder={`-- Seleziona ${anteValue} --`} />
         </SelectTrigger>
         <SelectContent position="popper" className="z-[70]">
           <SelectGroup>
@@ -594,7 +661,7 @@ export function FormField({ nome, label, value, onchange, type }) {
         name={nome}
         value={value}
         onChange={onchange}
-        className={`appearance-none rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand`}
+        className={`appearance-none rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand`}
       />
     </div>
   );
