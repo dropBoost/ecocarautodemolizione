@@ -495,16 +495,20 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                     SELEZIONA AZIENDA
                   </h4>
                 </div>
-                <div className="flex flex-row justify-between gap-2 items-center">
-                  <FormSelect
-                    nome="aziendaFiltro"
-                    anteValue="Azienda"
-                    classAdd={`flex-1`}
-                    value={filterAzienda}
-                    onchange={handleChangeFilterAzienda}
-                    options={optionAziende}
-                  />
-                  <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-3 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                <div className="flex flex-row justify-between gap-2 items-center w-full">
+                  <div className="flex-1">
+                    <FormSelect
+                      nome="aziendaFiltro"
+                      anteValue="Azienda"
+                      classAdd={`flex-1`}
+                      value={filterAzienda}
+                      onchange={handleChangeFilterAzienda}
+                      options={optionAziende}
+                    />
+                    </div>
+                  <div className="w-fit">
+                    <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-2 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                  </div>
                 </div>
               </div>  
               <div className="flex flex-col gap-2 overflow-auto">
