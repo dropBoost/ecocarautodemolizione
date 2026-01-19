@@ -5,6 +5,7 @@ import { useState } from "react";
 import InserimentoCertificatiDemolizione from "./inserimentoCertificatoDemolizione";
 import ElencoCertificatiDemolizione from "./elencoCertificatiDemolizione";
 import CercaDemolizioneTarga from "./cercaTarga";
+import { useAdmin } from "@/app/admin/components/AdminContext";
 
 export default function CertificatiDemolizione() {
 
@@ -13,6 +14,10 @@ export default function CertificatiDemolizione() {
   const [onDisplaySectionThree, setOnDisplaySectionThree] = useState("off")
   const [statusAziende, setStatusAziende] = useState(false)
   const [statusPage, setStatusPage] = useState(false)
+
+  const utente = useAdmin()
+  const role = utente?.utente?.user_metadata?.ruolo
+  const isAdmin = role === "admin" || role === "superadmin"
 
   function ClickSectionOne () {
     setOnDisplaySectionOne("on")
@@ -36,15 +41,15 @@ export default function CertificatiDemolizione() {
     <>
     <div className="flex flex-col min-h-0 w-full justify-start items-start overflow-auto gap-3">
       <div className="flex items-start md:justify-start justify-center w-full gap-3">
-        <ButtonSection click={ClickSectionOne} nome="INSERIMENTO DEMOLIZIONE" section={onDisplaySectionOne}/>
+        {isAdmin ? <ButtonSection click={ClickSectionOne} nome="INSERIMENTO DEMOLIZIONE" section={onDisplaySectionOne}/> : "" }
         <ButtonSection click={ClickSectionTwo} nome="DEMOLIZIONI EFFETTUATE" section={onDisplaySectionTwo}/>
-        <ButtonSection click={ClickSectionThree} nome="CERCA TARGA" section={onDisplaySectionThree}/>
+        {isAdmin ? <ButtonSection click={ClickSectionThree} nome="CERCA TARGA" section={onDisplaySectionThree}/> : ""}
       </div>
       <div className="h-[1px] w-full bg-gradient-to-r from-brand to-brandDark"/>
       <div className="flex flex-1 justify-start items-start w-full min-h-0">
-        <InserimentoCertificatiDemolizione statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionOne}/>
+        {isAdmin ? <InserimentoCertificatiDemolizione statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionOne}/> : ""}
         <ElencoCertificatiDemolizione statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionTwo}/>
-        <CercaDemolizioneTarga statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree} sPage={statusPage} sSPage={setStatusPage}/>
+        {isAdmin ? <CercaDemolizioneTarga statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree} sPage={statusPage} sSPage={setStatusPage}/> : ""}
       </div>
     </div>
     </>

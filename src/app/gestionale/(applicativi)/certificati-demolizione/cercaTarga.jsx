@@ -11,6 +11,7 @@ import { ButtonLinkDisplayDownloadDOC } from "../../componenti/displayButtonComp
 import { FormSelect, FormTextarea } from "@/app/componenti/componentiForm";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { AiOutlineLoading3Quarters, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai'
+import { useAdmin } from "@/app/admin/components/AdminContext"
 
 export default function CercaDemolizioneTarga({ onDisplay, sSPage, sPage }) {
 
@@ -30,6 +31,9 @@ export default function CercaDemolizioneTarga({ onDisplay, sSPage, sPage }) {
   const [uploadingByField, setUploadingByField] = useState({});
   const [resetUploadsTick, setResetUploadsTick] = useState(0);
 
+  const utente = useAdmin()
+  const role = utente?.utente?.user_metadata?.ruolo
+  const isAdmin = role === "admin" || role === "superadmin"
   function handleReset(e) {
     e?.preventDefault?.()
     setDemolizioneTarga(null)
@@ -276,6 +280,8 @@ export default function CercaDemolizioneTarga({ onDisplay, sSPage, sPage }) {
     console.log("Aggiornato:", data)
 
   }
+
+  if (!isAdmin) return (<span>NON POSSIEDI I PERMESSI PER ENTRARE IN QUEST'AREA</span>)
 
   return (
     <div className={`${onDisplay === 'on' ? '' : 'hidden'}
