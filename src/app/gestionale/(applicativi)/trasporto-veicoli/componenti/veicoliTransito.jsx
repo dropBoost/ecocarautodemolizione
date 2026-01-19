@@ -186,7 +186,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 		return (
 			<>
 				<div className={`${onDisplay === true && veicoliInConsegna.length > 0 ? "" : "hidden"} w-full h-full`}>
-					<div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
+					<div className="flex xl:flex-row flex-col lg:gap-y-3 gap-y-1 w-full min-h-0">
 						{/* CRUSCOTTO */}
 						{/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
 							<div className="flex flex-row justify-between">
@@ -196,7 +196,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 							</div>
 						</div> */}
 						{/* VEICOLI DA CONSEGNARE */}
-						<div className="flex flex-col gap-4 xl:basis-6/12 w-full p-1 h-60 overflow-auto">
+						<div className={`flex flex-col gap-4 ${veicoliConsegnati.length > 0 ? "xl:basis-6/12 basis-full" : "basis-full"}  p-1 h-full overflow-auto`}>
 							<div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
 								<div className="flex flex-row justify-between">
 									<h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
@@ -223,7 +223,8 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 							</div>
 						</div>
 						{/* VEICOLI CONSEGNATI */}
-						<div className="flex flex-col gap-2 xl:basis-6/12 w-full p-1 h-60">
+						{veicoliConsegnati.length > 0 ?
+						<div className={`flex flex-col gap-4 xl:basis-6/12 basis-full p-1 h-full overflow-auto`}>
 							<div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
 								<div className="flex flex-row justify-between items-start">
 									<h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
@@ -247,7 +248,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 									))}
 								</div>
 							</div>
-						</div>
+						</div> : null }
 						{/* INSERIMENTO AUTISTA
 						<div className="flex flex-col gap-4 w-full bg-neutral-950 p-5 rounded-2xl">
 							ciaoii

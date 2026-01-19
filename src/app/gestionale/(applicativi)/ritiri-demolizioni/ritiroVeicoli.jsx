@@ -498,6 +498,21 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
       pratica_completata: formData.completato,
     };
 
+    if (aziendaScelta == "") {
+      alert("Selezionare Azienda");
+      return;
+    }
+
+    if (modelloSelect == "") {
+      alert("Selezionare Veicolo");
+      return;
+    }
+
+    if (formData.statoGravami == "") {
+      alert("Selezionare Stato GRAVAMI");
+      return;
+    }
+
     if (targaCaricare === true) {
       alert("Targa già inserita");
       return;
@@ -575,6 +590,8 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     alert("Pratica inserita con successo!");
   }
 
+  console.log("az", aziendaScelta, "md", modelloSelect)
+
   return (
     <>
       <div
@@ -617,7 +634,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full min-w-0 justify-between outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background data-[state=open]:ring-2 data-[state=open]:ring-ring data-[state=open]:ring-offset-2"
+                      className="w-full min-w-0 justify-between outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background data-[state=open]:ring-2 data-[state=open]:ring-ring data-[state=open]:ring-offset-2 truncate"
                     >
                       {aziendaScelta
                         ? optionsAziendeRitiro.find(

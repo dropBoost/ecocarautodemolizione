@@ -208,16 +208,19 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
       <div className="w-full border rounded-xl p-4">
         <div id="mainImagecontainergridtwo" className="flex flex-row">
             {praticaAuto?.length ? praticaAuto.map((pa, index) => {
+
+              const isPdfDetentoreF = pa.foto_documento_detentore_f.slice(-3).toLowerCase() == "pdf" ? true : false
+
               return (
                 <div id="rowImageContainer" className="flex flex-wrap w-full" key={`${pa.uuid_veicolo_ritirato ?? index}`}>
 									{pa.foto_documento_detentore_f ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
-											<Image src={pa.foto_documento_detentore_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
+                        {!isPdfDetentoreF ? <Image src={pa.foto_documento_detentore_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_detentore_f}?download=${pa.targa_veicolo_ritirato}-doc-detentore-fronte.jpg`} target="_blank">
+												<Link href={`${pa.foto_documento_detentore_f}?download`} target="_blank">
 													DETENTORE FRONTE
 												</Link>
 											</button>
@@ -231,7 +234,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<Image src={pa.foto_documento_detentore_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_detentore_r}?download=${pa.targa_veicolo_ritirato}-doc-detentore-retro.jpg`} target="_blank">
+												<Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank">
 													DETENTORE RETRO
 												</Link>
 											</button>
@@ -245,7 +248,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<Image src={pa.foto_documento_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download=${pa.targa_veicolo_ritirato}-doc-veicolo-fronte.jpg`} target="_blank">
+												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank">
 													VEICOLO FRONTE
 												</Link>
 											</button>
@@ -259,7 +262,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<Image src={pa.foto_documento_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download=${pa.targa_veicolo_ritirato}-doc-veicolo-retro.jpg`} target="_blank">
+												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank">
 													VEICOLO RETRO
 												</Link>
 											</button>
@@ -273,7 +276,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<Image src={pa.foto_complementare_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download=${pa.targa_veicolo_ritirato}-complementare-veicolo-fronte.jpg`} target="_blank">
+												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank">
 													COMPLEMENTARE FRONTE
 												</Link>
 											</button>
@@ -287,7 +290,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<Image src={pa.foto_complementare_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_complementare_veicolo_ritirato_r}?download=${pa.targa_veicolo_ritirato}-complementare-veicolo-retro.jpg`} target="_blank">
+												<Link href={`${pa.foto_complementare_veicolo_ritirato_r}?download`} target="_blank">
 													COMPLEMENTARE RETRO
 												</Link>
 											</button>
