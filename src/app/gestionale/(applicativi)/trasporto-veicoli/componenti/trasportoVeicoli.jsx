@@ -499,12 +499,12 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                   <FormSelect
                     nome="aziendaFiltro"
                     anteValue="Azienda"
-                    classAdd={``}
+                    classAdd={`flex-1`}
                     value={filterAzienda}
                     onchange={handleChangeFilterAzienda}
                     options={optionAziende}
                   />
-                  <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-3 rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                  <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-3 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
                 </div>
               </div>  
               <div className="flex flex-col gap-2 overflow-auto">

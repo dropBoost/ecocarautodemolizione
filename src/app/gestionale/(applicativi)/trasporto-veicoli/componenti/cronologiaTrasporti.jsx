@@ -14,7 +14,7 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
   const utente = useAdmin();
   const role = utente?.utente?.user_metadata.ruolo;
   const [veicoliRitirati, setVeicoliRitirati] = useState([]);
-  const [data, setData] = useState()
+  const [data, setData] = useState(()=>dataOggiItalia())
 
   const isAdmin = role === "admin" || role === "superadmin";
   const isTrasporter = role === "transporter";
@@ -107,10 +107,6 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
 
     const day = data
 
-    if (!data){
-      setData(dataOggi)
-    }
-
     const startIso = toUtcIsoFromRomeLocal(day, "00:00:00");
     const endIso = toUtcIsoFromRomeLocal(day, "23:59:59");
     if (!startIso || !endIso) return;
@@ -150,6 +146,9 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
   function handleChangeData(e) {
     const { name, value } = e.target;
     setData(value);
+    if (value > dataOggi) (
+      setData(dataOggi)
+    )
   }
   
   const columns = [
