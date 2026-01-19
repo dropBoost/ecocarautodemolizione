@@ -636,7 +636,7 @@ export function FormSelect({ nome, label, value, onchange, options, anteValue = 
         <SelectTrigger id={nome} className="w-full rounded-lg">
           <SelectValue placeholder={`-- Seleziona ${anteValue} --`} />
         </SelectTrigger>
-        <SelectContent position="popper" className="z-[70]">
+        <SelectContent position="popper" className="z-[70] max-w-full">
           <SelectGroup>
             {options.map((opt) => (
               <SelectItem
