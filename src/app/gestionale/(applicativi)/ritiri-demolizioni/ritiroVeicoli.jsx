@@ -194,7 +194,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     const raw = formData?.targa ?? "";
     const targa = raw.toUpperCase().replace(/\s+/g, ""); // normalizza
 
-    if (targa.length !== 7) {
+    if (targa.length < 3 || targa.length > 8) {
       setTargaCaricare(false);
       return;
     }
@@ -329,7 +329,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     // STEP 2: tutti presenti
     const twoOk =
       compilato(fd.targa) &&
-      fd.targa.length == 7 &&
+      (fd.targa.length >= 3 && fd.targa.length <= 8) &&
       ((fd.vinLeggibile == true && compilato(fd.vin) && fd.vin.length == 5) ||
         fd.vinLeggibile == false) &&
       compilato(fd.anno) &&
@@ -426,6 +426,10 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  }
+  function handleChangeTarga(e) {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value.slice(0,8) });
   }
 	function handleChangeGravami(e) {
     const { name, value } = e.target;
@@ -838,7 +842,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
                 label="Targa"
                 value={formData.targa}
                 basis={`lg:basis-3/12 basis-full`}
-                onchange={handleChange}
+                onchange={handleChangeTarga}
                 type="text"
               />
               <FormField
@@ -1532,7 +1536,7 @@ export function FormFileUpload({
   }
 
   return (
-    <div className={targa.length === 7 ? cn(basis, "min-w-0") : `hidden`}>
+    <div className={(targa.length >= 3 && targa.length <= 8) ? cn(basis, "min-w-0") : `hidden`}>
       <Label htmlFor={nome}>{label}</Label>
 
       <Input

@@ -495,8 +495,8 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                     SELEZIONA AZIENDA
                   </h4>
                 </div>
-                <div className="flex flex-row justify-between gap-2 items-center w-full">
-                  <div className="flex-1">
+                <div className="flex flex-row justify-between gap-2 items-center max-w-full overflow-hidden">
+                  <div className="flex-1 overflow-hidden">
                     <FormSelect
                       nome="aziendaFiltro"
                       anteValue="Azienda"
@@ -505,7 +505,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                       onchange={handleChangeFilterAzienda}
                       options={optionAziende}
                     />
-                    </div>
+                  </div>
                   <div className="w-fit">
                     <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-2 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
                   </div>
@@ -642,7 +642,7 @@ export function FormSelect({ nome, label, value, onchange, options, anteValue = 
               <SelectItem
                 key={opt.value}
                 value={opt.value}
-                className="data-[state=checked]:bg-brand data-[state=checked]:text-foreground focus:bg-brand truncate"
+                className="data-[state=checked]:bg-brand data-[state=checked]:text-foreground focus:bg-brand truncate overflow-hidden"
               >
                 {opt.label}
               </SelectItem>
