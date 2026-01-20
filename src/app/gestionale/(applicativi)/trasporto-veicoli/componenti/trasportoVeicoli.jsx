@@ -513,7 +513,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               </div>  
               <div className="flex flex-col gap-2 overflow-auto">
                 {veicoliDaRitirare?.map((c, i) => (
-                  <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border py-3 px-4 rounded-xl">
+                  <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border hover:border-brand transition p-3 rounded-xl">
                     <div className="flex flex-wrap items-start gap-1">
                       <div className="flex flex-wrap gap-2">
                         <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
@@ -562,18 +562,17 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               </div>
               <div className="flex flex-col gap-2 overflow-auto pe-2">
                 {veicoliRitirati?.length > 0 ? veicoliRitirati?.map((vr, i) => (
-                  <div key={vr.uuid_log_trasporto_veicolo} className="flex flex-row justify-between border py-2 px-4 rounded-xl">
-                    <div className="flex flex-row items-center gap-3">
+                  <div key={vr.uuid_log_trasporto_veicolo} className="flex flex-row justify-between border hover:border-brand transition p-3 gap-2 rounded-xl">
+                    <div className="flex flex-wrap items-start gap-2">
                       <div className="w-36">
                         <TargaDesign
                           targa={vr?.veicoloRitirato?.targa_veicolo_ritirato}
                         />
                       </div>
-                      <div className="flex lg:items-center items-start lg:flex-row flex-col lg:gap-2 gap-1">
-                        <span className="text-xs border px-2 py-1 rounded-lg">
+                      <div className="flex lg:items-center items-start flex-wrap lg:gap-2 gap-1">
+                        <span className="text-xs border px-2 py-1 rounded-lg truncate">
                           {
-                            vr?.veicoloRitirato?.aziendaRitiro
-                              ?.ragione_sociale_arv
+                            vr?.veicoloRitirato?.aziendaRitiro?.ragione_sociale_arv
                           }
                         </span>
                         <span className="text-xs bg-brand/30 px-2 py-1 rounded-lg">{vr?.autista?.nome_autista} {vr?.autista?.cognome_autista} / {vr?.camion?.targa_camion}</span>
