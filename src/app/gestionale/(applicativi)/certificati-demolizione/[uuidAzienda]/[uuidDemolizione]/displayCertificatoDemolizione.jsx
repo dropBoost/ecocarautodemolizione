@@ -235,7 +235,7 @@ export default function CertificatoDemolizione ({
     console.log("Aggiornato:", data)
 
   }
-
+  console.log("ciao")
   return (
     <>
       <div className="flex xl:flex-row flex-col min-h-0 justify-between items-start gap-3 w-full h-full">
@@ -468,7 +468,7 @@ export default function CertificatoDemolizione ({
             <button
               type="submit"
               disabled={anyUploading}
-              className="border border-red-900 hover:bg-red-900 mt-2 text-red-900 dark:text-white px-6 py-1 text-xs rounded-lg font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
+              className="bg-red-900 mt-2 text-white px-6 py-1 text-xs rounded-lg font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
             >
               {anyUploading
                 ? "Caricamento in corso..."
@@ -487,10 +487,10 @@ export default function CertificatoDemolizione ({
 
 export function SpanElementList ({icon, label, data}) {
   return(
-    <div className="flex flex-row border border-neutral-800 rounded-md p-1 px-3 gap-1 items-center justify-start text-sm text-neutral-400">
+    <div className="flex flex-row border rounded-md p-1 px-3 gap-1 items-center justify-start text-sm text-neutral-400">
       <div className="text-brand">{icon}</div>
-      <span>{label}</span>
-      <span className="text-neutral-300 font-bold">{data}</span>
+      <span className="">{label}</span>
+      <span className="dark:text-neutral-300 font-bold">{data}</span>
     </div>
   )
 }
