@@ -468,7 +468,7 @@ export default function CertificatoDemolizione ({
             <button
               type="submit"
               disabled={anyUploading}
-              className="border border-red-900 hover:bg-red-900 mt-2 text-white px-6 py-1 text-xs rounded-lg font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
+              className="border border-red-900 hover:bg-red-900 mt-2 text-red-900 dark:text-white px-6 py-1 text-xs rounded-lg font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8"
             >
               {anyUploading
                 ? "Caricamento in corso..."

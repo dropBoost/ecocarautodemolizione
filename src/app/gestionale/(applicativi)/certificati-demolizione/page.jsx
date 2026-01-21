@@ -36,7 +36,7 @@ export default function CertificatiDemolizione() {
     setOnDisplaySectionTwo("off")
     setOnDisplaySectionThree("on")
   }
-
+  console.log(role,isAdmin)
   return (
     <>
     <div className="flex flex-col min-h-0 w-full justify-start items-start overflow-auto gap-3">
