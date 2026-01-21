@@ -18,17 +18,17 @@ const styles = StyleSheet.create({
     gap:10
   },
   sectionCol: {
-    flexDirection: "col",
+    flexDirection: "column",
     gap:3
   },
   sectionColFooter: {
-    flexDirection: "col",
+    flexDirection: "column",
     alignItems:"flex-end",
     justifyContent:"flex-end",
     gap:3
   },
   sectionColBorder: {
-    flexDirection: "col",
+    flexDirection: "column",
     gap:3,
     borderWidth: 1,
     borderColor:"#222222",
@@ -148,19 +148,35 @@ const styles = StyleSheet.create({
     fontSize: 9,
   },
   markSpace: {
-    display:"flex",
-    alignItems: "center",
-    justifyContent: "center",
+    position: "relative",
     width: 200,
     height: 100,
     borderWidth: 1,
-    borderColor:`${colorDark}`,
+    borderColor: colorDark,
     borderRadius: 7,
+    overflow: "hidden",      // utile per non far uscire l'immagine dai bordi
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  markBg: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",    // oppure "cover"
+    opacity: 0.15,           // effetto watermark
+  },
+  imageWrap: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   imageDoc: {
+    width: "100%",
     height: "100%",
-    objectFit: "contain", // oppure "cover"
-  }
+    objectFit: "contain",
+  },
 });
 
 export default function RitiroVeicoloDOC(props) {
@@ -197,6 +213,9 @@ export default function RitiroVeicoloDOC(props) {
     iComplementareR,
   } = props;
 
+  const isPdf = (url) =>
+  typeof url === "string" && url.split("?")[0].toLowerCase().endsWith(".pdf");
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -205,7 +224,12 @@ export default function RitiroVeicoloDOC(props) {
           {/* HEAD */}
           <View style={styles.mainSection}>
             {/* LOGO */}
-            {logoSrc ? <Image src={logoSrc} style={{ width: 140, height: 40, marginBottom: 10, textAlign:"center",}} /> : null}
+            <View style={styles.sectionRow}>
+              {logoSrc ? <Image src={logoSrc} style={{ width: 140, height: 40, marginBottom: 10, textAlign:"center",}} /> : null}
+              {/* ✅ BLOCCO QR */}
+              <Image style={styles.qrImg} src={qrDataUrl}/>
+            </View>
+            
             {/* TITOLO */}
             <View style={styles.sectionCol}>
               <Text style={styles.title}>PRESA IN CARICO PROVVISORIA PER IL TRASPORTO<br/>DI VEICOLI DESTINATI ALLA ROTTAMAZIONE</Text>
@@ -269,21 +293,18 @@ export default function RitiroVeicoloDOC(props) {
                 </View>
             </View>
             {/* ✅ BLOCCO QR */}
-            {(qrDataUrl || qrValue) && (
-              <View style={styles.sectionCol}>
-                <Text style={styles.label}>Stato Pratica e Certificato di Demolizione</Text>
-                <View style={styles.sectionColBorder}>
-                  <View style={styles.sectionRow}>
-                    <View style={styles.sectionCol}>
-                      <Text style={styles.value}>
-                        Per verificare lo stato d'avanzemento della tua pratica e per scaricare il certificato di demolizione una volta completata
-                        scansiona il QR oppure visita il sito ecocarautodemolizione.it e clicca sulla apposita area dedicata ed inserisci i dati richiesti.</Text>
-                      {qrDataUrl ? <Image style={styles.qrImg} src={qrDataUrl} /> : null}
-                    </View>
+            <View style={styles.sectionCol}>
+              <Text style={styles.label}>Stato Pratica e Certificato di Demolizione</Text>
+              <View style={styles.sectionColBorder}>
+                <View style={styles.sectionRow}>
+                  <View style={styles.sectionCol}>
+                    <Text style={styles.value}>
+                      Per verificare lo stato d'avanzemento della tua pratica e successivamente scaricare il certificato di demolizione appena la tua pratica sarà completata
+                      scansiona il QR Code in alto a destra e monitora lo stato di avanzamento.</Text>
                   </View>
                 </View>
               </View>
-            )}
+            </View>
           </View>
           {/* FOOTER */}
           <View style={styles.sectionRowInfo}>
@@ -305,60 +326,70 @@ export default function RitiroVeicoloDOC(props) {
             <View style={styles.sectionColFooter}>
               <Text style={styles.labelFooter}>Timbro e Firma</Text>
               <View style={styles.markSpace}>
-                {logoSrc ? <Image src={logoSrc} style={{ width: 90, marginBottom: 10, textAlign:"center", opacity:0.3}} /> : null}
+                {logoSrc ? <Image src={logoSrc} style={styles.markBg} /> : null}
+
+                {/* contenuto sopra lo sfondo */}
+                <Text style={{ fontSize: 10 }}><b>ECOCAR s.a.s. di Cavagnoli Ciro & C.</b></Text>
+                <Text style={{ fontSize: 10 }}>Zona Industriale ASI Località Pantano</Text>
+                <Text style={{ fontSize: 10 }}>80011 Acerra (NA)</Text>
+                <Text style={{ fontSize: 10 }}>P.IVA/C.F.: 03913251215</Text>
               </View>
             </View>
           </View>
         </View>
       </Page>
-      {iDocVeicoloF ?
+      {/* {iDocVeicoloF && !isPdf(iDocVeicoloF) ? (
       <Page size="A4" style={styles.page}>
         <View style={styles.mainPage}>
-          {/* SEZIONE 1 */}
           <View style={styles.mainSection}>
-            {iDocVeicoloF ? <Image src={iDocVeicoloF} style={styles.imageDoc} /> : null}
+            <Image src={iDocVeicoloF} style={styles.imageDoc} />
           </View>
-          </View>
-      </Page> : null }
-      {iDocVeicoloR ?
+        </View>
+      </Page> ) : null }
+      {iDocVeicoloR && !isPdf(iDocVeicoloR) ? (
       <Page size="A4" style={styles.page}>
         <View style={styles.mainPage}>
-          {/* SEZIONE 1 */}
           <View style={styles.mainSection}>
-            {iDocVeicoloR ? <Image src={iDocVeicoloR} style={styles.imageDoc} /> : null}
+            <Image src={iDocVeicoloR} style={styles.imageDoc} />
           </View>
-          </View>
-      </Page> : null }
-      {iDocDetentoreF && iDocDetentoreR ?
+        </View>
+      </Page> ) : null }
+      {iDocDetentoreF && !isPdf(iDocDetentoreF) ? (
       <Page size="A4" style={styles.page}>
         <View style={styles.mainPage}>
-          {/* SEZIONE 1 */}
           <View style={styles.mainSection}>
             <View style={styles.sectionCol}>
-              {iDocDetentoreF ? <Image src={iDocDetentoreF} style={styles.imageDoc} /> : null}
-              {iDocDetentoreR ? <Image src={iDocDetentoreR} style={styles.imageDoc} /> : null}
+              <Image src={iDocDetentoreF} style={styles.imageDoc} />
             </View>
           </View>
         </View>
-      </Page> : null }
-      {iComplementareF ?
+      </Page> ) : null }
+      {iDocDetentoreR && !isPdf(iDocDetentoreR) ? (
       <Page size="A4" style={styles.page}>
         <View style={styles.mainPage}>
-          {/* SEZIONE 1 */}
           <View style={styles.mainSection}>
-            {iComplementareF ? <Image src={iComplementareF} style={styles.imageDoc} /> : null}
+            <View style={styles.sectionCol}>
+              <Image src={iDocDetentoreR} style={styles.imageDoc} />
+            </View>
           </View>
-          </View>
-      </Page> : null }
-      {iComplementareR ?
+        </View>
+      </Page> ) : null }
+      {iComplementareF && !isPdf(iComplementareF) ? (
       <Page size="A4" style={styles.page}>
         <View style={styles.mainPage}>
-          {/* SEZIONE 1 */}
           <View style={styles.mainSection}>
-            {iComplementareR ? <Image src={iComplementareR} style={styles.imageDoc} /> : null}
+            <Image src={iComplementareF} style={styles.imageDoc} />
           </View>
+        </View>
+      </Page> ) : null }
+      {iComplementareR && !isPdf(iComplementareR) ? (
+      <Page size="A4" style={styles.page}>
+        <View style={styles.mainPage}>
+          <View style={styles.mainSection}>
+            <Image src={iComplementareR} style={styles.imageDoc} />
           </View>
-      </Page> : null }
+        </View>
+      </Page> ) : null } */}
     </Document>
   );
 }
