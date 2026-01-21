@@ -43,7 +43,7 @@ export default function LayoutGestionale({ children }) {
   return (
     <AdminProvider>
       {ruolo !== "" ? 
-      <div className="min-h-screen dark:bg-neutral-900 text-neutral-100 overflow-hidden scrollbar-gestionale">
+      <div className="min-h-screen overflow-hidden scrollbar-gestionale">
         <main>{children}</main>
       </div> : "non autorizzato"}
     </AdminProvider>

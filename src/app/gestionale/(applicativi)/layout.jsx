@@ -20,7 +20,7 @@ export default function LayoutGestionale({ children }) {
       grid h-dvh min-h-0 overflow-hidden supports-[height:100svh]:h-[100svh]
       grid-cols-1 grid-rows-[64px_1fr_48px]
       md:grid-cols-[280px_1fr]
-      bg-neutral-100 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100
+      bg-neutral-100 dark:bg-neutral-950
     ">
       {/* Sidebar desktop */}
       <aside className="hidden md:block md:row-span-3 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
@@ -62,7 +62,7 @@ export default function LayoutGestionale({ children }) {
       </header>
 
       {/* Main scrollabile */}
-      <main className="bg-white dark:bg-neutral-900 col-start-1 md:col-start-2 row-start-2 min-w-0 min-h-0 overflow-y-auto overscroll-contain [scrollbar-gutter:stable]">
+      <main className="dark:bg-neutral-900 col-start-1 md:col-start-2 row-start-2 min-w-0 min-h-0 overflow-y-auto overscroll-contain [scrollbar-gutter:stable]">
         <div className="lg:p-5 p-3">
           {children}
         </div>

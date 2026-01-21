@@ -51,7 +51,7 @@ export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato
     
     return (
         <>
-        <div className="flex flex-col min-h-0 w-full border justify-between border-neutral-200 dark:border-neutral-700 rounded-xl p-3 gap-2">
+        <div className="flex flex-col min-h-0 w-full border justify-between hover:border-brand transition-all rounded-xl p-3 gap-2 bg-white dark:bg-neutral-900">
             <div className="flex flex-col justify-start items-start min-h-0 h-full lg:mt-1 m-0">
                     <ButtonCompanyOnOff onClick={()=> ActiveCompany(uuid)} stato={stato}/>
             </div>
@@ -62,8 +62,8 @@ export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato
                         <span className="text-sm font-semibold text-brand uppercase truncate text-ellipsis">{ragioneSociale} <font className="text-xs lowercase text-neutral-600 font-medium italic">{rules}</font></span>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <span className="text-xs font-light truncate">{sedeLegale}</span>
-                        <span className="text-xs font-light truncate">{piva} / {sdi}</span>
+                        <span className="text-xs truncate">{sedeLegale}</span>
+                        <span className="text-xs truncate">{piva} / {sdi}</span>
                     </div>
                 </div>
                 <div className="flex flex-wrap justify-start items-center h-full gap-1 lg:border-s lg:ps-3">

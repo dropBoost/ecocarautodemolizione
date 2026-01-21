@@ -20,8 +20,8 @@ a {
 
 @layer base {
   :root {
-    --background: theme(colors.neutral.100);
-    --foreground: theme(colors.neutral.950);
+    --background: 0 0% 100%;
+    --foreground: 220 10% 20%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -47,8 +47,8 @@ a {
     --radius: 0.5rem;
   }
   .dark {
-    --background: theme(colors.neutral.950);
-    --foreground: theme(colors.neutral.100);
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;

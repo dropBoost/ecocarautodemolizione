@@ -448,7 +448,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
             </div>
           </div> */}
           {/* SELEZIONA CAMION E AUTISTA E DATA */}
-          <div className="flex lg:flex-row flex-col justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border">
+          <div className="flex lg:flex-row flex-col justify-between w-full gap-4 min-h-0 p-5 rounded-2xl border bg-white dark:bg-neutral-900">
             <div className="flex flex-row lg:basis-6/12 basis-full">
               <FormSelect
                 nome="camionRitiro"
@@ -485,7 +485,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
           </div>
           {/* VEICOLI DA RITIRARE */}
           <div className={`flex flex-col gap-4 ${veicoliRitirati.length > 0 ? `xl:basis-6/12 w-full` : `xl:basis-12/12 w-full`}  p-1`}>
-            <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
+            <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2 bg-white dark:bg-neutral-900">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row justify-between">
                   <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">

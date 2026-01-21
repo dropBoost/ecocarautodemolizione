@@ -7,7 +7,7 @@ export function ButtonLinkDisplayDownloadDOC ({label, info, icon,linkHref, targe
         <a href={`${linkHref}`} target={targetType} rel="noopener noreferrer">
         <button
         disabled={dis}
-        className={`flex flex-row items-center text-xs font-light gap-2 bg-brand hover:text-neutral-950 p-1 hover:border px-2 rounded-lg ${!dis ? "hover:bg-white" : "hover:bg-none hover:border-none"} `}
+        className={`flex flex-row items-center text-[0.7rem] font-light gap-2 border hover:border-brand hover:bg-brand p-1 transition-all px-2 rounded-lg`}
         alt={label}
         >
             {icon} <font className="font-semibold">{info}</font>

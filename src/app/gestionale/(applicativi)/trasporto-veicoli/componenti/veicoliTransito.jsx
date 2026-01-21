@@ -205,7 +205,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 								</div>
 								<div className="flex flex-col gap-2 overflow-auto">
 									{veicoliInConsegna?.map((c, i) => (
-										<div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border hover:border-brand transition py-2 px-4 rounded-xl">
+										<div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border hover:border-brand transition py-2 px-4 rounded-xl bg-white dark:bg-neutral-900">
 											<div className="flex flex-row items-center gap-3">
 												<div className="w-36">
 													<TargaDesign targa={c?.targa_veicolo_ritirato} />

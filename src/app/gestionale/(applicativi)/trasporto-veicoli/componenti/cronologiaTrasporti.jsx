@@ -202,7 +202,7 @@ export default function SECTIONcronologiaTrasporti({ onDisplay, setStatusAziende
                 ><FaCloudDownloadAlt/> ESPORTA </ExportExcelButton>
               </div>
             </div>
-            <div className="flex flex-col p-5 h-full gap-3 bg-neutral-950/50 rounded-xl">
+            <div className="flex flex-col p-5 h-full gap-3 bg-white dark:bg-neutral-950/50 rounded-xl">
               <div className="flex flex-col gap-2 overflow-auto pe-2">
                 {veicoliRitirati?.length > 0 ? veicoliRitirati?.map((vr, i) => (
                   <div key={vr.uuid_log_trasporto_veicolo} className="flex flex-row justify-between border-b pb-2 border-brand/20 h-full gap-3">

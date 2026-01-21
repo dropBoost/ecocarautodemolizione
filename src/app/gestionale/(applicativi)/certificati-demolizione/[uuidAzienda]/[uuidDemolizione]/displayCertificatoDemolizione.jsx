@@ -12,6 +12,7 @@ import { FormSelect, FormTextarea } from "@/app/componenti/componentiForm";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { AiOutlineLoading3Quarters, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai'
+import TargaDesign from "@/app/componenti/targaDesign";
 
 export default function CertificatoDemolizione ({
     tipologiaDemolizione,
@@ -235,38 +236,24 @@ export default function CertificatoDemolizione ({
     console.log("Aggiornato:", data)
 
   }
-  console.log("ciao")
+
   return (
     <>
       <div className="flex xl:flex-row flex-col min-h-0 justify-between items-start gap-3 w-full h-full">
         {/* COLONNA DATI VEICOLO / AZIENDA / DETENTORE */}
         <div className="flex flex-col w-full justify-start items-start h-full gap-1 border p-5 rounded-xl shadow-xl">
           <div className="flex flex-col gap-1">
-            <div className="flex flex-row gap-1 items-center border border-brand w-fit rounded-lg px-2">
-              <FaCarAlt className="text-brand text-xs"/>
-              <span className="text-base font-semibold uppercase truncate text-ellipsis">
-                {datiV?.targa_veicolo_ritirato}
-                <font className="text-xs text-neutral-500 font-medium italic uppercase">
-                  {' '}{datiV?.vin_veicolo_ritirato}
-                </font>
+            <div className="flex flex-col gap-1 items-start w-fit">
+              <span className="text-base font-semibold uppercase truncate text-ellipsis w-36">
+                <TargaDesign targa={datiV?.targa_veicolo_ritirato}/>
               </span>
+              <span className="text-xs font-medium italic uppercase">VIN: {datiV?.vin_veicolo_ritirato}</span>
+              <span className="text-xs ">Demolizione in data: {data}</span>
             </div>
           </div>
-
-          <div className="flex flex-row gap-1 items-center border border-neutral-500 w-fit rounded-md px-2">
-            <span className="text-xs text-neutral-400">
-              Demolizione
-              <font className={`font-bold uppercase ${tipologiaDemolizione == "totale" ? "text-red-600" : "text-brand"}`}>
-                {' '}{tipologiaDemolizione}{' '}
-              </font>
-              in data
-              <span className="text-xs text-neutral-400">: {data}</span>
-            </span>
-          </div>
-
           {note !== "" && (
             <div className="flex flex-row gap-1 items-center w-fit rounded-md px-2">
-              <p className="text-xs text-neutral-400">
+              <p className="text-xs">
                 <font className="text-red-600">Note:</font> {note}
               </p>
             </div>
@@ -274,7 +261,7 @@ export default function CertificatoDemolizione ({
 
           <hr className="w-full border-brand my-2"/>
 
-          <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-3 py-1 text-xs mb-2">
+          <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-3 py-1 text-xs mb-2 font-bold">
             <span>DATI AZIENDA RITIRO</span>
           </div>
           <div className="flex flex-col gap-1">
@@ -286,7 +273,7 @@ export default function CertificatoDemolizione ({
             <SpanElementList icon={<FaCaretRight/>} label="Data Ritiro Veicolo:" data={DataFormat(datiV?.created_at_veicolo_ritirato)}/>
           </div>
 
-          <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-3 py-1 text-xs my-2">
+          <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-3 py-1 text-xs my-2 font-bold">
             <span>FORMA LEGALE DETENTORE VEICOLO</span>
           </div>
           <div className="flex flex-col gap-1">
@@ -301,7 +288,7 @@ export default function CertificatoDemolizione ({
             )}
           </div>
 
-          <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-3 py-1 text-xs my-2">
+          <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-3 py-1 text-xs my-2 font-bold">
             <span>DATI DETENTORE VEICOLO</span>
           </div>
           <div className="flex flex-col gap-1">
@@ -312,7 +299,7 @@ export default function CertificatoDemolizione ({
             <SpanElementList icon={<FaCaretRight/>} label="Indirizzo Detentore:" data={`${datiV?.indirizzo_detentore} - ${datiV?.cap_detentore} ${datiV?.citta_detentore} ${datiV?.provincia_detentore}`}/>
           </div>
 
-          <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-3 py-1 text-xs my-2">
+          <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-3 py-1 text-xs my-2 font-bold">
             <span>DATI VEICOLO</span>
           </div>
           <div className="flex flex-col gap-1">
@@ -328,8 +315,8 @@ export default function CertificatoDemolizione ({
         <div className="flex flex-col lg:flex-1 h-full w-full lg:min-w-72 justify-start items-start gap-3 rounded-xl">
           <div className="flex flex-col gap-3 min-h-0 w-full">
             <div className="flex flex-wrap xl:flex-col flex-row gap-3 w-full">
-              <div className="flex flex-col items-start justify-start border border-neutral-800 rounded-xl p-3 gap-1 shadow-xl ">
-                <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-2 py-1 text-[0.6rem]">
+              <div className="flex flex-col items-start justify-start border rounded-xl p-3 gap-1 shadow-xl ">
+                <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-2 py-1 text-[0.6rem] font-bold">
                   <span>AZIENDA RITIRO</span>
                 </div>
                 <LinkComponentContact label="Mobile" icon={<TbBrandWhatsappFilled/>} info={arv?.mobile_arv} linkHref="https://wa.me/"/>
@@ -337,8 +324,8 @@ export default function CertificatoDemolizione ({
                 <LinkComponentContact label="Email" icon={<MdEmail/>} info={arv?.email_arv} linkHref="mailto:"/>
               </div>
 
-              <div className="flex flex-col items-start justify-start border border-neutral-800 rounded-xl p-3 gap-1 shadow-xl ">
-                <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-2 py-1 text-[0.6rem]">
+              <div className="flex flex-col items-start justify-start border rounded-xl p-3 gap-1 shadow-xl ">
+                <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-2 py-1 text-[0.6rem] font-bold">
                   <span>DETENTORE VEICOLO</span>
                 </div>
                 <LinkComponentContact label="mobile detentore" icon={<TbBrandWhatsappFilled/>} info={datiV?.mobile_detentore} linkHref="https://wa.me/"/>
@@ -347,24 +334,24 @@ export default function CertificatoDemolizione ({
             </div>
 
             <div className="flex flex-wrap xl:flex-col flex-row gap-3 w-full">
-              <div className="flex flex-col items-start justify-start border border-neutral-800 rounded-xl p-3 gap-1 shadow-xl ">
-                <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-2 py-1 text-[0.6rem]">
+              <div className="flex flex-col items-start justify-start border rounded-xl p-3 gap-1 shadow-xl ">
+                <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-2 py-1 text-[0.6rem] font-bold">
                   <span>DOCUMENTI DETENTORE</span>
                 </div>
                 <ButtonLinkDisplayDownloadDOC targetType="_blank" linkHref={datiV?.foto_documento_detentore_f} info="DETENTORE F" icon={<FaFileDownload/>}/>
                 <ButtonLinkDisplayDownloadDOC targetType="_blank" linkHref={datiV?.foto_documento_detentore_r} info="DETENTORE R" icon={<FaFileDownload/>}/>
               </div>
 
-              <div className="flex flex-col items-start justify-start border border-neutral-800 rounded-xl p-3 gap-1 shadow-xl ">
-                <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-2 py-1 text-[0.6rem]">
+              <div className="flex flex-col items-start justify-start border rounded-xl p-3 gap-1 shadow-xl ">
+                <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-2 py-1 text-[0.6rem] font-bold">
                   <span>DOCUMENTI VEICOLO</span>
                 </div>
                 <ButtonLinkDisplayDownloadDOC targetType="_blank" linkHref={datiV?.foto_documento_veicolo_ritirato_f} info="VEICOLO F" icon={<FaFileDownload/>}/>
                 <ButtonLinkDisplayDownloadDOC targetType="_blank" linkHref={datiV?.foto_documento_veicolo_ritirato_r} info="VEICOLO R" icon={<FaFileDownload/>}/>
               </div>
 
-              <div className="flex flex-col items-start justify-start border border-neutral-800 rounded-xl p-3 gap-1 shadow-xl ">
-                <div className="flex flex-row items-center border border-brand text-neutral-300 w-fit rounded-lg px-2 py-1 text-[0.6rem]">
+              <div className="flex flex-col items-start justify-start border rounded-xl p-3 gap-1 shadow-xl ">
+                <div className="flex flex-row items-center border border-brand w-fit rounded-lg px-2 py-1 text-[0.6rem] font-bold">
                   <span>DOCUMENTI DEMOLIZIONE</span>
                 </div>
 
@@ -411,8 +398,8 @@ export default function CertificatoDemolizione ({
         </div>
 
         {/* COLONNA FORM UPDATE */}
-        <div className="flex flex-col w-full h-full shadow-xl p-3 gap-3 border border-red-900 rounded-xl">
-          <div className="flex flex-row gap-1 items-center border border-red-900 text-neutral-300 w-fit rounded-lg px-3 py-1 text-xs">
+        <div className="flex flex-col w-full h-full shadow-xl p-3 gap-3 border border-red-800 rounded-xl">
+          <div className="flex flex-row gap-1 items-center border border-red-800 w-fit rounded-lg px-3 py-1 text-xs">
             <span>AGGIORNA</span>
           </div>
 
@@ -487,10 +474,10 @@ export default function CertificatoDemolizione ({
 
 export function SpanElementList ({icon, label, data}) {
   return(
-    <div className="flex flex-row border rounded-md p-1 px-3 gap-1 items-center justify-start text-sm text-neutral-400">
+    <div className="flex flex-row border rounded-md p-1 px-3 gap-1 items-center justify-start text-sm">
       <div className="text-brand">{icon}</div>
-      <span className="">{label}</span>
-      <span className="dark:text-neutral-300 font-bold">{data}</span>
+      <span className="text-foreground">{label}</span>
+      <span className="text-foreground font-bold">{data}</span>
     </div>
   )
 }

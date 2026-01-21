@@ -346,7 +346,7 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
               {anyUploading ? "Caricamento in corso..." : <FaPlusSquare className='font-bold text-white'/>}
             </button>
         </div>
-        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full bg-neutral-100 dark:bg-neutral-950/40'>
+        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full bg-neutral-300 dark:bg-neutral-950/40'>
           <FormField nome="ragioneSociale" label='Ragione Sociale' value={formData.ragioneSociale} colspan="col-span-12" mdcolspan="lg:col-span-4" onchange={handleChangeRagioneSociale} type='text'/>
           <FormField nome="piva" label='Partita Iva' value={formData.piva} colspan="col-span-6" mdcolspan="lg:col-span-2" onchange={handleChangePiva} type='text'/>
           <FormField nome="sdi" label='SDI' value={formData.sdiArv} colspan="col-span-6" mdcolspan="lg:col-span-2" onchange={handleChange} type='text'/>
@@ -356,7 +356,7 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
         <div className="col-span-12">
           <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">SEDE LEGALE</h4>
         </div>
-        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border border-neutral-200 dark:border-neutral-800'>
+        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border bg-white dark:bg-neutral-900'>
           <FormSelect nome="provinciaLegale" label='Provincia' value={formData.provinciaLegale} colspan="col-span-3" mdcolspan="lg:col-span-2" onchange={handleChangeProvinciaLegale} options={provinceSet}/>
           <FormSelect nome="cittaLegale" label='Città' value={formData.cittaLegale} colspan="col-span-5" mdcolspan="lg:col-span-2" onchange={handleChangeCittaLegale} options={cittaLegale}/>
           <FormSelect nome="capLegale" label='Cap' value={formData.capLegale} colspan="col-span-4" mdcolspan="lg:col-span-2" onchange={handleChangeCapLegale} options={capLegale}/>
@@ -365,7 +365,7 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
         <div className="col-span-12">
           <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">SEDE OPERATIVA</h4>
         </div>
-        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border border-neutral-200 dark:border-neutral-800'>
+        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border bg-white dark:bg-neutral-900'>
         <FormSelect nome="provinciaOperativa" label='Provincia' value={formData.provinciaOperativa} colspan="col-span-3" mdcolspan="lg:col-span-2" onchange={handleChangeProvinciaOperativa} options={provinceSet}/>
         <FormSelect nome="cittaOperativa" label='Città' value={formData.cittaOperativa} colspan="col-span-5" mdcolspan="lg:col-span-2" onchange={handleChangeCittaOperativa} options={cittaOperativa}/>
         <FormSelect nome="capOperativa" label='Cap' value={formData.capOperativa} colspan="col-span-4" mdcolspan="lg:col-span-2" onchange={handleChangeCapOperativa} options={capOperativa}/>
@@ -374,7 +374,7 @@ export default function InserimentoAzienda({onDisplay, setStatusAziende}) {
         <div className="col-span-12">
           <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">CONTATTI</h4>
         </div>
-        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border border-neutral-200 dark:border-neutral-800'>
+        <div className='grid grid-cols-12 gap-4 p-6 col-span-12 rounded-2xl min-w-0 h-full border bg-white dark:bg-neutral-900'>
         <FormField nome="email" label='Email' value={formData.email} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChange} type='email'/>
         <FormField nome="telefono" label='Telefono' value={formData.telefono} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChangeNumerico} type='tel'/>
         <FormField nome="mobile" label='Mobile' value={formData.mobile} colspan="col-span-12" mdcolspan="lg:col-span-6" onchange={handleChangeNumerico} type='tel'/>

@@ -6,7 +6,7 @@ export default function DisplayAziendeRitiriDemolizioni ({uuid, n, pl, ar, ragio
 
     return (
         <>
-        <div className={`flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start ${n > 0 ? `border-red-700` : `border-neutral-200 dark:border-neutral-700` } rounded-xl p-3 gap-1`}>
+        <div className={`flex lg:flex-row flex-col min-h-0 w-full border lg:items-center justify-between items-start ${n > 0 ? `border-red-700` : `` } hover:border-brand transition-all rounded-xl p-3 gap-1 bg-white dark:bg-neutral-900`}>
             <div className="flex lg:flex-row flex-col justify-start items-start lg:items-center gap-1 flex-1">
                 <div className="flex flex-col justify-start items-center w-fit me-2 h-fit">
                     {n == 0

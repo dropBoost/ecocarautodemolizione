@@ -66,15 +66,15 @@ export default function PAGEveicoliAttesaRitiro({ onDisplay, statusAziende, setS
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap border rounded-xl p-5 gap-2 overflow-auto">
+        <div className="flex flex-1 flex-col border rounded-xl p-5 gap-2 bg-white dark:bg-neutral-900">
           {veicoliAttesa?.length ? 
           veicoliAttesa.map(v => (
           <Link key={v.targa_veicolo_ritirato} href={`/gestionale/ritiri-demolizioni/${v.uuid_azienda_ritiro_veicoli}/${v.uuid_veicolo_ritirato}`}>
-            <div className="flex flex-col border rounded-xl px-5 py-3 hover:border-brand hover:shadow-xl">
-              <div className="w-36">
+            <div className="flex flex-row border rounded-xl px-5 py-3 hover:border-brand gap-3 transition-all">
+              <div className="min-w-36 max-w-36">
                 <TargaDesign targa={v.targa_veicolo_ritirato}/>
               </div>
-              <span className="text-xs flex flex-row items-center gap-1"><TbBuildingSkyscraper className="text-brand"/>{v.aziendaRitiro.ragione_sociale_arv}</span>
+              <span className="text-xs flex flex-row items-center gap-1 truncate overflow-hidden"><TbBuildingSkyscraper className="text-brand"/>{v.aziendaRitiro.ragione_sociale_arv}</span>
             </div>
           </Link>
           )) : null }

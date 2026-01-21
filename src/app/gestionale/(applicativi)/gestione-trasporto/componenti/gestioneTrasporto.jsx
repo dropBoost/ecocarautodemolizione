@@ -245,16 +245,16 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
             <div className="border px-3 pb-4 pt-1 rounded-2xl h-full overflow-auto">
               <div className="flex flex-col gap-2 text-xs mt-2">
                 {autisti.map((a, i) => (
-                  <div key={i} className="flex flex-row border w-fit px-2 py-1 rounded-lg gap-1">
-                    <span className="text-brand font-bold">{a.nome_autista} {a.cognome_autista}</span>
-                    <span className="">| {a.n_patente_autista} | {a.mobile_autista} | <font className="lowercase">{a.email_autista}</font> </span>
+                  <div key={i} className="flex flex-row border px-2 py-1 rounded-lg gap-1">
+                    <span className="text-brand font-bold truncate overflow-hidden">{a.nome_autista} {a.cognome_autista}</span>
+                    <span className="text-[0.6rem]">| {a.n_patente_autista} | {a.mobile_autista} | <font className="lowercase">{a.email_autista}</font> </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>                 
           {/* INSERIMENTO CAMION */}
-          <div className="flex flex-col gap-4 w-full dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">    
+          <div className="flex flex-col gap-4 w-full bg-white dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">    
             <div className="col-span-12 flex flex-row justify-between">
                 <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">INSERIMENTO CAMION</h4>
                 <button
@@ -272,7 +272,7 @@ export default function SECTIONgestioneTrasporto({onDisplay, setStatusAziende}) 
             </form>
           </div>
           {/* INSERIMENTO AUTISTA */}
-          <div className="flex flex-col gap-4 w-full dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">  
+          <div className="flex flex-col gap-4 w-full bg-white dark:bg-neutral-950 dark:border-none border p-5 rounded-2xl">  
             <div className="col-span-12 flex flex-row justify-between">
                 <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">INSERIMENTO AUTISTA</h4>
                 <button
