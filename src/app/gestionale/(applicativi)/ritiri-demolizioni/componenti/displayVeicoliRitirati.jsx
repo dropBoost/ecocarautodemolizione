@@ -26,17 +26,18 @@ export default function DisplayVeicoliRitirati ({
 
 	return (
 		<>
-		<div className="flex flex-row min-h-0 lg:h-56 h-full w-full border justify-between items-start rounded-xl p-3 gap-2">
+		<div className="flex flex-row min-h-0 lg:h-56 h-full w-full border hover:border-brand transition-all justify-between items-start rounded-xl p-3 gap-2">
 			<div className="flex flex-1 flex-col justify-between items-start min-h-0 h-full lg:gap-0 gap-4">
 				{/* DATI VEICOLO */}
 				<div className="flex flex-col flex-1 justify-start items-start gap-1">
-					<div className={`flex flex-row gap-1 items-center border border-neutral-500 w-fit rounded-md px-2`}>
-						<span className={`text-xs text-neutral-400`}>{data}</span>
+					<div className={`flex flex-row gap-1 items-center border w-fit rounded-md px-2`}>
+						<span className={`text-xs`}>{data}</span>
 					</div>
 					<div className="flex flex-col gap-1">
-						<TargaDesign targa={targa}/>
-						{telaio ? <span className={`border border-brand rounded-lg px-2 py-1 text-xs truncate text-ellipsis w-fit`}>Telaio:<font className="text-xs text-neutral-400 font-medium italic uppercase"> {telaio}</font></span> : <span className="border bg-red-700 rounded-lg px-2 py-1 text-[0.55rem] truncate text-ellipsis w-fit uppercase"> telaio non leggibile</span>}
-						<div className="flex flex-row gap-1 items-center border border-neutral-500 w-fit rounded-lg px-2">
+						<div className="min-w-36 max-w-36"><TargaDesign targa={targa}/></div>
+						
+						{telaio ? <span className={`border border-brand rounded-lg px-2 py-1 text-xs truncate text-ellipsis w-fit`}>Telaio:<font className="text-xs font-medium italic uppercase"> {telaio}</font></span> : <span className="border bg-red-700 rounded-lg px-2 py-1 text-[0.55rem] truncate text-ellipsis w-fit uppercase"> telaio non leggibile</span>}
+						<div className="flex flex-row gap-1 items-center border w-fit rounded-lg px-2">
 								<FaCarAlt className="text-brand text-xs"/>
 								<span className={`text-sm font-semibold uppercase truncate text-ellipsis`}>{modelloVeicolo} <font className="text-xs text-neutral-500 font-medium italic lowercase">{documento}</font></span>
 						</div>
