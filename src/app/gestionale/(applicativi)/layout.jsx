@@ -15,9 +15,15 @@ export default function LayoutGestionale({ children }) {
   const ruolo = utente?.user_metadata.ruolo
   const [openUpBar, setOpenUpBar] = useState(false)
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
     <div className="
-      grid h-dvh min-h-0 overflow-hidden supports-[height:100svh]:h-[100svh]
+      grid h-[100svh] min-h-0 overflow-hidden
+      supports-[height:100dvh]:h-[100dvh]
       grid-cols-1 grid-rows-[64px_1fr_48px]
       md:grid-cols-[280px_1fr]
       bg-neutral-100 dark:bg-neutral-950
@@ -34,7 +40,7 @@ export default function LayoutGestionale({ children }) {
 
       {/* Header */}
       <header className="col-start-1 md:col-start-2 row-start-1 flex items-center justify-between gap-3 px-3 md:px-4 bg-brand backdrop-blur">
-        <div id='headerCNT' className={`${!openUpBar ? "flex items-center justify-between flex-row w-full" : "hidden"}`}>
+        <div id='headerCN' className={`${!openUpBar ? "flex items-center justify-between flex-row w-full" : "hidden"}`}>
           <div className="flex items-center gap-2">
             <button className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-900" onClick={() => setOpen(true)} aria-label="Apri menu">
               {/* Icona hamburger */}

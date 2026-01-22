@@ -25,7 +25,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="it" suppressHydrationWarning className="h-full min-h-0 ">
-      <body className={`${geistSans.variable} ${geistMono.variable} h-dvh min-h-0 bg-background text-foreground overflow-hidden`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-background text-foreground overflow-x-hidden`}>
         <Analytics/>
         <ThemeProvider attribute='class' enableSystem defaultTheme='system'>
           {children}

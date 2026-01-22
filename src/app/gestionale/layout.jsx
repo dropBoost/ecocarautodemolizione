@@ -34,7 +34,7 @@ export default function LayoutGestionale({ children }) {
 
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-900">
+      <div className="min-h-dvh flex items-center justify-center bg-neutral-900">
         <p className="text-neutral-100">Verifica autenticazione...</p>
       </div>
     )
@@ -42,10 +42,17 @@ export default function LayoutGestionale({ children }) {
 
   return (
     <AdminProvider>
-      {ruolo !== "" ? 
-      <div className="min-h-screen overflow-hidden scrollbar-gestionale">
-        <main>{children}</main>
-      </div> : "non autorizzato"}
+      {ruolo !== "" ? (
+        <div className="min-h-dvh scrollbar-gestionale">
+          <div className="flex min-h-0 flex-col overflow-hidden">
+            <main className="flex-1 min-h-0 overflow-y-auto">
+              {children}
+            </main>
+          </div>
+        </div>
+      ) : (
+        "non autorizzato"
+      )}
     </AdminProvider>
   )
 }

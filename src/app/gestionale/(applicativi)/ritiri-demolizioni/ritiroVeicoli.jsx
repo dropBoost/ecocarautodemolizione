@@ -228,7 +228,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
 		const raw = formData?.vin ?? "";
 		const telaio = raw.toUpperCase().replace(/\s+/g, ""); // normalizza
 
-		if (telaio.length !== 17) {
+		if (telaio.length < 5 ) {
 			setTelaioCaricare(false);
 			return;
 		}
@@ -401,13 +401,11 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     }
 
   }
-
   function handleChangeCheckbox(e) {
     const { name, checked } = e.target;
     setFormData((prev) => ({ ...prev, [name]: checked }));
 		setFormData((prev) => ({ ...prev, vin: "" }));
   }
-	
   function handleChangeProvinciaLegale(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
