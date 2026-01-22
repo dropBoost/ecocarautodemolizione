@@ -34,12 +34,12 @@ export default function DisplayAziendeRitiriDemolizioni ({uuid, n, pl, ar, ragio
                 </div>
             </div>
             <div className="flex flex-row items-start lg:gap-3 gap-1 rounded-md lg:p-1 p-2">
-                <div className="flex flex-col justify-center items-start w-fit h-full">
+                {/* <div className="flex flex-col justify-center items-start w-fit h-full">
                     <Link className="lg:p-2 p-1 bg-brand/70 rounded-md hover:bg-brand text-xs" href={`ritiri-demolizioni/${uuid}`}><FaFileDownload /></Link>
                 </div>
                 <div className="flex flex-col justify-center items-start w-fit h-full">
                     <Link className="lg:p-2 p-1 bg-brand/70 rounded-md hover:bg-brand text-xs" href={`ritiri-demolizioni/${uuid}`}><FaFileDownload /></Link>
-                </div>
+                </div> */}
                 <div className="flex flex-col justify-center items-start w-fit h-full">
                     <Link className="lg:p-2 p-1 bg-brand/70 rounded-md hover:bg-brand text-xs" href={`ritiri-demolizioni/${uuid}`}><RiEyeCloseLine/></Link>
                 </div>

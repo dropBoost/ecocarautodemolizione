@@ -232,7 +232,7 @@ export default function RitiroVeicoloDOC(props) {
             
             {/* TITOLO */}
             <View style={styles.sectionCol}>
-              <Text style={styles.title}>PRESA IN CARICO PROVVISORIA PER IL TRASPORTO<br/>DI VEICOLI DESTINATI ALLA ROTTAMAZIONE</Text>
+              <Text style={styles.title}>PRESA IN CARICO PROVVISORIA PER IL TRASPORTO DI VEICOLI DESTINATI ALLA ROTTAMAZIONE</Text>
               <Text style={styles.subTitle}>Art.208 D.Lgs 152/06 – D.lgs. 209/03</Text>
             </View>
             {/* DETTAGLI PRATICA */}
