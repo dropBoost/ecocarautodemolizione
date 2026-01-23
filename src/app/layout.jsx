@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner";
+import { version } from "./cosetting";
 
 
 const geistSans = Geist({
@@ -16,8 +17,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "HI DEM",
+  title: `hiDEM ${version}`,
   description: "powered by DROPBOOST.it",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }) {
