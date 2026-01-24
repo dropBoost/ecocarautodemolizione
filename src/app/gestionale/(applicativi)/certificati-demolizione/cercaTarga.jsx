@@ -284,7 +284,7 @@ export default function CercaDemolizioneTarga({ onDisplay, sSPage, sPage }) {
   if (!isAdmin) return (<span>NON POSSIEDI I PERMESSI PER ENTRARE IN QUEST'AREA</span>)
 
   return (
-    <div className={`${onDisplay === 'on' ? '' : 'hidden'}
+    <div className={`${onDisplay === true ? '' : 'hidden'}
       w-full h-full
       flex-1 flex flex-col
       md:p-0 md:pe-3 px-4 gap-4`}>

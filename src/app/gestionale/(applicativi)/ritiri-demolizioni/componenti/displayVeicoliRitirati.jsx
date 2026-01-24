@@ -6,6 +6,7 @@ import TargaDesign from "@/app/componenti/targaDesign";
 import ButtonScaricaRitiroPDF from "@/app/componenti/pdf/buttonScaricaRitiroPDF";
 import DeleteRecordWithBucketsButton from "@/app/componenti/DeleteRecordButton";
 import { useAdmin } from "@/app/admin/components/AdminContext";
+import { IoDocument } from "react-icons/io5";
 
 export default function DisplayVeicoliRitirati ({
 	uuid, uuidAzienda, targa, modelloVeicolo, telaio, nome, cognome, mobileDetentore,completata,tipologiaD,ragioneSociale, piva, cf, email, documento, data,
@@ -26,8 +27,8 @@ export default function DisplayVeicoliRitirati ({
 
 	return (
 		<>
-		<div className="flex flex-row min-h-0 lg:h-56 h-full w-full border hover:border-brand transition-all justify-between items-start rounded-xl p-3 gap-2">
-			<div className="flex flex-1 flex-col justify-between items-start min-h-0 h-full lg:gap-0 gap-4">
+		<div className="flex flex-row min-h-0 h-full w-full border hover:border-brand transition-all justify-between items-end rounded-xl p-3 gap-2">
+			<div className="flex flex-1 flex-col justify-between items-start min-h-0 h-full gap-2">
 				{/* DATI VEICOLO */}
 				<div className="flex flex-col flex-1 justify-start items-start gap-1">
 					<div className={`flex flex-row gap-1 items-center border w-fit rounded-md px-2`}>
@@ -39,20 +40,21 @@ export default function DisplayVeicoliRitirati ({
 						{telaio ? <span className={`border border-brand rounded-lg px-2 py-1 text-xs truncate text-ellipsis w-fit`}>Telaio:<font className="text-xs font-medium italic uppercase"> {telaio}</font></span> : <span className="border bg-red-700 rounded-lg px-2 py-1 text-[0.55rem] truncate text-ellipsis w-fit uppercase"> telaio non leggibile</span>}
 						<div className="flex flex-row gap-1 items-center border w-fit rounded-lg px-2">
 								<FaCarAlt className="text-brand text-xs"/>
-								<span className={`text-sm font-semibold uppercase truncate text-ellipsis`}>{modelloVeicolo} <font className="text-xs text-neutral-500 font-medium italic lowercase">{documento}</font></span>
+								<span className={`text-sm font-semibold uppercase truncate text-ellipsis`}>{modelloVeicolo}</span>
 						</div>
+						<span className="w-fit border border-sky-600 rounded-lg px-2 py-1 flex flex-row gap-1 items-center text-xs font-medium italic lowercase"><IoDocument className="text-brand"/>{documento}</span>
 					</div>
 					<div className="flex flex-col gap-1">
 						{tipologiaD == "azienda" ?
 							<>
-								<span className="text-xs font-light truncate">{ragioneSociale}</span>
-								<span className="text-xs font-light truncate">{nome} {cognome} / <font className="italic text-yellow-600">{tipologiaD}</font></span>
-								<span className="text-xs font-light truncate">{piva}</span>
+								<span className="text-xs truncate">{ragioneSociale}</span>
+								<span className="text-xs truncate">{nome} {cognome} / <font className="italic text-yellow-600">{tipologiaD}</font></span>
+								<span className="text-xs truncate">{piva}</span>
 							</>    
 								:
 							<>    
-								<span className="text-xs font-light truncate">{nome} {cognome} / <font className="italic text-blue-600">{formaLegale}</font></span>
-								<span className="text-xs font-light truncate">{cf}</span>
+								<span className="text-xs truncate">{nome} {cognome} / <font className="italic text-blue-600">{formaLegale}</font></span>
+								<span className="text-xs truncate">{cf}</span>
 							</>    
 						}
 					</div>
@@ -71,7 +73,7 @@ export default function DisplayVeicoliRitirati ({
 				</div>
 			</div>
 			{/* BOTTONI */}
-			<div className="flex lg:flex-row flex-col justify-end items-end h-full gap-1 text-xs">
+			<div className="flex lg:flex-row flex-col justify-end items-end gap-1 text-xs">
 				<ButtonScaricaRitiroPDF payload={{
 					uuidRitiroVeicolo: uuid,
 					vinLeggibile: vinLeggibile,

@@ -193,7 +193,7 @@ export default function InserimentoCertificatiDemolizione({onDisplay, statusAzie
 
   return (
     <>
-      <div className={`${onDisplay === 'on' ? '' : 'hidden'} w-full h-full flex-1 flex flex-col md:p-0 md:pe-3 px-4`}>
+      <div className={`${onDisplay === true ? '' : 'hidden'} w-full h-full flex-1 flex flex-col md:p-0 md:pe-3 px-4`}>
 				<form onSubmit={handleSubmit} className="grid h-full grid-cols-12 gap-4">
 					<div id="oneStep" className='flex flex-col col-span-12 h-fit gap-3'>  
 						<div className="col-span-12 flex flex-row justify-between">
@@ -280,7 +280,7 @@ export default function InserimentoCertificatiDemolizione({onDisplay, statusAzie
 								label="Radiazione PRA"
 								bucket="documentiveicoli"
 								accept="image/*,application/pdf"
-								campo="altro"
+								campo="radiazionePRA"
 								colspan="col-span-12"
 								mdcolspan="lg:col-span-6"
 								targa={datiPraticaSelezionata?.targa_veicolo_ritirato}

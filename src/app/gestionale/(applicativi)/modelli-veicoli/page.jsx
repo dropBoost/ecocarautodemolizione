@@ -11,8 +11,6 @@ export default function ModelliVeicoliPAGE () {
 
   function ClickSectionOne () {
     setOnDisplaySectionOne("on")
-    setOnDisplaySectionTwo("off")
-    setOnDisplaySectionThree("off")
   }
 
   return (

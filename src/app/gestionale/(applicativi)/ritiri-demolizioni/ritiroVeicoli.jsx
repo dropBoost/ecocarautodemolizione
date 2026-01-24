@@ -330,7 +330,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     const twoOk =
       compilato(fd.targa) &&
       (fd.targa.length >= 3 && fd.targa.length <= 8) &&
-      ((fd.vinLeggibile == true && compilato(fd.vin) && fd.vin.length == 5) ||
+      ((fd.vinLeggibile == true && compilato(fd.vin) && (fd.vin.length >= 5 && fd.vin.length <= 17)) ||
         fd.vinLeggibile == false) &&
       compilato(fd.anno) &&
       fd.anno > 1900 &&

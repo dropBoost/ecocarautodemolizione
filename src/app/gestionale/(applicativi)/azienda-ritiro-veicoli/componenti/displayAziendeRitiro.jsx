@@ -53,7 +53,7 @@ export default function DisplayAziendeRitiro ({uuid, ragioneSociale, piva, stato
         <>
         <div className="flex flex-col min-h-0 w-full border justify-between hover:border-brand transition-all rounded-xl p-3 gap-2 bg-white dark:bg-neutral-900">
             <div className="flex flex-col justify-start items-start min-h-0 h-full lg:mt-1 m-0">
-                    <ButtonCompanyOnOff onClick={()=> ActiveCompany(uuid)} stato={stato}/>
+                <ButtonCompanyOnOff onClick={()=> ActiveCompany(uuid)} stato={stato}/>
             </div>
             <div className="flex lg:flex-row flex-col gap-5">
                 {/* dati azienda */}

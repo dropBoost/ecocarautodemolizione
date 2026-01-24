@@ -184,7 +184,7 @@ export default function ElencoCertificatiDemolizione({ onDisplay, statusAziende,
   }, [statusAziende])
 
   return ( 
-	<div className={`${onDisplay === 'on' ? '' : 'hidden'} w-full h-full flex-1 flex flex-col md:p-0 md:pe-3 px-4 gap-4`}>
+	<div className={`${onDisplay === true ? '' : 'hidden'} w-full h-full flex-1 flex flex-col md:p-0 md:pe-3 px-4 gap-4`}>
 		{/* Barra ricerca */}
 		<div className="flex w-full items-center gap-2">
 			<Input type="text" id="cerca" placeholder="Cerca ragione sociale o partita iva…" value={dataSearch} onChange={handleChangeSearchBar} onKeyDown={handleSearchKeyDown} className="appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand placeholder:text-xs placeholder:text-neutral-500 placeholder:italic"/>

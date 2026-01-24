@@ -218,7 +218,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 
               return (
                 <div id="rowImageContainer" className="flex flex-wrap w-full" key={`${pa.uuid_veicolo_ritirato ?? index}`}>
-									{pa.foto_documento_detentore_f ? 
+									{pa?.foto_documento_detentore_f ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
@@ -232,7 +232,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 										</div>
 									</div> : null
 									}
-									{pa.foto_documento_detentore_r ? 
+									{pa?.foto_documento_detentore_r ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
@@ -246,7 +246,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 										</div>
 									</div> : null
 									}
-									{pa.foto_documento_veicolo_ritirato_f ? 
+									{pa?.foto_documento_veicolo_ritirato_f ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
@@ -260,7 +260,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 										</div>
 									</div> : null
 									}  
-									{pa.foto_documento_veicolo_ritirato_r ? 
+									{pa?.foto_documento_veicolo_ritirato_r ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
@@ -274,7 +274,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 										</div>
 									</div> : null
 									}
-									{pa.foto_complementare_veicolo_ritirato_f ? 
+									{pa?.foto_complementare_veicolo_ritirato_f ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
@@ -288,14 +288,14 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 										</div>
 									</div> : null
 									}
-									{pa.foto_complementare_veicolo_ritirato_r ? 
+									{pa?.foto_complementare_veicolo_ritirato_r ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfComplementareR ? <Image src={pa.foto_complementare_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
 											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_complementare_veicolo_ritirato_r}?download`} target="_blank">
+												<Link href={`${pa?.foto_complementare_veicolo_ritirato_r}?download`} target="_blank">
 													COMPLEMENTARE RETRO
 												</Link>
 											</button>
@@ -315,33 +315,33 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
       </div>
       <div className="w-full border rounded-xl p-5">
         <div id="mainImagecontainergridtwo" className="flex flex-row">
-          {datiDemolizione.length ? datiDemolizione.map((dem, index) => {
+          {datiDemolizione?.length ? datiDemolizione?.map((dem, index) => {
             return (
               <>
               <div id="rowImageContainer" className="grid grid-cols-4 w-full gap-2" key={`${dem.uuid_veicolo_ritirato ?? index}`}>
-                {dem.documento_demolizione ? 
+                {dem?.documento_demolizione ? 
                 <div className="lg:col-span-1 col-start-1 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
                   <div className="flex flex-col gap-1 w-full">
                     <div className="relative w-full h-[200px] overflow-hidden rounded">
                     <Image src="/pdf_placeholder.webp" fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
                     </div>
-                    <Link href={`${dem.documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-demolizione.jpg`} target="_blank">
-                      <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+                    <Link href={`${dem?.documento_demolizione}?download`} target="_blank">
+                      <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg w-full">
                       DOCUMENTO DEMOLIZIONE
                       </button>
                     </Link>
                   </div>
                 </div> : null
                 }
-                {dem.altro_documento_demolizione !== "" ? 
+                {dem?.altro_documento_demolizione !== "" ? 
                 <div className="lg:col-span-1 col-start-3 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
                   <div className="flex flex-col gap-1 w-full">
                     <div className="relative w-full h-[200px] overflow-hidden rounded">
-                    <Image src={dem.altro_documento_demolizione} fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
+                    <Image src={dem?.altro_documento_demolizione} fill alt={`${dem?.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
                     </div>
                     <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
-                      <Link href={`${dem.altro_documento_demolizione}?download=${dem.datiVeicolo.targa_veicolo_ritirato}-${dem.tipologia_demolizione}-altro.jpg`} target="_blank">
-                        ALTRO DOCUMENTO
+                      <Link href={`${dem?.altro_documento_demolizione}`} target="_blank">
+                        RADIAZIONE PRA
                       </Link>
                     </button>
                   </div>
