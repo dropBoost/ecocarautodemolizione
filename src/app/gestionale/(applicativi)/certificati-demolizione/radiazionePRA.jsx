@@ -193,11 +193,11 @@ export default function SECTIONradiazioniPRA({ onDisplay, setStatusAziende, stat
       {isAdmin ? 
       <div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
         <div className="flex lg:flex-row flex-col flex-wrap lg:gap-y-3 gap-y-1 w-full min-h-0">
-          {/* VEICOLI RITIRATI */}
+          {/* VEICOLI DEMOLITI */}
           <div className="flex flex-col gap-2 xl:basis-12/12 w-full">
             <div className="flex flex-row justify-between items-start">
               <h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                CRONOLOGIA VEICOLI RITIRATI
+                CRONOLOGIA DEMOLIZIONI
               </h4>
               <div className="flex flex-row items-center justify-center gap-2">
                 <FormField
@@ -260,7 +260,7 @@ export default function SECTIONradiazioniPRA({ onDisplay, setStatusAziende, stat
                       }
                     </div>
                   </div>
-                )) : "... nessun veicolo ritirato"}
+                )) : "... nessuna demolizione inserita"}
               </div>
             </div>
           </div>
