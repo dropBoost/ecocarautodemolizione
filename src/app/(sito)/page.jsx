@@ -185,7 +185,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MAPPA */}
+      {/* MAPPA */} 
       <section id="mappa" className="mx-auto max-w-6xl px-4 pb-12">
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
