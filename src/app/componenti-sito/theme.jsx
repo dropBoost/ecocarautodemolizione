@@ -1,10 +1,12 @@
 'use client'
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { HomeButton, ThemeToggle, LogoutButton, PlusButton } from '@/app/componenti/button'
 import { useAdmin } from '@/app/admin/components/AdminContext'
+import { MdCloudDownload } from "react-icons/md";
 
 export function Header () {
 
@@ -12,29 +14,28 @@ export function Header () {
 
     return(
         <>
-        <div className="flex lg:flex-row flex-col gap-3 justify-between items-center py-5 px-5 w-full bg-companyPrimary">
-            <div id="logo-cnt" className="w-32">
-                <img src={'/logo-white.png'} width={150} height={50} quality={20} alt="logo-company"/>
+        <div className="flex lg:flex-row flex-row gap-3 justify-between items-center py-5 lg:px-10 px-5 w-full bg-companyPrimary">
+            <div id="logo-cnt" className="max-w-24 lg:max-w-48">
+                <Image src={'/assets/logo-white.png'} width={150} height={50} quality={100} alt="logo-company" className="lg:max-w-48 max-w-24"/>
             </div>
-            <div id="btn-cnt" className="flex flex-row items-center justify-between gap-3 w-full px-7">
-                <div id="menu-cnt">
-                    <button className="flex flex-row items-center justify-between rounded-lg px-4 py-1 gap-2 bg-neutral-100 text-xs dark:text-neutral-900" onClick={()=>{setOpenMenu(prev => !prev)}}><FaBars/>MENU</button>
-                </div>
-                <div className="flex flex-row items-center justify-end gap-3">
-                    <Link href="/download-demolizione"><button className="bg-neutral-100 text-xs dark:text-neutral-900 px-2 py-1 rounded-md">SCARICA DEMOLIZIONE</button></Link>
-                    <Link href="/gestionale"><button className="bg-neutral-100 text-xs px-2 py-1 dark:text-neutral-900 rounded-md">GESTIONALE</button></Link>
-                    <ThemeToggle/>
-                </div>
+            <nav className="flex flex-row justify-center items-center flex-1">
+							<ul className="flex flex-row text-xs text-white gap-3">
+								<Link href={"/#chi-siamo"} className="hover:text-companySecondary hover:bg-white hover:px-3 py-1 rounded-md">CHI SIAMO</Link>
+								<Link href={"/#contatti"} className="hover:text-companySecondary hover:bg-white hover:px-3 py-1 rounded-md">CONTATTI</Link>
+							</ul>
+            </nav>
+            <div id="btn-cnt" className="flex flex-row items-center justify-between gap-3 px-7">
+							<Link href="/download-demolizione" className="bg-neutral-100 text-xl dark:text-neutral-900 px-2 py-1 rounded-md"><MdCloudDownload/></Link>
             </div>
         </div>
-        <div className={`${openMenu? "flex flex-row p-5 gap-10" : "hidden"} `}>
+        {/* <div className={`${openMenu? "flex flex-row p-5 gap-10" : "hidden"} `}>
             <div id="col-one" className="">
                 <h3 className="text-neutral-500">CIAO</h3>
             </div>
             <div id="col-one" className="">
                 <h3 className="text-neutral-500">CIAO</h3>
             </div>
-        </div>
+        </div> */}
         </>
     )
 }
@@ -54,10 +55,13 @@ export function FooterInfo () {
 export function Footer () {
     return(
         <>
-        <div className="flex flex-row justify-center items-center bg-neutral-900 w-full py-3">
-            <span>© {new Date().getFullYear()} – Azienda Demolizioni</span>
-            <h6>ECOCAR PARTS</h6>
-        </div>
+        {/* FOOTER */}
+        <footer className="border-t">
+            <div className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground flex flex-col sm:flex-row gap-2 justify-between">
+            <p>© {new Date().getFullYear()} Ecocar Autodemolizione</p>
+            <p className="sm:text-right">Acerra (NA) — Zona Industriale</p>
+            </div>
+        </footer>
         </>
     )
 }

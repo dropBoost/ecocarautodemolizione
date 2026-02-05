@@ -1,20 +1,341 @@
+'use client'
+
 import { Header, Footer } from "@/app/componenti-sito/theme";
 import Image from "next/image";
+import { useMemo, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function Home() {
+
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const address = "Via degli Etruschi, 57, 80011 Acerra NA – Zona Industriale";
+
+  const googleMapsEmbedSrc = useMemo(() => {
+    // Embed semplice senza API key (query address)
+    const q = encodeURIComponent("Via degli Etruschi 57, 80011 Acerra NA");
+    return `https://www.google.com/maps?q=${q}&output=embed`;
+  }, []);
+
+  function onChange(e) {
+    const { name, value } = e.target;
+    setForm((s) => ({ ...s, [name]: value }));
+  }
+
+  function validate() {
+    if (!form.name.trim()) return "Inserisci il nome.";
+    if (!form.phone.trim()) return "Inserisci un numero di telefono.";
+    if (!form.email.trim()) return "Inserisci un’email.";
+    if (!form.message.trim()) return "Scrivi un messaggio.";
+    return null;
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    const err = validate();
+    if (err) return toast.error(err);
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          source: "landing-ecocar",
+          company: "", // honeypot
+        }),
+      });
+
+      const json = await res.json().catch(() => ({}));
+
+      if (!res.ok || !json.ok) {
+        throw new Error(json?.message || "Invio non riuscito");
+      }
+
+      toast.success("Messaggio inviato! Ti ricontatteremo al più presto.");
+      setForm({ name: "", phone: "", email: "", message: "" });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Errore durante l’invio. Riprova tra poco.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   return (
     <>
-      {/* CONTENUTO PAGINA */}
-      <div id="pageContenent" className="">
-        <img src={`/demolizione.jpg`} alt="test" className="w-full object-cover h-96"/>
-        <div className="flex flex-col items-center justify-center bg-neutral-400 p-5">
-          <h1 className="text-6xl font-semibold uppercase"> DEMOLIZIONI IN TUTTA ITALIA</h1>
+    <main className="min-h-dvh bg-white text-foreground">
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-neutral-100">
+        <div className="flex lg:flex-row flex-col mx-auto max-w-6xl px-4 py-14 md:py-20 gap-6">
+          <div className="">
+            <Image src={"/banner2-home.jpeg"} width={800} height={800} className="max-w-full object-cover rounded-2xl" alt="banner2-home"/>
+          </div>
+          <div id="chi-siamo" className="max-w-2xl">
+            <Image src={"/assets/logo-color.png"} alt="Ecocar Autodemolizione" width={1500} height={100} className="w-48 h-auto mb-4" sizes="(max-width: 640px) 96px, 160px"/>
+            <p className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
+              <span className="h-2 w-2 rounded-full bg-companyPrimary" />
+              Oltre 20 anni di esperienza
+            </p>
+
+            <h1 className="mt-4 text-3xl md:text-5xl font-extrabold tracking-tight">
+              Ecocar <span className="text-companyPrimary">Autodemolizione</span>
+            </h1>
+
+            <p className="mt-4 text-base md:text-lg text-muted-foreground">
+              Rottamazione veicoli e ricambi auto usati garantiti ad Acerra (NA), Zona Industriale.
+              Un servizio rapido, trasparente e professionale per privati e aziende.
+            </p>
+
+            <div className="mt-7 flex flex-col sm:flex-row gap-3">
+              <a
+                href="#contatti"
+                className="inline-flex items-center justify-center rounded-md bg-companyPrimary px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
+              >
+                Contattaci ora
+              </a>
+
+              <a
+                href="#mappa"
+                className="inline-flex items-center justify-center rounded-md border px-5 py-3 text-sm font-semibold hover:bg-muted"
+              >
+                Vedi la sede
+              </a>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col px-48 py-10">
-          <p className="text-neutral-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, doloribus quas. Tempore provident fuga blanditiis repellat hic. Delectus neque suscipit sunt obcaecati facere iusto corrupti molestiae quaerat alias nulla quas ullam nobis commodi pariatur enim ipsum reprehenderit, officia illo cum laudantium. Quod aliquam laudantium ab. Voluptatum iure nisi, aperiam repudiandae voluptatem odit hic rerum debitis vitae cupiditate praesentium ipsum labore tempore ab quaerat voluptate doloremque minus perferendis veritatis eius itaque. Vel aspernatur ducimus optio unde aut nesciunt deleniti accusamus quae molestiae illo eligendi, corporis deserunt! Impedit, deleniti? Temporibus perferendis, labore facere ipsa quas ea cum obcaecati voluptate dolor laborum eius adipisci sunt repellendus fugit tempore possimus! Molestiae tenetur ullam facere, ipsa quod hic fugiat laboriosam, ab blanditiis perspiciatis eveniet eum debitis architecto rem eaque. Harum velit totam quibusdam nobis saepe exercitationem aspernatur animi commodi asperiores nostrum! Earum ut porro itaque maxime facere! Exercitationem alias voluptatibus temporibus doloribus quam hic velit saepe quaerat, consequuntur iusto id quos enim vel ex dolore possimus harum pariatur voluptatum sit illo excepturi eveniet qui quod aliquid! Illo labore ducimus eligendi sit obcaecati, ea ipsam libero iure autem quam, aut doloribus? Eveniet magnam facilis a cupiditate unde ratione ducimus sint quod, nobis delectus fugit rerum optio dicta impedit excepturi recusandae ut, laudantium repudiandae tenetur doloribus vitae nesciunt assumenda odit natus. Eius, eos voluptas non omnis consectetur similique corrupti vitae enim nemo, in neque atque dicta corporis eveniet, optio vel placeat consequuntur nisi cupiditate! Beatae quis molestiae repudiandae excepturi laboriosam totam voluptatum voluptas debitis veritatis sint explicabo cupiditate dolorum minima recusandae, dolorem vitae officiis nihil eum nulla maxime accusamus. Autem, blanditiis deserunt. Animi eaque voluptatibus soluta culpa optio perferendis rem sint cum quas quo. Harum pariatur sequi repellat rerum non mollitia architecto quia modi veniam, nemo dolor? Quidem necessitatibus facere, exercitationem commodi quos facilis ea impedit placeat minus quam architecto eveniet vero voluptatibus omnis hic, molestiae beatae rerum culpa? Perferendis eveniet accusamus quos inventore ducimus repellat voluptatem. Quisquam fuga sint labore doloribus voluptate autem reiciendis ducimus praesentium iste veritatis alias nihil dolorem perspiciatis illo sit maxime, dignissimos aperiam blanditiis repudiandae tempore. Iusto libero vel inventore ex harum minima, expedita architecto veniam voluptates facilis, mollitia voluptas nam enim sapiente explicabo vero similique. Repellendus voluptate tempora adipisci nam provident necessitatibus nobis! Vero officiis velit eveniet, laudantium quam deserunt labore quos rem, doloribus voluptatem ut, reprehenderit corrupti sit aperiam! In unde voluptatum tempore pariatur, est autem architecto quae assumenda error explicabo deleniti voluptatibus soluta laborum, reprehenderit hic aliquam ad eligendi excepturi tempora perferendis maxime numquam modi veritatis? Fuga minima eaque distinctio laudantium aliquam? Praesentium iure dolore velit rem sint maxime ex rerum laudantium ducimus atque tempora voluptatum molestias cupiditate, eos sapiente deserunt voluptas blanditiis doloribus? Quas, fugiat inventore beatae quo impedit odio eveniet ab necessitatibus aspernatur aliquam dolorum officia voluptas eligendi. Quod consequatur possimus velit excepturi. Explicabo harum perspiciatis, sed reiciendis eveniet exercitationem magni voluptates natus quisquam quam quibusdam. Unde quibusdam cum, at ipsam quas officiis vero. Velit quibusdam ipsum magni! Quae eum quaerat, quasi sapiente amet eveniet similique ut vitae inventore tempore iure ad. Soluta eaque laborum autem illum sunt voluptate labore impedit, modi sed veritatis ipsam earum, incidunt delectus laboriosam beatae. Nihil consequuntur adipisci voluptatibus nesciunt vel possimus distinctio est inventore quisquam enim ullam quo nam saepe commodi et praesentium ipsam dicta numquam, sunt voluptate reiciendis consequatur doloribus illum. Ut similique id, ipsa distinctio aliquam placeat beatae saepe consequuntur nemo cum sint, minima cupiditate doloremque illo ratione? Quis non iste quisquam distinctio saepe, nihil consequuntur exercitationem minima dignissimos sequi, dolor perferendis. Sit quam reprehenderit aspernatur eveniet provident maiores. Repudiandae qui, vero inventore nulla nam magnam iure tenetur aspernatur corrupti fugiat enim iusto nesciunt architecto commodi quo totam amet! Animi praesentium, cumque ut cupiditate facilis nesciunt a amet suscipit itaque quod earum, alias culpa eos consequatur exercitationem. Incidunt voluptates nemo obcaecati tempore aperiam cupiditate dicta expedita quibusdam provident repudiandae. Nam inventore modi accusantium maxime quos rerum repellat id, odit earum sunt ipsum doloribus! Vel ad iusto ducimus, corporis, quos accusamus repudiandae dignissimos amet, officia perspiciatis excepturi sed illo voluptate magni cumque dolorem aliquid? Ipsum assumenda, voluptas a obcaecati error, veritatis eligendi optio perferendis quos mollitia libero aperiam quibusdam dolor earum autem amet est iusto voluptatem minus ea inventore eaque sapiente? Mollitia perferendis, earum dolor, velit iure debitis facere excepturi libero laboriosam nisi laborum ipsam nostrum impedit quae nesciunt provident sunt natus veritatis eius quos non a, omnis dignissimos! Accusamus, obcaecati odio cupiditate corrupti mollitia eligendi ab doloremque minus, eum nulla laborum reiciendis. Totam officia recusandae adipisci necessitatibus nisi voluptatibus ratione culpa distinctio quis, ut harum consectetur, vitae cumque non. Ratione enim, consectetur, nisi repudiandae soluta quis perspiciatis nesciunt perferendis necessitatibus ullam odio quidem! Reiciendis cupiditate voluptatum saepe expedita voluptates harum rem labore similique, quaerat, dolorum ullam fugit ex error natus illum placeat a obcaecati numquam vel eligendi rerum laboriosam molestiae facilis eum! Sed deserunt ab perferendis incidunt exercitationem laboriosam impedit pariatur accusantium itaque! Ducimus placeat fugiat dolorum quas vel nihil! Officiis, excepturi hic tempore eveniet dolore obcaecati architecto cum nihil quod aspernatur doloribus, qui sequi recusandae tempora ab, illum modi nam voluptas in culpa iste expedita accusantium dicta. Autem, ut doloremque ab nam corporis, optio odio, cupiditate dolore architecto sapiente quae magnam quidem dolorem. Perspiciatis itaque eius doloremque dolorum, voluptatibus deleniti amet dolor quae aut quod, magnam rem, veritatis ad commodi animi mollitia aspernatur accusamus molestiae blanditiis error unde quos! Hic doloremque suscipit eum corporis repellat corrupti consectetur. Similique error ipsam, aut asperiores ipsum corporis voluptas hic fugit totam obcaecati, tempora praesentium commodi minus veritatis maiores fuga vel ducimus. Eligendi minus blanditiis facilis, est consequatur sequi aliquid, facere et commodi laboriosam rem nam molestiae soluta molestias dolores! Ut, error aspernatur aperiam repellendus aliquid animi deleniti nobis molestias veniam asperiores ullam earum voluptates laborum perspiciatis reprehenderit enim quidem libero natus obcaecati ipsum ratione consequatur dolorem nemo. Aperiam autem ducimus quisquam animi provident eius, tempora doloremque rem, possimus sunt ullam delectus at. Temporibus magnam ipsum id dolorem officia, laborum voluptates nulla minus? Earum, delectus? Alias soluta, iusto dicta culpa sint neque.</p>
+      </section>
+      <section className="relative flex items-center justify-center h-80 bg-[url('/banner-home.png')] bg-cover bg-center bg-no-repeat bg-neutral-950">
+        <div className="absolute inset-0 bg-black/50" />
+        <h1 className="relative mt-4 text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+          Ecocar <span className="text-brand">Autodemolizione</span>
+        </h1>
+      </section>
+      {/* CHI SIAMO */}
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <div className="grid gap-10 md:grid-cols-12 items-start">
+          <div className="md:col-span-7">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Chi siamo</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              Ecocar Autodemolizione opera da oltre 20 anni nel settore della rottamazione dei veicoli fuori uso,
+              affermandosi come realtà affidabile e professionale nel territorio campano.
+            </p>
+            <p className="mt-3 text-muted-foreground leading-relaxed">
+              Con sede ad Acerra, Zona Industriale, ci occupiamo della rottamazione e demolizione di ogni tipologia
+              di veicolo nel pieno rispetto delle normative ambientali vigenti.
+            </p>
+          </div>
+
+          <div className="md:col-span-5">
+            <div className="rounded-2xl border p-5 bg-card shadow-sm">
+              <p className="text-sm font-semibold">In breve</p>
+              <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                <li className="flex gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-companyPrimary" />
+                  Servizio rapido e trasparente
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-companyPrimary" />
+                  Supporto a privati e aziende
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-companyPrimary" />
+                  Ricambi auto usati garantiti
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-companyPrimary" />
+                  Rispetto normative ambientali
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-      {/* FINE PAGINA */}
+      </section>
+
+      {/* SERVIZI */}
+      <section className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border p-6 bg-card shadow-sm">
+            <h3 className="text-lg font-bold">Rottamazione e demolizione veicoli</h3>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              Gestiamo rottamazione e demolizione di ogni tipologia di veicolo, con un servizio completo
+              e chiaro in ogni fase.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border p-6 bg-card shadow-sm">
+            <h3 className="text-lg font-bold">Ricambi auto usati garantiti</h3>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              Disponiamo di ricambi auto usati selezionati e garantiti, una soluzione conveniente e affidabile
+              per manutenzioni e riparazioni.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* MAPPA */}
+      <section id="mappa" className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Dove siamo</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Sede: <span className="text-foreground font-medium">{address}</span>
+            </p>
+          </div>
+
+          <a
+            className="text-sm font-semibold text-companyPrimary hover:underline"
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Apri su Google Maps →
+          </a>
+        </div>
+
+        <div className="mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm">
+          <iframe
+            title="Mappa Ecocar Autodemolizione"
+            src={googleMapsEmbedSrc}
+            className="h-[320px] w-full"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+      </section>
+
+      {/* CONTATTI + FORM */}
+      <section id="contatti" className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="grid gap-6 md:grid-cols-12 items-start">
+          <div className="md:col-span-5">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Contatti</h2>
+
+            <div className="mt-4 rounded-2xl border p-5 bg-card shadow-sm">
+              <p className="text-sm font-semibold">Recapiti</p>
+
+              <div className="mt-3 space-y-3 text-sm">
+                <div>
+                  <p className="text-muted-foreground">Sede</p>
+                  <p className="font-medium">{address}</p>
+                </div>
+
+                <div className="grid gap-3">
+                  <div>
+                    <p className="text-muted-foreground">Cellulare Rottamazione</p>
+                    <a className="font-medium hover:underline" href="tel:+39375858112">
+                      375 858 112
+                    </a>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Cellulare Ricambi Auto</p>
+                    <a className="font-medium hover:underline" href="tel:+393757401160">
+                      375 740 1160
+                    </a>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Email</p>
+                    <a className="font-medium hover:underline" href="mailto:ecocar.cavagnoli@gmail.com">
+                      ecocar.cavagnoli@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t">
+                  <p className="text-xs text-muted-foreground">
+                    Preferisci una risposta rapida? Lascia telefono e richiesta: ti ricontattiamo appena possibile.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-7">
+            <div className="rounded-2xl border p-6 bg-card shadow-sm">
+              <h3 className="text-lg font-bold">Richiedi informazioni</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Compila il modulo e inviaci la tua richiesta. Ti rispondiamo al più presto.
+              </p>
+
+              <form onSubmit={onSubmit} className="mt-5 space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Nome e Cognome</label>
+                    <Input
+                      name="name"
+                      value={form.name}
+                      onChange={onChange}
+                      placeholder="Es. Mario Rossi"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Telefono</label>
+                    <Input
+                      name="phone"
+                      value={form.phone}
+                      onChange={onChange}
+                      placeholder="Es. 333 123 4567"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Email</label>
+                  <Input
+                    name="email"
+                    value={form.email}
+                    onChange={onChange}
+                    placeholder="Es. nome@email.it"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Messaggio</label>
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={onChange}
+                    placeholder="Scrivi qui la tua richiesta (rottamazione, ricambi, info...)"
+                    className="min-h-[120px] w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-companyPrimary"
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Button type="submit" disabled={loading} className="bg-companyPrimary text-white hover:opacity-90">
+                    {loading ? "Invio..." : "Invia richiesta"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setForm({ name: "", phone: "", email: "", message: "" })}
+                    disabled={loading}
+                  >
+                    Svuota
+                  </Button>
+                </div>
+
+                <p className="text-[11px] text-muted-foreground pt-2">
+                  Inviando accetti che i tuoi dati vengano usati solo per rispondere alla richiesta.
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+    </main>
     </>
   );
 }

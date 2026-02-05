@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { RiEyeCloseLine } from "react-icons/ri";
 import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
+import { toast } from "sonner";
 
   export default function PraticheAzienda() {
 
@@ -24,21 +25,6 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
     // ricerca
     const [dataSearch, setDataSearch] = useState("")        // testo digitato
     const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
-
-    // paginazione
-    const [page, setPage] = useState(1)
-    const [pageSize, setPageSize] = useState(20)
-    const [totalCount, setTotalCount] = useState(0)
-
-    // calcolo indici per Supabase range (inclusivo)
-    const { from, to } = useMemo(() => {
-        const start = (page - 1) * pageSize
-        return { from: start, to: start + pageSize - 1 }
-    }, [page, pageSize])
-
-    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
-
-    const escapeLike = (s) => s.replace(/([%_\\])/g, "\\$1")
 
     // CARICAMENTO DATI AZIENDA
     useEffect(() => {
@@ -62,52 +48,66 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
 
     // CARICAMENTO PRATICHE AZIENDA
     useEffect(() => {
-        if (!params.uuidAzienda){
-        return
-        }
-        ;(async () => {
-        const { data: praticheData, error } = await supabase
-            .from("dati_veicolo_ritirato")
-            .select(`
-              *,
-              modello:modello_veicolo(
-              marca,
-              modello
-              )
-              `)
-            .eq("pratica_completata", false)
-            .eq("uuid_azienda_ritiro_veicoli", uuidAzienda)
-            .order("created_at_veicolo_ritirato", {ascending: false})
+      if (!uuidAzienda) return
+      ;(async () => {
+        let query = supabase
+        .from("dati_veicolo_ritirato")
+        .select(`
+          *,
+          modello:modello_veicolo(
+          marca,
+          modello
+          )
+          `)
+        .eq("pratica_completata", false)
+        .eq("uuid_azienda_ritiro_veicoli", uuidAzienda)
+        .order("created_at_veicolo_ritirato", {ascending: false})
 
-        if (error) {
-            console.error(error)
-            toast.error("Errore nel caricamento Modelli Marchio Auto")
-            return
-        }
-        setListPraticheAzienda(praticheData ?? [])
-        })()
-    }, [uuidAzienda, updateList])  
+      // filtro ricerca (targa)
+        if (dataSearchSubmit) {
+          // se vuoi match parziale (consigliato)
+          query = query.ilike("targa_veicolo_ritirato", `${dataSearchSubmit}%`);
+          // query = query.eq("targa_veicolo_ritirato", dataSearchSubmit.toUpperCase());
+    }
+
+  const { data: praticheData, error } = await query;
+
+      if (error) {
+          console.error(error)
+          toast.error("Errore nel caricamento delle pratiche auto")
+          return
+      }
+      setListPraticheAzienda(praticheData ?? [])
+      })()
+    }, [uuidAzienda, updateList, dataSearchSubmit])  
+
+    useEffect(() => {
+      if (listPraticheAzienda?.length == 0) {
+        return
+      } 
+      toast.info(`pratiche auto ${datiAzienda[0]?.ragione_sociale_arv} caricate con successo`)
+      
+    },[datiAzienda])
 
     // handlers ricerca
     function handleChangeSearchBar(e) {
         setDataSearch(e.target.value)
     }
     function handleSearchClick() {
-        setDataSearchSubmit(dataSearch.trim())
-        setPage(1) // 🔑 reset pagina quando applichi filtro
+      setDataSearchSubmit(dataSearch.trim().toUpperCase());
+      {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
     }
     function handleSearchKeyDown(e) {
-        if (e.key === "Enter") {
-        setDataSearchSubmit(dataSearch.trim())
-        setPage(1)
-        }
+      if (e.key === "Enter") {
+        setDataSearchSubmit(dataSearch.trim().toUpperCase());
+        {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
+      }
     }
     function handleReset() {
         setDataSearch("")
         setDataSearchSubmit("")
-        setPage(1)
     }
-		console.log("ddd",listPraticheAzienda)
+
   return (
   <>
       <div className={`${listPraticheAzienda ? '' : 'hidden'} w-full min-h-0 flex-1 flex flex-col gap-4`}>
@@ -119,7 +119,7 @@ import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
         <Input
           type="text"
           id="cerca"
-          placeholder="Cerca nome, cognome, email o telefono…"
+          placeholder="Cerca targa…"
           value={dataSearch}
           onChange={handleChangeSearchBar}
           onKeyDown={handleSearchKeyDown}
