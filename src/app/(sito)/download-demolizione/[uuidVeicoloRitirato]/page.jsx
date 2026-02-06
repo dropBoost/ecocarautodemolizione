@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient"
 import { Timeline,PickDotColor } from "@/app/componenti-sito/trackerStatus";
 import { SpanElementList } from "@/app/componenti-sito/theme";
-import { FaCaretRight, FaCarAlt, FaUser, FaBuilding } from "react-icons/fa";
+import { FaCaretRight, FaCarAlt, FaUser, FaBuilding, FaFileDownload } from "react-icons/fa";
 import { DataFormat } from "@/app/componenti-sito/dataFormat";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
@@ -94,8 +94,8 @@ export default function StatusDemolizione () {
     }, [veicoloRitirato])
 
     return (
-        <div className="flex flex-col items-center lg:justify-center justify-start bg-neutral-200 dark:bg-neutral-900 lg:px-5 lg:py-5 px-5 py-5 h-full">
-          <div className="flex flex-col gap-5 bg-neutral-50 dark:bg-neutral-900 border dark:border-neutral-700 w-full max-w-[1100px] py-5 px-5 lg:mx-10 lg:my-10 m-0 rounded-2xl shadow-2xl lg:h-fit h-full overflow-auto">
+        <div className="flex flex-col items-center lg:justify-center justify-center bg-neutral-200 lg:px-5 lg:py-5 px-5 py-5 h-full">
+          <div className="flex flex-col gap-5 bg-neutral-50 w-full max-w-[1100px] py-5 px-5 lg:mx-10 lg:my-10 m-0 rounded-2xl shadow-2xl h-fit overflow-auto">
             <div className="flex flex-col items-start p-5 text-sm justify-center w-full max-w-[1100px] h-fit border rounded-2xl dark:bg-companyPrimary">
               <h3 className="">STATUS DEMOLIZIONE: <font className="font-bold">{datiVeicolo?.targa_veicolo_ritirato}</font></h3>
             </div>
@@ -137,18 +137,14 @@ export default function StatusDemolizione () {
                         <AccordionTrigger><span className="flex items-center justify-start gap-2"><FaBuilding className="text-companyPrimary"/> DATI AZIENDA RITIRO</span></AccordionTrigger>
                         <AccordionContent>
                           <div className="flex flex-col gap-1">
-                            <SpanElementList icon={<FaCaretRight/>} label="Ritirato da:" data={aziendaRitiro?.ragione_sociale_arv}/>
-                            <SpanElementList icon={<FaCaretRight/>} label="Partita Iva:" data={aziendaRitiro?.piva_arv}/>
-                            <SpanElementList icon={<FaCaretRight/>} label="SDI:" data={aziendaRitiro?.sdi_arv}/>
-                            <SpanElementList icon={<FaCaretRight/>} label="Sede Legale:" data={`${aziendaRitiro?.indirizzo_legale_arv} - ${aziendaRitiro?.cap_legale_arv} ${aziendaRitiro?.citta_legale_arv} ${aziendaRitiro?.provincia_legale_arv}`}/>
-                            <SpanElementList icon={<FaCaretRight/>} label="Sede Operativa:" data={`${aziendaRitiro?.indirizzo_operativa_arv} - ${aziendaRitiro?.cap_operativa_arv} ${aziendaRitiro?.citta_operativa_arv} ${aziendaRitiro?.provincia_operativa_arv}`}/>
+                            <SpanElementList icon={<FaCaretRight/>} label="RITIRATO DA ECOCAR AUTODEMOLIZIONE"/>
                             <SpanElementList icon={<FaCaretRight/>} label="Data Ritiro Veicolo:" data={DataFormat(datiVeicolo?.created_at_veicolo_ritirato)}/>
                           </div>
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>
                   </div>
-                  <div className="w-full bg-neutral-400 border rounded-xl px-7 py-7">
+                  <div className="w-full bg-neutral-300 rounded-xl px-7 py-7">
                   {veicoloDemolito.length == 0 ?
                     <>
                       <div className="border rounded-xl p-3 bg-companyPrimary text-neutral-300 mb-5">
@@ -167,12 +163,14 @@ export default function StatusDemolizione () {
                     </> : 
                     <div className="flex flex-col gap-5">
                       <span className="text-xs">SCARICA IL CERTIFICATO DI DEMOLIZIONE</span>
-                      <a href={`${veicoloDemolito[0]?.documento_demolizione}`}>
-                        <button className="rounded-xl px-4 py-1 bg-neutral-100 hover:bg-companyPrimary hover:text-neutral-100">CERTIFICATO</button>
-                      </a>
-                      <a href={`${veicoloDemolito[0]?.altro_documento_demolizione}`}>
-                        <button className="rounded-xl px-4 py-1 bg-neutral-100 hover:bg-companyPrimary hover:text-neutral-100">ALTRO DOCUMENTO</button>
-                      </a>
+                      <div className="flex flex-row gap-3">
+                        <a href={`${veicoloDemolito[0]?.documento_demolizione}`}>
+                          <button className="flex flex-row items-center gap-1 rounded-xl px-4 py-1 bg-neutral-100 hover:bg-companyPrimary hover:text-neutral-100 text-sm font-bold text-companyPrimary"><FaFileDownload/>CERTIFICATO</button>
+                        </a>
+                        <a href={`${veicoloDemolito[0]?.altro_documento_demolizione}`}>
+                          <button className="flex flex-row items-center gap-1 rounded-xl px-4 py-1 bg-neutral-100 hover:bg-companyPrimary hover:text-neutral-100 text-sm font-bold text-companyPrimary"><FaFileDownload/>ALTRO DOCUMENTO</button>
+                        </a>
+                      </div>
                     </div>
                   }
                   </div>
