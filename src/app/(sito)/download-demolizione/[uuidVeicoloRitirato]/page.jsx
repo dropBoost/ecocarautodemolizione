@@ -17,7 +17,6 @@ export default function StatusDemolizione () {
     const [veicoloDemolito, setVeicoloDemolito] = useState([]) //DATI PRATICA
     const [veicoloRitirato, setVeicoloRitirato] = useState([]) //DATI VEICOLO
     const [statoAvanzamento, setStatoAvanzamento] = useState([]) //DATI AVANZAMENTO
-    const aziendaRitiro = veicoloRitirato[0]?.azienda_ritiro_veicoli
     const datiVeicolo = veicoloRitirato ? veicoloRitirato[0] : []
 
     // CARICAMENTO DATI VEICOLO

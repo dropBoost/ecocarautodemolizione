@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
-import { FaUserSlash } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -54,7 +53,7 @@ export default function ElencoVeicoliRitirati({ onDisplay, statusAziende, setSta
   }
 
   useEffect(() => {
-    // 1) guardie come nel tuo secondo useEffect
+
     if (!role) return
     if ((!isAdmin || isCompany) && !uuidUtente) return
 

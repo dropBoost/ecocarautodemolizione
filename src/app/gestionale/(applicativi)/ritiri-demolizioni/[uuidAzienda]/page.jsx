@@ -1,16 +1,10 @@
 'use client'
 
 import { useParams } from "next/navigation";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
-import { FaFileDownload } from "react-icons/fa";
-import { FaUserSlash } from "react-icons/fa";
-import { FaCircle, FaDotCircle } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
-import Link from "next/link";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { RiEyeCloseLine } from "react-icons/ri";
 import DisplayVeicoliRitirati from "../componenti/displayVeicoliRitirati";
 import { toast } from "sonner";
 
