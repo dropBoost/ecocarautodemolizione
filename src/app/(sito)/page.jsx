@@ -17,11 +17,11 @@ export default function Home() {
     message: "",
   });
 
-  const address = "Via degli Etruschi, 57, 80011 Acerra NA – Zona Industriale";
+  const address = "Contrada Pagliarone SNC - Zona ASI - 80011 Acerra";
 
   const googleMapsEmbedSrc = useMemo(() => {
     // Embed semplice senza API key (query address)
-    const q = encodeURIComponent("Via degli Etruschi 57, 80011 Acerra NA");
+    const q = encodeURIComponent("Ecocar Autodemolizione");
     return `https://www.google.com/maps?q=${q}&output=embed`;
   }, []);
 
@@ -95,7 +95,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-4 text-base md:text-lg text-muted-foreground">
-              Rottamazione veicoli e ricambi auto usati garantiti ad Acerra (NA), Zona Industriale.
+              Rottamazione veicoli e vendita ricambi auto usati garantiti ad Acerra (NA).
               Un servizio rapido, trasparente e professionale per privati e aziende.
             </p>
 

@@ -14,19 +14,21 @@ export function Header () {
 
     return(
         <>
-        <div className="flex lg:flex-row flex-row gap-3 justify-between items-center py-5 lg:px-10 px-5 w-full bg-companyPrimary">
-            <div id="logo-cnt" className="max-w-24 lg:max-w-48">
-                <Image src={'/assets/logo-white.png'} width={150} height={50} quality={100} alt="logo-company" className="lg:max-w-48 max-w-24"/>
-            </div>
-            <nav className="flex flex-row justify-center items-center flex-1">
-							<ul className="flex flex-row text-xs text-white gap-3">
-								<Link href={"/#chi-siamo"} className="hover:text-companySecondary hover:bg-white hover:px-3 py-1 rounded-md">CHI SIAMO</Link>
-								<Link href={"/#contatti"} className="hover:text-companySecondary hover:bg-white hover:px-3 py-1 rounded-md">CONTATTI</Link>
+        <div className="flex md:flex-row flex-col gap-3 justify-between items-center py-5 lg:px-10 px-5 w-full bg-companyPrimary">
+					<div id="logo-cnt" className="md:max-w-48 md:my-0 my-3">
+							<Image src={'/assets/logo-white.png'} width={150} height={50} quality={100} alt="logo-company" className="md:max-w-48 w-56"/>
+					</div>
+					<div className="flex flex-row gap-2 md:w-fit w-full justify-between">
+						<nav className="flex flex-row md:justify-center justify-start items-center flex-1 rounded-md">
+							<ul className="flex flex-row text-xs text-white gap-3 h-full">
+								<Link href={"/#chi-siamo"} className="text-xs flex items-center hover:text-companySecondary hover:bg-neutral-100 border border-white h-full px-4 py-1 rounded-md font-bold">CHI SIAMO</Link>
+								<Link href={"/#contatti"} className="text-xs flex items-center hover:text-companySecondary hover:bg-neutral-100 border border-white h-full px-4 py-1 rounded-md font-bold">CONTATTI</Link>
 							</ul>
-            </nav>
-            <div id="btn-cnt" className="flex flex-row items-center justify-between gap-3 px-7">
-							<Link href="/download-demolizione" className="bg-neutral-100 text-xl dark:text-neutral-900 px-2 py-1 rounded-md"><MdCloudDownload/></Link>
-            </div>
+						</nav>
+						<div id="btn-cnt" className="flex flex-row items-center justify-between gap-3 bg-neutral-100 text-xl dark:text-neutral-900 px-4 py-1 rounded-md">
+							<Link href="/download-demolizione" className="flex flex-row gap-2 items-center hover:text-companySecondary font-bold"><font className="text-xs">SCARICA ROTTAMAZIONE</font> <MdCloudDownload/></Link>
+						</div>
+					</div>
         </div>
         {/* <div className={`${openMenu? "flex flex-row p-5 gap-10" : "hidden"} `}>
             <div id="col-one" className="">
