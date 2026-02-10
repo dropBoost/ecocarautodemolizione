@@ -76,12 +76,20 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
 					.eq("dati_veicolo_ritirato.uuid_azienda_ritiro_veicoli", uuidAzienda)
 					.order("created_at_certificato_demolizione", { ascending: false })
 
-				if (dataSearchSubmit) {
-					const q = escapeLike(dataSearchSubmit).replaceAll(",", " ");
+          if (dataSearchSubmit) {
+            const q = escapeLike(dataSearchSubmit).replaceAll(",", " ").trim().toUpperCase();
+            const term = `${q}%`;
 
-					// ✅ un solo OR, con prefisso per i campi della tabella inner
-					query = query.ilike("dati_veicolo_ritirato.targa_veicolo_ritirato", `%${q}%`)
-				}
+            query = query.or(
+              [
+                `targa_veicolo_ritirato.ilike.${term}`,
+                `cognome_detentore.ilike.${term}`,
+                `nome_detentore.ilike.${term}`,
+                `email_detentore.ilike.${term}`,
+              ].join(","),
+              { foreignTable: "dati_veicolo_ritirato" } // 👈 chiave!
+            );
+          }
 
 				const { data, error, count } = await query;
 
@@ -125,12 +133,12 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
         <Input
           type="text"
           id="cerca"
-          placeholder="Cerca nome, cognome, email o telefono…"
+          placeholder="cerca targa, email, nome o cognome..."
           value={dataSearch}
           onChange={handleChangeSearchBar}
           onKeyDown={handleSearchKeyDown}
           className="appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand
-                     focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand"
+                     focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand text-xs"
         />
         <Button type="button" onClick={handleSearchClick}>Cerca</Button>
         <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
