@@ -14,6 +14,7 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
     const [listPraticheAzienda, setListPraticheAzienda] = useState([])  
     const [datiAzienda, setDatiAzienda] = useState([])  
     const [certificatiDemolizione, setCertificatiDemolizione] = useState([])
+    const [numeroPratiche, setNumeroPratiche] = useState(0)
 
     // ricerca
     const [dataSearch, setDataSearch] = useState("")        // testo digitato
@@ -102,6 +103,7 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
 				}
 
 				setCertificatiDemolizione(data ?? []);
+        setNumeroPratiche(count)
 			})();
 		}, [uuidAzienda, dataSearchSubmit]);
 
@@ -140,6 +142,7 @@ import DisplayCertificatiDemolizioniAzienda from "../componenti/displayElencoCer
           className="appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand
                      focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand text-xs"
         />
+        <span className="flex items-center justify-center border border-brand text-xs p-1 rounded-full aspect-square w-10 h-full">{numeroPratiche}</span>
         <Button type="button" onClick={handleSearchClick}>Cerca</Button>
         <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
       </div>

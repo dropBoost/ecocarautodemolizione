@@ -4,7 +4,7 @@ import { MdDashboard, MdOutlinePointOfSale } from "react-icons/md";
 import { BiSolidReport } from "react-icons/bi";
 import { GiTowTruck } from "react-icons/gi";
 import { TbEngine, TbBuildingSkyscraper } from "react-icons/tb";
-import { FaCar, FaCarOn } from "react-icons/fa6";
+import { FaCar, FaCarOn, FaCheckToSlot } from "react-icons/fa6";
 import { SiGoogleforms } from "react-icons/si";
 
 //ICONE SOCIAL
@@ -32,6 +32,7 @@ const ICON10 = <SiGoogleforms/>
 const ICON11 = <FaUserCheck/>
 const ICON12 = <TbBuildingSkyscraper/>
 const ICON13 = <FaCarOn/>
+const ICON14 = <FaCheckToSlot/>
 
 // FOOTER SIGN
 
@@ -78,6 +79,7 @@ export const moduliGestionale = [
     {name:'gestione-trasporto', link:'/gestionale/gestione-trasporto', linkActive:'gestione-trasporto', icon: ICON2, label:'Gestione Trasporto', attivo:true, level:['admin', 'superadmin']},
     {name:'trasporto-veicoli', link:'/gestionale/trasporto-veicoli', linkActive:'trasporto-veicoli', icon: ICON13, label:'Trasporto Veicoli', attivo:true, level:['transporter','admin','superadmin']},
     {name:'demolizioni', link:'/gestionale/certificati-demolizione', linkActive:'demolizioni', icon: ICON4, label:'Certificati Demolizione', attivo:true, level:['admin', 'superadmin', 'company']},
+    {name:'pratiche-completate', link:'/gestionale/pratiche-completate', linkActive:'pratiche-completate', icon: ICON14, label:'Pratiche Completate', attivo:true, level:['admin', 'superadmin']},
     {name:'veicoli', link:'/gestionale/modelli-veicoli', linkActive:'modelli-veicoli', icon: ICON6, label:'Veicoli', attivo:true, level:['admin', 'superadmin']},
     {name:'utenti', link:'/gestionale/update-utenti', linkActive:'update-utenti', icon: ICON11, label:'Utenti', attivo:false, level:['superadmin']},
   ]

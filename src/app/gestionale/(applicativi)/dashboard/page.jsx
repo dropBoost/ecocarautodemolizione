@@ -3,6 +3,7 @@
 import { moduliGestionale } from "@/app/cosetting"
 import { usePathname } from "next/navigation"
 import { useAdmin } from "@/app/admin/components/AdminContext"
+import AnalisiConsegnaDemolizione from "./componenti/analisiConsegnaDemolizione"
 
 export default function PAGEdashboard () {
 
@@ -21,7 +22,15 @@ export default function PAGEdashboard () {
 
     return (
         <>
-        {moduloAttivo.name}
+        <div className="flex flex-wrap min-h-0 w-full justify-start items-start overflow-auto gap-3">
+					<div className="lg:basis-6/12 basis-full p-2">
+						<AnalisiConsegnaDemolizione/>
+					</div>
+					{/* <div className="basis-6/12">
+						<AnalisiConsegnaDemolizione/>
+					</div> */}
+        </div>
+        
         </>
     )
 }

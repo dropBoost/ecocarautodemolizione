@@ -2,26 +2,20 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
 import { TiArrowBack } from "react-icons/ti";
 import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup } from "@/components/ui/select";
 import TargaDesign from "@/app/componenti/targaDesign";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectGroup,
-} from "@/components/ui/select";
 
 export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, statusAziende }) {
   const utente = useAdmin();
   const role = utente?.utente?.user_metadata.ruolo;
   const uuidUtente = utente?.utente?.id;
+  const [dataSearch, setDataSearch] = useState("")        // testo digitato
+  const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
   const [updateList, setUpdateList] = useState(true);
   const [veicoliDaRitirare, setVeicoliDaRitirare] = useState([]);
   const [veicoliRitirati, setVeicoliRitirati] = useState([]);
@@ -37,7 +31,6 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
   const isAdmin = role === "admin" || role === "superadmin";
   const isTrasporter = role === "transporter";
   const isCompany = role === "company";
-
   //GESTIONE DATA PER QUERY
 
   function dataOggiItalia() {
@@ -110,8 +103,24 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   }
-
-  //GESTIONE FORM
+  function handleChangeSearchBar(e) {
+      setDataSearch(e.target.value)
+  }
+  function handleSearchClick() {
+    setDataSearchSubmit(dataSearch.trim().toUpperCase());
+    {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
+  }
+  function handleSearchKeyDown(e) {
+    if (e.key === "Enter") {
+      setDataSearchSubmit(dataSearch.trim().toUpperCase());
+      {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
+    }
+  }
+    function handleReset() {
+      setFilterAzienda("")
+      setDataSearch("")
+      setDataSearchSubmit("")
+  }
   function handleChangeFilterAzienda(e) {
     const { name, value } = e.target;
     setFilterAzienda(value);
@@ -142,6 +151,11 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
         query = query.eq("uuid_azienda_ritiro_veicoli", filterAzienda);
       }
 
+      if ((isAdmin || isTrasporter) && dataSearchSubmit) {
+        // se vuoi match parziale (consigliato)
+        query = query.ilike("targa_veicolo_ritirato", `${dataSearchSubmit}%`);
+        // query = query.eq("targa_veicolo_ritirato", dataSearchSubmit.toUpperCase());
+      }
       const { data, error } = await query;
 
       if (error) {
@@ -153,7 +167,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     };
 
     fetchData();
-  }, [role, uuidUtente, updateList, filterAzienda]);
+  }, [role, uuidUtente, updateList, filterAzienda, dataSearchSubmit]);
 
   //CARICAMENTO VEICOLI RITIRATI
   useEffect(() => {
@@ -303,7 +317,6 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
 		}
 
 	}
-
 	async function StatusDowngrade(uuidVeicolo, uuidStatoAvanzamento) {
 
 		const { data, error } = await supabase
@@ -368,7 +381,6 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     setStatusAziende(prev => !prev)
     alert("Trasporto Inserito con successo");
   }
-
   async function EliminaRitiro(uuidVeicolo, uuidLog) {
     if (!uuidVeicolo) return alert("seleziona un veicolo");
     if (!uuidLog) return alert("seleziona Log");
@@ -481,7 +493,6 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
               type="date"
             />
             </div>
-            
           </div>
           {/* VEICOLI DA RITIRARE */}
           <div className={`flex flex-col gap-4 ${veicoliRitirati.length > 0 ? `xl:basis-6/12 w-full` : `xl:basis-12/12 w-full`}  p-1`}>
@@ -492,22 +503,34 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                     VEICOLI DA RITIRARE
                   </h4>
                   <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                    SELEZIONA AZIENDA
+                    FILTRI
                   </h4>
                 </div>
-                <div className="flex flex-row justify-between gap-2 items-center max-w-full overflow-hidden">
-                  <div className="flex-1 overflow-hidden">
+                <div className="flex flex-row justify-between gap-2 items-center max-w-full overflow-hidden border border-brand/50 p-2 rounded-lg">
+                  <div className="flex-1 flex flex-row items-center overflow-hidden gap-2">
+                    {/* CAMPO FILTRO AZIENDA */}
                     <FormSelect
                       nome="aziendaFiltro"
                       anteValue="Azienda"
-                      classAdd={`flex-1`}
+                      classAdd={`basis-7/12`}
                       value={filterAzienda}
                       onchange={handleChangeFilterAzienda}
                       options={optionAziende}
                     />
+                    {/* CAMPO RICERCA TARGA */}
+                    <Input
+                      type="text"
+                      id="cerca"
+                      placeholder="Cerca targa…"
+                      value={dataSearch}
+                      onChange={handleChangeSearchBar}
+                      onKeyDown={handleSearchKeyDown}
+                      className="basis-5/12 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand placeholder:text-xs
+                                focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand"
+                    />
                   </div>
                   <div className="w-fit">
-                    <button onClick={()=>setFilterAzienda("")} className="bg-brand/50 p-2 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                    <button onClick={()=> handleReset()} className="bg-brand/50 p-2 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
                   </div>
                 </div>
               </div>  
@@ -632,7 +655,7 @@ export function FormSelect({ nome, label, value, onchange, options, anteValue = 
         {label ? label : null}
       </label>
       <Select value={value ?? ""} onValueChange={handleValueChange}>
-        <SelectTrigger id={nome} className="w-full rounded-lg">
+        <SelectTrigger id={nome} className="w-full rounded-md">
           <SelectValue placeholder={`-- Seleziona ${anteValue} --`} />
         </SelectTrigger>
         <SelectContent position="popper" className="z-[70] max-w-full">
