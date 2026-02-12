@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
 import { toast } from "sonner";
-import { FaPlusSquare, FaCar, FaMinusSquare, FaUser } from "react-icons/fa";
+import { FaPlusSquare, FaCar, FaMinusSquare, FaUser, FaSearch, FaFilter } from "react-icons/fa";
 import { TiArrowBack } from "react-icons/ti";
 import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
@@ -97,7 +98,6 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
 
     return dt.toISOString().slice(0, 10);
   }
-
   //GESTIONE FORM
   function handleChange(e) {
     const { name, value } = e.target;
@@ -107,13 +107,15 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
       setDataSearch(e.target.value)
   }
   function handleSearchClick() {
+    if (!dataSearch) return
     setDataSearchSubmit(dataSearch.trim().toUpperCase());
-    {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
+    {veicoliDaRitirare.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : "targa non trovata"}
   }
   function handleSearchKeyDown(e) {
     if (e.key === "Enter") {
+      if (!dataSearch) return
       setDataSearchSubmit(dataSearch.trim().toUpperCase());
-      {dataSearch.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : null}
+      {veicoliDaRitirare.length > 0 ? toast.info(`ricerca targa ${dataSearch}`) : "targa non trovata" }
     }
   }
     function handleReset() {
@@ -446,7 +448,8 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     setStatusAziende((prev) => !prev);
     alert("Trasporto Eliminato");
   }
-
+console.log("filteraz",veicoliDaRitirare.length)
+console.log()
   return (
     <>
       <div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
@@ -502,17 +505,18 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                   <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
                     VEICOLI DA RITIRARE
                   </h4>
-                  <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-                    FILTRI
-                  </h4>
+                  
                 </div>
-                <div className="flex flex-row justify-between gap-2 items-center max-w-full overflow-hidden border border-brand/50 p-2 rounded-lg">
-                  <div className="flex-1 flex flex-row items-center overflow-hidden gap-2">
+                <div className="flex flex-row lg:justify-between justify-center gap-2 items-center max-w-full overflow-hidden bg-neutral-950/60 p-2 rounded-lg">
+                  <h4 className="lg:flex hidden items-center text-[0.6rem] font-bold text-dark dark:text-brand/30 bg-brand/10 px-2 py-1 w-fit h-full rounded-xl">
+                    <FaFilter/>
+                  </h4>
+                  <div className="flex-1 flex lg:flex-row flex-col lg:items-center items-start justify-start overflow-hidden gap-2 h-full">
                     {/* CAMPO FILTRO AZIENDA */}
                     <FormSelect
                       nome="aziendaFiltro"
                       anteValue="Azienda"
-                      classAdd={`basis-7/12`}
+                      classAdd={``}
                       value={filterAzienda}
                       onchange={handleChangeFilterAzienda}
                       options={optionAziende}
@@ -525,12 +529,13 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
                       value={dataSearch}
                       onChange={handleChangeSearchBar}
                       onKeyDown={handleSearchKeyDown}
-                      className="basis-5/12 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand placeholder:text-xs
+                      className="appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-brand placeholder:text-xs
                                 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand"
                     />
                   </div>
-                  <div className="w-fit">
-                    <button onClick={()=> handleReset()} className="bg-brand/50 p-2 w-fit rounded-lg hover:bg-brand transition"><TiArrowBack/></button>
+                  <div className="flex lg:flex-row flex-col gap-2 justify-start w-fit h-full">
+                    <Button type="button" onClick={handleSearchClick} className=""><FaSearch/></Button>
+                    <Button type="button" onClick={handleReset}><TiArrowBack/></Button>
                   </div>
                 </div>
               </div>  
