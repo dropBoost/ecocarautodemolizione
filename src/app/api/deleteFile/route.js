@@ -8,6 +8,11 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// --- utils ---
+function norm(p) {
+  return String(p || "").replace(/^\/+|\/+$/g, "");
+}
+
 // Lista ricorsiva di TUTTI i file sotto un prefisso (folder)
 async function listAllFilesRecursive(bucket, prefix) {
   const files = [];
@@ -15,24 +20,27 @@ async function listAllFilesRecursive(bucket, prefix) {
   async function walk(currentPrefix) {
     const { data, error } = await supabaseAdmin.storage
       .from(bucket)
-      .list(currentPrefix, { limit: 1000 });
+      .list(norm(currentPrefix), { limit: 1000 });
 
     if (error) throw error;
 
     for (const item of data ?? []) {
       if (!item?.name) continue;
 
-      // ✅ In storage: i file hanno quasi sempre item.id valorizzato
-      if (item.id) {
-        files.push(`${currentPrefix}/${item.name}`);
+      const nextPath = norm([currentPrefix, item.name].filter(Boolean).join("/"));
+
+      // ✅ file: metadata presente (di solito). cartella: metadata null
+      const isFile = item.metadata != null;
+
+      if (isFile) {
+        files.push(nextPath);
       } else {
-        // cartella
-        await walk(`${currentPrefix}/${item.name}`);
+        await walk(nextPath);
       }
     }
   }
 
-  await walk(prefix);
+  await walk(norm(prefix));
   return files;
 }
 
@@ -43,6 +51,11 @@ export async function POST(req) {
     // storage: [{ bucket, folder }]
     const storageOps = Array.isArray(body?.storage) ? body.storage : [];
 
+    // db update params (arrivano dal bottone)
+    const table = body?.table;       // "dati_veicolo_ritirato"
+    const idColumn = body?.idColumn; // "uuid_veicolo_ritirato"
+    const uuid = body?.uuid;         // uuid record
+
     if (!storageOps.length) {
       return NextResponse.json(
         { error: "Parametri mancanti: storage (array di {bucket, folder})" },
@@ -50,10 +63,10 @@ export async function POST(req) {
       );
     }
 
+    // 1) Cancello file dallo storage (ricorsivo)
     let removedTotal = 0;
     const removedDetail = [];
 
-    // 1) Cancello tutto in ogni folder richiesto (ricorsivo)
     for (const op of storageOps) {
       const bucket = op?.bucket;
       const folder = op?.folder;
@@ -68,7 +81,6 @@ export async function POST(req) {
         continue;
       }
 
-      // prendo tutti i file sotto folder (anche sottocartelle)
       let pathsToRemove = [];
       try {
         pathsToRemove = await listAllFilesRecursive(bucket, folder);
@@ -84,7 +96,6 @@ export async function POST(req) {
         continue;
       }
 
-      // remove in batch (per sicurezza a chunk)
       const CHUNK = 200;
       for (let i = 0; i < pathsToRemove.length; i += CHUNK) {
         const chunk = pathsToRemove.slice(i, i + CHUNK);
@@ -101,10 +112,64 @@ export async function POST(req) {
       removedDetail.push({ bucket, folder, removed: pathsToRemove.length });
     }
 
-    // ✅ NON cancella più record DB
-    return NextResponse.json({ ok: true, removedTotal, removedDetail });
+    // 2) Reset campi foto in dati_veicolo_ritirato
+    let dbUpdatedDati = false;
+
+    if (table && idColumn && uuid) {
+      const { error: updErr } = await supabaseAdmin
+        .from(table)
+        .update({
+          foto_documento_veicolo_ritirato_f: null,
+          foto_documento_veicolo_ritirato_r: null,
+          foto_documento_detentore_f: null,
+          foto_documento_detentore_r: null,
+          foto_complementare_veicolo_ritirato_f: null,
+          foto_complementare_veicolo_ritirato_r: null,
+        })
+        .eq(idColumn, uuid);
+
+      if (updErr) {
+        return NextResponse.json(
+          { error: `Errore update DB (${table}): ${updErr.message}` },
+          { status: 400 }
+        );
+      }
+
+      dbUpdatedDati = true;
+    }
+
+    // 3) Reset campi documento in certificato_demolizione
+    let dbUpdatedCert = false;
+
+    if (uuid) {
+      const { error: updCertErr } = await supabaseAdmin
+        .from("certificato_demolizione")
+        .update({
+          documento_demolizione: null,
+          altro_documento_demolizione: null,
+        })
+        // ⚠️ cambia qui se la colonna FK ha un nome diverso
+        .eq("uuid_veicolo_ritirato", uuid);
+
+      if (updCertErr) {
+        return NextResponse.json(
+          { error: `Errore update DB (certificato_demolizione): ${updCertErr.message}` },
+          { status: 400 }
+        );
+      }
+
+      dbUpdatedCert = true;
+    }
+
+    return NextResponse.json({
+      ok: true,
+      removedTotal,
+      removedDetail,
+      dbUpdatedDati,
+      dbUpdatedCert,
+    });
   } catch (e) {
-    console.error("[delete-files-only] error:", e);
+    console.error("[delete-files-and-null-fields] error:", e);
     return NextResponse.json({ error: "Errore interno" }, { status: 500 });
   }
 }

@@ -217,18 +217,16 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
               const isPdfComplementareR = pa?.foto_complementare_veicolo_ritirato_r?.slice(-3).toLowerCase() == "pdf" ? true : false
 
               return (
-                <div id="rowImageContainer" className="flex flex-wrap w-full" key={`${pa.uuid_veicolo_ritirato ?? index}`}>
+                <div id="rowImageContainer" className={`flex flex-wrap w-full`} key={`${pa.uuid_veicolo_ritirato ?? index}`}>
 									{pa?.foto_documento_detentore_f ? 
 									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
 										<div className="flex flex-col gap-1 w-full">
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                         {!isPdfDetentoreF ? <Image src={pa.foto_documento_detentore_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_detentore_f}?download`} target="_blank">
+												<Link href={`${pa.foto_documento_detentore_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													DETENTORE FRONTE
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}
@@ -238,11 +236,9 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfDetentoreR ? <Image src={pa.foto_documento_detentore_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank">
+												<Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													DETENTORE RETRO
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}
@@ -252,11 +248,9 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfVeicoloF ? <Image src={pa.foto_documento_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank">
+												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													VEICOLO FRONTE
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}  
@@ -266,11 +260,9 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfVeicoloR ? <Image src={pa.foto_documento_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}  
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank">
+												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													VEICOLO RETRO
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}
@@ -280,11 +272,9 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfComplementareF ? <Image src={pa.foto_complementare_veicolo_ritirato_f} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank">
+												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													COMPLEMENTARE FRONTE
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}
@@ -294,11 +284,9 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 											<div className="relative w-full h-[200px] overflow-hidden rounded">
                       {!isPdfComplementareR ? <Image src={pa.foto_complementare_veicolo_ritirato_r} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
 											</div>
-											<button className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg text-xs">
-												<Link href={`${pa?.foto_complementare_veicolo_ritirato_r}?download`} target="_blank">
+												<Link href={`${pa?.foto_complementare_veicolo_ritirato_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
 													COMPLEMENTARE RETRO
 												</Link>
-											</button>
 										</div>
 									</div> : null
 									}
@@ -317,7 +305,6 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
         <div id="mainImagecontainergridtwo" className="flex flex-row">
           {datiDemolizione?.length ? datiDemolizione?.map((dem, index) => {
             return (
-              <>
               <div id="rowImageContainer" className="grid grid-cols-4 w-full gap-2" key={`${dem.uuid_veicolo_ritirato ?? index}`}>
                 {dem?.documento_demolizione ? 
                 <div className="lg:col-span-1 col-start-1 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
@@ -325,30 +312,25 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
                     <div className="relative w-full h-[200px] overflow-hidden rounded">
                     <Image src="/pdf_placeholder.webp" fill alt={`${dem.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>
                     </div>
-                    <Link href={`${dem?.documento_demolizione}?download`} target="_blank">
-                      <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg w-full">
+                    <Link href={`${dem?.documento_demolizione}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
                       DOCUMENTO DEMOLIZIONE
-                      </button>
                     </Link>
                   </div>
                 </div> : null
                 }
-                {dem?.altro_documento_demolizione !== "" ? 
+                {dem?.altro_documento_demolizione ? 
                 <div className="lg:col-span-1 col-start-3 col-span-2 flex flex-row items-start h-fit gap-2 text-sm">
                   <div className="flex flex-col gap-1 w-full">
                     <div className="relative w-full h-[200px] overflow-hidden rounded">
                     <Image src={dem?.altro_documento_demolizione} fill alt={`${dem?.uuid_veicolo_ritirato}`} className="object-cover rounded"/>
                     </div>
-                    <button asChild className="uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
-                      <Link href={`${dem?.altro_documento_demolizione}`} target="_blank">
+                      <Link href={`${dem?.altro_documento_demolizione}`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
                         RADIAZIONE PRA
                       </Link>
-                    </button>
                   </div>
                 </div> : null
                 }
               </div>
-              </>
             )
           }) : (
             <div className="h-fit text-center">NESSUNA DEMOLIZIONE INSERITA</div>

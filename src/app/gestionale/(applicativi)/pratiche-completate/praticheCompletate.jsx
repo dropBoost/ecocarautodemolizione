@@ -4,15 +4,18 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletate";
+import { IoMdPhotos } from "react-icons/io";
+
 
   export default function PraticheCompletate() {
 
     const [praticheCompletate, setListPraticheCompletate] = useState([])
 		const [updateList, setUpdateList] = useState(true)
     const [loading, setLoading] = useState(false)
-
+    const [withFile, setWithFile] = useState(true)
     // ricerca
     const [dataSearch, setDataSearch] = useState("")        // testo digitato
     const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
@@ -35,9 +38,15 @@ import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletat
         // filtro ricerca (targa)
         if (dataSearchSubmit) {
           // se vuoi match parziale (consigliato)
-          query = query.ilike("targa_veicolo_ritirato", `${dataSearchSubmit}%`);
+          query = query.ilike("dati_veicolo_ritirato.targa_veicolo_ritirato", `${dataSearchSubmit}%`);
           // query = query.eq("targa_veicolo_ritirato", dataSearchSubmit.toUpperCase());
         }
+
+        if (withFile) {
+          query = query
+            .not("documento_demolizione", "is", null)
+            .neq("documento_demolizione", "");
+        } 
 
       const { data: praticheData, error } = await query;
 
@@ -53,7 +62,7 @@ import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletat
       setListPraticheCompletate(praticheData ?? [])
       setLoading(true)
       })()
-    }, [updateList, dataSearchSubmit])  
+    }, [updateList, dataSearchSubmit, withFile])  
 
     useEffect(() => {
       if (!loading) {
@@ -89,7 +98,7 @@ import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletat
         <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">PRATICHE COMPLETATE</h4>
       </div>
       {/* Barra ricerca */}
-      <div className="flex w-full items-center gap-2">
+      <div className="flex w-full items-center gap-2 h-10">
         <Input
           type="text"
           id="cerca"
@@ -101,7 +110,17 @@ import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletat
                      focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-brand"
         />
         <Button type="button" onClick={handleSearchClick}>Cerca</Button>
-        <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
+        <Button type="button" onClick={handleReset}>Reset</Button>
+        <div className="flex items-center gap-2 px-3 rounded-lg border h-full p-2">
+          <Checkbox
+            checked={withFile}
+            onCheckedChange={(v) => setWithFile(v === true)} // ✅ sempre boolean
+            id="withFile"
+          />
+          <label htmlFor="withFile" className="lg:flex hidden">
+            <IoMdPhotos className="text-red-600"/>
+          </label>
+        </div>
       </div>
 
 
@@ -168,7 +187,7 @@ import DisplayPraticheCompletate from "./componenti.jsx/displayPraticheCompletat
           );
           
         }) : (
-            <span colSpan={8} className="h-24 text-center">Nessun veicolo ritirato.</span>
+          <span colSpan={8} className="h-24 text-center">Nessun veicolo ritirato.</span>
         )}
       </div> 
     </div>

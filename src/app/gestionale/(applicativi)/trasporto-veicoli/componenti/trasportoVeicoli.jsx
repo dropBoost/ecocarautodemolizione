@@ -505,7 +505,6 @@ console.log()
                   <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
                     VEICOLI DA RITIRARE
                   </h4>
-                  
                 </div>
                 <div className="flex flex-row lg:justify-between justify-center gap-2 items-center max-w-full overflow-hidden bg-neutral-950/60 p-2 rounded-lg">
                   <h4 className="lg:flex hidden items-center text-[0.6rem] font-bold text-dark dark:text-brand/30 bg-brand/10 px-2 py-1 w-fit h-full rounded-xl">

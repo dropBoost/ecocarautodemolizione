@@ -24,6 +24,8 @@ export default function DisplayPraticheCompletate ({
 	const folderVeicoli = `public/${uuidAzienda}/${targaNormalizzata}`;
 	const folderDetentori = `public/${uuidAzienda}/${targaNormalizzata}`;
 
+	const imgTrue = Boolean(iDocVeicoloF || iDocVeicoloR || iDocDetentoreF || iDocDetentoreR || iComplementareF || iComplementareR)
+	
 	return (
 		<>
 		<div className="flex flex-row min-h-0 h-full w-full border hover:border-brand transition-all justify-between items-end rounded-xl p-3 gap-2">
@@ -86,7 +88,7 @@ export default function DisplayPraticheCompletate ({
 					iComplementareR:iComplementareR,
 				}}/>
 				<Link className="p-2 bg-brand/70 rounded-md hover:bg-brand" href={`ritiri-demolizioni/${uuidAzienda}/${uuid}`}><RiEyeCloseLine/></Link>
-				{isAdmin ? 
+				{isAdmin && imgTrue ? 
 				<DeleteFilesWithBucketsButton
 					table="dati_veicolo_ritirato"
 					idColumn="uuid_veicolo_ritirato"
