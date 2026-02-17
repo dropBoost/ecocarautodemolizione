@@ -9,9 +9,9 @@ import { AnalisiTrasportatori } from "./componenti/analisiTrasportatori"
 
 export default function PAGEdashboard () {
 
-    const utente = useAdmin().utente
-    const ruolo = utente?.user_metadata.ruolo
-		const isAdmin = ruolo == "superadmin" || ruolo == "admin"
+		const utente = useAdmin()
+  	const role = utente?.utente?.user_metadata?.ruolo
+		const isAdmin = role === "admin" || role === "superadmin"
 
 		const [caricamentoDati, setCaricamentoDati] = useState(0)
 
