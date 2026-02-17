@@ -15,14 +15,22 @@ export async function GET(req) {
   const to = searchParams.get("to");     // lte
 
   let query = supabaseAdmin
-    .from("dati_veicolo_ritirato")
-    .select(`*`,
+    .from("log_trasporto_veicolo")
+    .select(
+      `
+      uuid_log_trasporto_veicolo,
+      uuid_autista_ctv!inner(
+        uuid_autista_ctv,
+        nome_autista,
+        cognome_autista
+      )
+      `,
       { count: "exact" }
     )
 
   // aggiungi filtri solo se arrivano
-  if (from) query = query.gte("created_at_veicolo_ritirato", from);
-  if (to) query = query.lte("created_at_veicolo_ritirato", to);
+  if (from) query = query.gte("created_at_log_trasporto_veicolo", from);
+  if (to) query = query.lte("created_at_log_trasporto_veicolo", to);
 
   const { data, error, count } = await query;
 

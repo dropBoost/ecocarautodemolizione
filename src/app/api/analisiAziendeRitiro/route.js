@@ -16,9 +16,20 @@ export async function GET(req) {
 
   let query = supabaseAdmin
     .from("dati_veicolo_ritirato")
-    .select(`*`,
+    .select(
+      `
+      uuid_veicolo_ritirato,
+      created_at_veicolo_ritirato,
+      uuid_azienda_ritiro_veicoli!inner(
+        uuid_azienda_ritiro_veicoli,
+        ragione_sociale_arv,
+        citta_operativa_arv,
+        provincia_operativa_arv
+      )
+      `,
       { count: "exact" }
     )
+    .eq("demolizione_approvata", true);
 
   // aggiungi filtri solo se arrivano
   if (from) query = query.gte("created_at_veicolo_ritirato", from);
