@@ -37,7 +37,6 @@ export default function PAGEdashboard () {
 			anno:startYear
 		})
 
-    if (!isAdmin) return
 
 		const handleChangeAnalisi = (field) => (value) => {
 			setDataAnalisi((prev) => ({
