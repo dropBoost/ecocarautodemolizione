@@ -89,7 +89,7 @@ export const moduliGestionale = [
 export const moduliInfo = [
     // {name:'Info', link:'/gestionale/info', linkActive:'info', icon: ICON1, label:'Info', attivo:'true'},
     {name:'Aiuto', link:'https://wa.me/message/3UVUR5BC53VEG1?text=Ho%20bisogno%20di%20aiuto%20con%20il%20gestionale%20ECOCAR', linkActive:'aiuto', icon: ICON2, label:'Aiuto', attivo:'true'},
-    // {name:'Test', link:'/gestionale/test', linkActive:'test', icon: ICON3, label:'Test', attivo:'true'},
+    // {name:'Test', link:'/gestionale/test', linkActive:'test', icon: ICON3, label:'Test', attivo:'true'}, 
     // {name:'Account', link:'/admin/account', linkActive:'account', icon: ICON4, label:'Account', attivo:'true'},
   ]
 
