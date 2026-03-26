@@ -5,6 +5,7 @@ import InserimentoVeicoliRitirati from "./ritiroVeicoli";
 import ElencoVeicoliRitirati from "./elencoVeicoliRitirati";
 import PAGEveicoliAttesaRitiro from "./veicoliAttesaRitiro";
 import ModificaPratica from "./modificaPratica";
+import CercaTarga from "./cercaTarga";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import { TiThMenu } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
@@ -17,6 +18,7 @@ export default function PAGEritiriDemolizioni() {
   const [onDisplaySectionTwo, setOnDisplaySectionTwo] = useState(true)
   const [onDisplaySectionThree, setOnDisplaySectionThree] = useState(false)
   const [onDisplaySectionFour, setOnDisplaySectionFour] = useState(false)
+  const [onDisplaySectionFive, setOnDisplaySectionFive] = useState(false)
   const [statusAziende, setStatusAziende] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -25,6 +27,7 @@ export default function PAGEritiriDemolizioni() {
     setOnDisplaySectionTwo(false)
     setOnDisplaySectionThree(false)
     setOnDisplaySectionFour(false)
+    setOnDisplaySectionFive(false)
     setOpen(false)
   }
 
@@ -33,6 +36,7 @@ export default function PAGEritiriDemolizioni() {
     setOnDisplaySectionTwo(true)
     setOnDisplaySectionThree(false)
     setOnDisplaySectionFour(false)
+    setOnDisplaySectionFive(false)
     setOpen(false)
   }
 
@@ -41,6 +45,7 @@ export default function PAGEritiriDemolizioni() {
     setOnDisplaySectionTwo(false)
     setOnDisplaySectionThree(true)
     setOnDisplaySectionFour(false)
+    setOnDisplaySectionFive(false)
     setOpen(false)
   }
 
@@ -49,8 +54,19 @@ export default function PAGEritiriDemolizioni() {
     setOnDisplaySectionTwo(false)
     setOnDisplaySectionThree(false)
     setOnDisplaySectionFour(true)
+    setOnDisplaySectionFive(false)
     setOpen(false)
   }
+
+  function ClickSectionFive () {
+    setOnDisplaySectionOne(false)
+    setOnDisplaySectionTwo(false)
+    setOnDisplaySectionThree(false)
+    setOnDisplaySectionFour(false)
+    setOnDisplaySectionFive(true)
+    setOpen(false)
+  }
+
   function ClickMenu () {
     setOpen(prev => !prev)
   }
@@ -68,6 +84,7 @@ export default function PAGEritiriDemolizioni() {
           {isAdmin || isCompany ? <ButtonSection click={ClickSectionTwo} nome="ELENCO RITIRI" section={onDisplaySectionTwo}/> : null}
           {isAdmin ? <ButtonSection click={ClickSectionThree} nome="ATTESA DI RITIRO" section={onDisplaySectionThree}/> : null}
           {isAdmin ? <ButtonSection click={ClickSectionFour} nome="MODIFICA PRATICA" section={onDisplaySectionFour}/> : null}
+          {isAdmin ? <ButtonSection click={ClickSectionFive} nome="CERCA TARGA" section={onDisplaySectionFive}/> : null}
         </div>
       </div>
       <div className="h-[1px] w-full bg-gradient-to-r from-brand to-brandDark"/>
@@ -76,6 +93,7 @@ export default function PAGEritiriDemolizioni() {
         {isAdmin || isCompany ? <ElencoVeicoliRitirati statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionTwo}/> : null}
         {isAdmin ? <PAGEveicoliAttesaRitiro statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree}/> : null }
         {isAdmin ? <ModificaPratica statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFour}/> : null }
+        {isAdmin ? <CercaTarga statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFive}/> : null }
       </div>
     </div>
     </>

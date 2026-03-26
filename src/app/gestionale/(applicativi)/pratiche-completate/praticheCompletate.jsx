@@ -90,7 +90,7 @@ import { IoMdPhotos } from "react-icons/io";
         setDataSearch("")
         setDataSearchSubmit("")
     }
-
+    console.log("prat",praticheCompletate)
   return (
   <>
       <div className={`${praticheCompletate ? '' : 'hidden'} w-full min-h-0 flex-1 flex flex-col gap-4`}>
@@ -145,7 +145,7 @@ import { IoMdPhotos } from "react-icons/io";
 
           return (
             <DisplayPraticheCompletate
-            key={lpa?.uuid_veicolo_ritirato}
+            key={p?.uuid_certificato_demolizione}
             uuid={lpa?.uuid_veicolo_ritirato}
             uuidAzienda={lpa?.uuid_azienda_ritiro_veicoli}
             data={DataFormat(lpa?.created_at_veicolo_ritirato)}

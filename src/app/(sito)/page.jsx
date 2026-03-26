@@ -235,7 +235,7 @@ export default function Home() {
                   <div>
                     <p className="text-muted-foreground">Cellulare Rottamazione</p>
                     <a className="font-medium hover:underline text-neutral-600" href="tel:+39375858112">
-                      375 858 112
+                      375 858 1112
                     </a>
                   </div>
                   <div>

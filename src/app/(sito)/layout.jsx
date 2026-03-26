@@ -1,8 +1,11 @@
-'use client'
-
 import { Footer, Header } from '@/app/componenti-sito/theme'
 
-export default function LayoutGestionale({ children }) {
+export const metadata = {
+  title: `ECOCAR AUTODEMOLIZIONE`,
+  description: "powered by DROPBOOST.it",
+};
+
+export default function LayoutSito({ children }) {
   return (
     <div
       className="
