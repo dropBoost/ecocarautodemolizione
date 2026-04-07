@@ -69,9 +69,10 @@ export default function InserimentoCertificatiDemolizione({onDisplay, statusAzie
   }, [statusPratiche])
 
   // OPTION PRATICHE DI RITIRO
-  const optionsPraticheRitiro = praticheRitiroVeicoli?.map(prv => ({
-    value:`${prv.uuid_veicolo_ritirato}`,
+  const optionsPraticheRitiro = (praticheRitiroVeicoli ?? []).map((prv) => ({
+    value: prv.uuid_veicolo_ritirato,
     label: `${prv.targa_veicolo_ritirato} / ${prv.aziendaRitiro?.ragione_sociale_arv} - ${prv.aziendaRitiro?.provincia_legale_arv}`,
+    search: `${prv.targa_veicolo_ritirato ?? ""}`,
   }))
 
   async function StatusUpdate(uuidVeicolo, uuidStatoAvanzamento) {
@@ -227,15 +228,23 @@ export default function InserimentoCertificatiDemolizione({onDisplay, statusAzie
 												<CommandEmpty>Nessun risultato</CommandEmpty>
 												<CommandGroup>
 													{optionsPraticheRitiro.map((opt) => (
-														<CommandItem
-															key={opt.value}
-															value={`${opt.value}`}
-															onSelect={() => { setPraticaSelect(opt.value); setOpen(false) }}
-														>
-															{opt.label}
-															<Check className={cn("ml-auto", optionsPraticheRitiro === opt.value ? "opacity-100" : "opacity-0")} />
-														</CommandItem>
-													))}
+                            <CommandItem
+                              key={opt.value}
+                              value={opt.search}
+                              onSelect={() => {
+                                setPraticaSelect(opt.value)
+                                setOpen(false)
+                              }}
+                            >
+                              {opt.label}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  praticaSelect === opt.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
 												</CommandGroup>
 											</CommandList>
 										</Command>
