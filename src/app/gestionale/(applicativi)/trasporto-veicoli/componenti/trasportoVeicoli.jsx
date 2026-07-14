@@ -506,8 +506,8 @@ console.log()
                     VEICOLI DA RITIRARE
                   </h4>
                 </div>
-                <div className="flex flex-row lg:justify-between justify-center gap-2 items-center max-w-full overflow-hidden bg-neutral-950/60 p-2 rounded-lg">
-                  <h4 className="lg:flex hidden items-center text-[0.6rem] font-bold text-dark dark:text-brand/30 bg-brand/10 px-2 py-1 w-fit h-full rounded-xl">
+                <div className="flex flex-row lg:justify-between justify-center gap-2 items-center max-w-full overflow-hidden dark:bg-neutral-950/60 p-2 rounded-lg">
+                  <h4 className="lg:flex hidden items-center text-[0.6rem] font-bold text-dark dark:text-brand/30 dark:bg-brand/10 px-2 py-1 w-fit h-full rounded-xl">
                     <FaFilter/>
                   </h4>
                   <div className="flex-1 flex lg:flex-row flex-col lg:items-center items-start justify-start overflow-hidden gap-2 h-full">
