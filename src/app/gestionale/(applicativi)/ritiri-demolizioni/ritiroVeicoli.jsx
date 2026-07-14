@@ -6,6 +6,8 @@ import {  Select,  SelectContent,  SelectItem,  SelectTrigger,  SelectValue,  Se
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { toast } from "sonner";
 import { FaPlusSquare } from "react-icons/fa";
 import * as React from "react";
@@ -87,6 +89,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
     retroDOCcomplementare: "",
     fronteDOCdetentore: "",
     retroDOCdetentore: "",
+    note_pratica:"",
     completato: false,
   });
 
@@ -497,6 +500,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
       foto_complementare_veicolo_ritirato_r: formData.retroDOCcomplementare || null,
       foto_documento_detentore_f: formData.fronteDOCdetentore || null,
       foto_documento_detentore_r: formData.retroDOCdetentore || null,
+      note: formData.note_pratica?.trim() || null,
       pratica_completata: formData.completato,
     };
 
@@ -574,6 +578,7 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
       documentoVeicolo: "",
       fronteDOCveicolo: "",
       retroDOCveicolo: "",
+      note_pratica:"",
       fronteDOCcomplementare: "",
       retroDOCcomplementare: "",
       fronteDOCdetentore: "",
@@ -829,6 +834,24 @@ export default function InserimentoVeicoliRitirati({  onDisplay,  statusAziende,
           </div>
           {/* SPECIFICHE VEICOLO */}
           <div id="twoStep" className={`${ gravamiSelect ? "" : "hidden" } flex flex-col gap-3 h-fit w-full`}>
+            <div className="w-full">
+              <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
+                NOTE PRATICA
+              </h4>
+            </div>
+              <Textarea
+                id="note_pratica"
+                name="note_pratica"
+                placeholder="Qui puoi scrivere le note..."
+                className="resize-none rounded-2xl bg-white dark:bg-neutral-900 focus:border-brand"
+                value={formData.note_pratica}
+                onChange={handleChange}
+                maxLength={300}
+                rows={3}
+              />
+              <FieldDescription className="text-right">
+                  {formData.note_pratica.length}/{"300"} caratteri
+              </FieldDescription>
             <div className="w-full">
               <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
                 SPECIFICHE VEICOLO

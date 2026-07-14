@@ -82,7 +82,7 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 
       return () => { cancelled = true; };
     }, [uuidRitiroVeicolo, sUpdateComponent]);
-
+    console.log("pr", praticaAuto)
   return (
   <>
     <div className={`${praticaAuto[0] ? '' : 'hidden'} w-full h-full flex flex-1 flex-col gap-4 p-3`}>
@@ -201,6 +201,17 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
             )}
         </div>
       </div>
+      {praticaAuto[0]?.note !== null && praticaAuto[0]?.note !== "" ?
+      <>
+      {/* DOCUMENTI */}
+      <div className="">
+        <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">NOTE</h4>
+      </div>
+      <div className="flex flex-col w-full justify-between border border-brand rounded-xl p-5">
+        {praticaAuto[0]?.note}
+      </div>
+      </>
+      : null}
       {/* DOCUMENTI */}
       <div className="">
         <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">DOCUMENTI</h4>

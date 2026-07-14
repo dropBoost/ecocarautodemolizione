@@ -1,17 +1,18 @@
 import Link from "next/link"
-import { FaFileDownload } from "react-icons/fa";
 import { RiEyeCloseLine } from "react-icons/ri";
+import { MdInsertComment } from "react-icons/md";
 import { FaCarAlt, FaTrash } from "react-icons/fa";
 import TargaDesign from "@/app/componenti/targaDesign";
 import ButtonScaricaRitiroPDF from "@/app/componenti/pdf/buttonScaricaRitiroPDF";
 import DeleteRecordWithBucketsButton from "@/app/componenti/DeleteRecordButton";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import { IoDocument } from "react-icons/io5";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 export default function DisplayVeicoliRitirati ({
 	uuid, uuidAzienda, targa, modelloVeicolo, telaio, nome, cognome, mobileDetentore,completata,tipologiaD,ragioneSociale, piva, cf, email, documento, data,
 	veicoloConsegnato, veicoloRitirato, demolizioneApprovata, formaLegale, vinLeggibile, documentoDetentore, nDocDetentore, indirizzo, gravami,
-	iDocVeicoloF, iDocVeicoloR, iDocDetentoreF, iDocDetentoreR, iComplementareF, iComplementareR, setUpdateList, emailDetentore
+	iDocVeicoloF, iDocVeicoloR, iDocDetentoreF, iDocDetentoreR, iComplementareF, iComplementareR, setUpdateList, emailDetentore, note
 	}) {
 	
 	const utente = useAdmin()
@@ -31,12 +32,21 @@ export default function DisplayVeicoliRitirati ({
 			<div className="flex flex-1 flex-col justify-between items-start min-h-0 h-full gap-2">
 				{/* DATI VEICOLO */}
 				<div className="flex flex-col flex-1 justify-start items-start gap-1">
-					<div className={`flex flex-row gap-1 items-center border w-fit rounded-md px-2`}>
+					<div className={`flex flex-row gap-2 items-center justify-center border w-fit rounded-md px-2 py-1`}>
+						{note !== null && note !== "" ?
+						<div className="">
+							<HoverCard>
+								<HoverCardTrigger delay={1} closeDelay={1000}><MdInsertComment className="hover:text-brand"/></HoverCardTrigger>
+								<HoverCardContent className={`text-xs`}>
+									{note}
+								</HoverCardContent>
+							</HoverCard>
+						</div> : null
+						}
 						<span className={`text-xs`}>{data}</span>
 					</div>
 					<div className="flex flex-col gap-1">
 						<div className="min-w-36 max-w-36"><TargaDesign targa={targa}/></div>
-						
 						{telaio ? <span className={`border border-brand rounded-lg px-2 py-1 text-xs truncate text-ellipsis w-fit`}>Telaio:<font className="text-xs font-medium italic uppercase"> {telaio}</font></span> : <span className="border bg-red-700 rounded-lg px-2 py-1 text-[0.55rem] truncate text-ellipsis w-fit uppercase"> telaio non leggibile</span>}
 						<div className="flex flex-row gap-1 items-center border w-fit rounded-lg px-2">
 								<FaCarAlt className="text-brand text-xs"/>

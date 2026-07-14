@@ -82,7 +82,7 @@ import { toast } from "sonner";
       toast.info(`pratiche auto ${datiAzienda[0]?.ragione_sociale_arv} caricate con successo`)
       
     },[datiAzienda])
-
+    console.log("llll",listPraticheAzienda)
     // handlers ricerca
     function handleChangeSearchBar(e) {
         setDataSearch(e.target.value)
@@ -180,6 +180,8 @@ import { toast } from "sonner";
             iDocDetentoreR={lpa?.foto_documento_detentore_r}
             iComplementareF={lpa?.foto_complementare_veicolo_ritirato_f}
             iComplementareR={lpa?.foto_complementare_veicolo_ritirato_r}
+
+            note={lpa?.note}
 
 						setUpdateList={setUpdateList}
             />
