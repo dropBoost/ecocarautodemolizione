@@ -36,7 +36,7 @@ export default function DisplayVeicoliRitirati ({
 						{note !== null && note !== "" ?
 						<div className="">
 							<HoverCard>
-								<HoverCardTrigger delay={1} closeDelay={1000}><MdInsertComment className="hover:text-brand"/></HoverCardTrigger>
+								<HoverCardTrigger><MdInsertComment className="hover:text-brand"/></HoverCardTrigger>
 								<HoverCardContent className={`text-xs`}>
 									{note}
 								</HoverCardContent>

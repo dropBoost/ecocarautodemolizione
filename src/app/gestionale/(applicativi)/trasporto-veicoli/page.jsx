@@ -4,6 +4,7 @@ import { useState } from "react";
 import SECTIONtrasportoVeicoli from "@/app/gestionale/(applicativi)/trasporto-veicoli/componenti/trasportoVeicoli";
 import SECTIONveicoliTransito from "@/app/gestionale/(applicativi)/trasporto-veicoli/componenti/veicoliTransito";
 import SECTIONcronologiaTrasporti from "@/app/gestionale/(applicativi)/trasporto-veicoli/componenti/cronologiaTrasporti";
+import SECTIONveicoliRitiratiTrasporto from "../notifiche/componenti/veicoliRitiratiTrasporto";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import { TiThMenu } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";

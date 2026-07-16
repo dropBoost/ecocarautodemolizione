@@ -6,6 +6,8 @@ import { GiTowTruck } from "react-icons/gi";
 import { TbEngine, TbBuildingSkyscraper } from "react-icons/tb";
 import { FaCar, FaCarOn, FaCheckToSlot } from "react-icons/fa6";
 import { SiGoogleforms } from "react-icons/si";
+import { IoIosNotifications } from "react-icons/io";
+
 
 //ICONE SOCIAL
 
@@ -33,6 +35,7 @@ const ICON11 = <FaUserCheck/>
 const ICON12 = <TbBuildingSkyscraper/>
 const ICON13 = <FaCarOn/>
 const ICON14 = <FaCheckToSlot/>
+const ICON15 = <IoIosNotifications/>
 
 // FOOTER SIGN
 
@@ -78,6 +81,7 @@ export const moduliGestionale = [
     {name:'ritiri-demolizioni', link:'/gestionale/ritiri-demolizioni', linkActive:'ritiri-demolizioni', icon: ICON3, label:'Ritiri Demolizioni', attivo:true, level:['admin', 'superadmin', 'company']},
     {name:'gestione-trasporto', link:'/gestionale/gestione-trasporto', linkActive:'gestione-trasporto', icon: ICON2, label:'Gestione Trasporto', attivo:true, level:['admin', 'superadmin']},
     {name:'trasporto-veicoli', link:'/gestionale/trasporto-veicoli', linkActive:'trasporto-veicoli', icon: ICON13, label:'Trasporto Veicoli', attivo:true, level:['transporter','admin','superadmin']},
+    {name:'notifiche', link:'/gestionale/notifiche', linkActive:'/notifiche', icon: ICON15, label:'Notifiche', attivo:true, level:['transporter', 'admin', 'superadmin']},
     {name:'demolizioni', link:'/gestionale/certificati-demolizione', linkActive:'demolizioni', icon: ICON4, label:'Certificati Demolizione', attivo:true, level:['admin', 'superadmin', 'company']},
     {name:'pratiche-completate', link:'/gestionale/pratiche-completate', linkActive:'pratiche-completate', icon: ICON14, label:'Pratiche Completate', attivo:true, level:['admin', 'superadmin']},
     {name:'veicoli', link:'/gestionale/modelli-veicoli', linkActive:'modelli-veicoli', icon: ICON6, label:'Veicoli', attivo:true, level:['admin', 'superadmin']},

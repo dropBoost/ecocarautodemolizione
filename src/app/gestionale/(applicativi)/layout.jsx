@@ -6,14 +6,39 @@ import Link from 'next/link'
 import { companyName, moduliGestionale, version } from '../../cosetting'
 import { useAdmin } from '@/app/admin/components/AdminContext'
 import { HomeButton, ThemeToggle, LogoutButton, PlusButton } from '@/app/componenti/button'
+import { getCountNoteVeicolo } from '@/app/utils/getCountNoteVeicolo'
+import { FaBell } from 'react-icons/fa'
 
 export default function LayoutGestionale({ children }) {
 
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [notificheTotali, setNotificheTotali] = useState(0);
+  const [notificheDaLeggere, setNotificheDaLeggere] = useState(0);
   const utente = useAdmin()?.utente
   const ruolo = utente?.user_metadata.ruolo
   const [openUpBar, setOpenUpBar] = useState(false)
+
+  useEffect(() => {
+
+    if (!utente?.id) return;
+
+    const caricaConteggi = async () => {
+      try {
+        const { totale, daLeggere } = await getCountNoteVeicolo({
+          userId: utente.id,
+          ruolo,
+        });
+
+        setNotificheTotali(totale);
+        setNotificheDaLeggere(daLeggere);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    caricaConteggi();
+  }, [utente?.id, ruolo]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -21,13 +46,7 @@ export default function LayoutGestionale({ children }) {
   }, [open])
 
   return (
-    <div className="
-      grid h-[100svh] min-h-0 overflow-hidden
-      supports-[height:100dvh]:h-[100dvh]
-      grid-cols-1 grid-rows-[64px_1fr_48px]
-      md:grid-cols-[280px_1fr]
-      bg-neutral-100 dark:bg-neutral-950
-    ">
+    <div className=" grid h-[100svh] min-h-0 overflow-hidden supports-[height:100dvh]:h-[100dvh] grid-cols-1 grid-rows-[64px_1fr_48px] md:grid-cols-[280px_1fr] bg-neutral-100 dark:bg-neutral-950">
       {/* Sidebar desktop */}
       <aside className="hidden md:block md:row-span-3 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <Sidebar pathname={pathname} u={utente} rule={ruolo}/>
@@ -51,6 +70,7 @@ export default function LayoutGestionale({ children }) {
             <span className="font-medium uppercase">Backoffice Demolizioni</span>
           </div>
           <div className="flex items-center gap-2">
+            {notificheDaLeggere > 0 ? <Link href={`/gestionale/notifiche`} className='flex flex-row gap-1 bg-red-500 items-center px-2 rounded-md text-[0.8rem] h-full'><FaBell/>{notificheDaLeggere}</Link> : null}
             <PlusButton open={() => setOpenUpBar(prev => !prev)} stato={openUpBar}/>
             <HomeButton/>
             <LogoutButton/>

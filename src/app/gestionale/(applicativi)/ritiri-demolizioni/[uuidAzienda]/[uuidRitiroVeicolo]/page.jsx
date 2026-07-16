@@ -5,11 +5,22 @@ import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabaseClient"
 import { FaCircle, FaDotCircle } from "react-icons/fa";
+import { BiCommentAdd } from "react-icons/bi";
 import Link from "next/link";
 import StatusTracking from "../../componenti/statusTracking";
 import ReadTracking from "../../componenti/readTracking";
 import BTNapprovazionePratica from "@/app/gestionale/(applicativi)/ritiri-demolizioni/[uuidAzienda]/[uuidRitiroVeicolo]/componenti/bottoneApprovazionePratica";
 import { useAdmin } from "@/app/admin/components/AdminContext";
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
+import { DataFormat } from "@/app/componenti-sito/dataFormat";
+
 
   export default function SchedaVeicoli() {
 
@@ -18,9 +29,11 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
     const params = useParams();
     const uuidRitiroVeicolo = params?.uuidRitiroVeicolo;
     const [praticaAuto, setPraticaAuto] = useState([])  
+    const [notePraticaAuto, setNotePraticaAuto] = useState([])  
     const [datiDemolizione, setDatiDemolizione] = useState([])
     const [updateTracking, setUpdateTracking] = useState(false)
     const [sUpdateComponent,setSUpdateComponent] = useState(false)
+    const [dialogOpen, setDialogOpen] = useState(false)
 
     // CARICAMENTO PRATICA VEICOLO
     useEffect(() => {
@@ -48,10 +61,31 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 
         if (error) {
             console.error(error)
-            toast.error("Errore nel caricamento Modelli Marchio Auto")
+            toast.error("Errore nel caricamento dati Veicolo")
             return
         }
         setPraticaAuto(praticheData ?? [])
+        })()
+    }, [uuidRitiroVeicolo, sUpdateComponent])  
+
+    // CARICAMENTO NOTE PRATICA
+    useEffect(() => {
+
+        if (!uuidRitiroVeicolo) return;
+
+        ;(async () => {
+        const { data: note, error } = await supabase
+            .from("note_veicolo_ritirato")
+            .select(`*`)
+            .eq("uuid_dati_veicolo_ritirato", uuidRitiroVeicolo)
+            .order("created_at", {ascending: false})
+
+        if (error) {
+            console.error(error)
+            toast.error("Errore caricamento Note")
+            return
+        }
+        setNotePraticaAuto(note ?? [])
         })()
     }, [uuidRitiroVeicolo, sUpdateComponent])  
 
@@ -82,7 +116,51 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
 
       return () => { cancelled = true; };
     }, [uuidRitiroVeicolo, sUpdateComponent]);
-    console.log("pr", praticaAuto)
+
+    const [formData, setFormData] = useState({
+      note_pratica:"",
+    });
+
+    function handleChange(e) {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    }
+
+    async function handleSubmit(e) {
+
+      e.preventDefault();
+  
+      if (!praticaAuto[0]?.uuid_veicolo_ritirato) return
+      if (!formData.note_pratica) return
+
+      const payload = {
+        uuid_dati_veicolo_ritirato: praticaAuto[0]?.uuid_veicolo_ritirato,
+        nota: formData.note_pratica?.trim() || null,
+      };
+  
+      const { data, error } = await supabase
+        .from("note_veicolo_ritirato")
+        .insert(payload)
+        .select()
+        .single();
+  
+      if (error) {
+        console.error(error);
+        toast.error(`Errore salvataggio: ${error.message}`);
+        return;
+      }
+
+      // reset form
+      setFormData({
+        note_pratica:"",
+      });
+
+      toast.success(`Nota inserita con successo!`);
+      setDialogOpen(false)
+      setSUpdateComponent(prev => !prev)
+
+    }
+
   return (
   <>
     <div className={`${praticaAuto[0] ? '' : 'hidden'} w-full h-full flex flex-1 flex-col gap-4 p-3`}>
@@ -123,77 +201,133 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
                     })
                 } 
               return (
-                <div id="rowContainer" className="flex flex-col gap-2 items-start" key={`${pa.targa_veicolo_ritirato ?? index}`}>
+                <div id="rowContainer" className="flex flex-col gap-2 items-start w-full" key={`${pa.targa_veicolo_ritirato ?? index}`}>
+                  <div className="flex flex-row items-start justify-between w-full">
                     {pa.pratica_completata ?
-                      <div className="flex flex-row items-center gap-2 border border-neutral-800 px-3 py-2 rounded-xl h-fit text-xs">
-                        <FaCircle className="text-brand"/>
-                        <span>STATO: COMPLETATO</span>
-                      </div> : 
-                      <div className="flex flex-row items-center gap-2 border border-neutral-800 px-3 py-2 rounded-xl h-fit text-xs">
-                        <FaDotCircle className="text-red-700"/>
-                        <span>STATO: IN CORSO</span>
-                      </div>
+                    <div className="flex flex-row items-center gap-2 border border-neutral-800 px-3 py-2 rounded-xl h-fit text-xs">
+                      <FaCircle className="text-brand"/>
+                      <span>STATO: COMPLETATO</span>
+                    </div> : 
+                    <div className="flex flex-row items-center gap-2 border border-neutral-800 px-3 py-2 rounded-xl h-fit text-xs">
+                      <FaDotCircle className="text-red-700"/>
+                      <span>STATO: IN CORSO</span>
+                    </div>
                     }
-                    <div id="containerOne" className="flex lg:flex-row flex-col gap-1 items-start h-fit">
-                        <div className="flex flex-row gap-1">
-                          <span className="uppercase font-bold">{pa.nome_detentore}</span> <span className="uppercase font-bold">{pa.cognome_detentore}</span>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                          <span>{pa.indirizzo_detentore} - {pa.cap_detentore} {pa.citta_detentore} - {pa.provincia_detentore}</span>
-                        </div>
+                    <div className="">
+                      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <DialogTrigger asChild>
+                          <Button type="button" variant="ghost" className="text-lg"><BiCommentAdd /></Button>
+                        </DialogTrigger>
+
+                        <DialogContent className="sm:max-w-xl">
+                          <form onSubmit={handleSubmit}>
+                            <DialogHeader>
+                              <DialogTitle>Aggiungi Nota</DialogTitle>
+                              <DialogDescription>
+                                Aggiungi una nota alla pratica
+                              </DialogDescription>
+                            </DialogHeader>
+
+                            <FieldGroup className="py-4">
+                              <Field>
+                                <Label htmlFor="uuid_dati_veicolo_ritirato">Codice Pratica</Label>
+                                <Input id="uuid_dati_veicolo_ritirato" name="uuid_dati_veicolo_ritirato" defaultValue={pa.uuid_veicolo_ritirato} disabled/>
+                              </Field>
+                              <Field>
+                                <Label htmlFor="targa">Targa</Label>
+                                <Input id="targa" name="targa" defaultValue={pa?.targa_veicolo_ritirato} disabled/>
+                              </Field>
+                              <Field>
+                                <Label htmlFor="note">Note</Label>
+                                <Textarea
+                                  id="note_pratica"
+                                  name="note_pratica"
+                                  placeholder="Qui puoi scrivere le note..."
+                                  className="resize-none rounded-2xl bg-white dark:bg-neutral-900 focus:border-brand"
+                                  value={formData.note_pratica}
+                                  onChange={handleChange}
+                                  maxLength={200}
+                                  rows={4}
+                                />
+                              </Field>
+                            </FieldGroup>
+
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button type="button" variant="outline">
+                                  Annulla
+                                </Button>
+                              </DialogClose>
+
+                              <Button type="submit">
+                                Salva modifiche
+                              </Button>
+                            </DialogFooter>
+                          </form>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                    <div id="containerTwo" className="flex flex-row items-start h-fit gap-2 text-sm">
-                      <div className="flex flex-row gap-2 border border-brand rounded-lg px-2">
-                        {pa.forma_legale_detentore == "azienda" ? <span> {pa.ragione_sociale_detentore} / P.IVA: {pa.piva_detentore}</span> : <span>Codice Fiscale {pa.cf_detentore} </span>}
+                  </div>
+                  <div id="containerOne" className="flex lg:flex-row flex-col gap-1 items-start h-fit">
+                      <div className="flex flex-row gap-1">
+                        <span className="uppercase font-bold">{pa.nome_detentore}</span> <span className="uppercase font-bold">{pa.cognome_detentore}</span>
                       </div>
+                      <div className="flex flex-row gap-2">
+                        <span>{pa.indirizzo_detentore} - {pa.cap_detentore} {pa.citta_detentore} - {pa.provincia_detentore}</span>
+                      </div>
+                  </div>
+                  <div id="containerTwo" className="flex flex-row items-start h-fit gap-2 text-sm">
+                    <div className="flex flex-row gap-2 border border-brand rounded-lg px-2">
+                      {pa.forma_legale_detentore == "azienda" ? <span> {pa.ragione_sociale_detentore} / P.IVA: {pa.piva_detentore}</span> : <span>Codice Fiscale {pa.cf_detentore} </span>}
                     </div>
-                    <div id="containerThree" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
-                      <div className="flex flex-row gap-2 bg-brand text-neutral-950 rounded-lg px-2">
-                        <span className="font-bold">{pa.targa_veicolo_ritirato}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        <span className="uppercase font-semibold text-brand">{pa.modello.marca} {pa.modello.modello}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        CM³ {pa.cilindrata_veicolo_ritirato}
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        {pa.anno_veicolo_ritirato}
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        KM {pa.km_veicolo_ritirato}
-                      </div>
+                  </div>
+                  <div id="containerThree" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
+                    <div className="flex flex-row gap-2 bg-brand text-neutral-950 rounded-lg px-2">
+                      <span className="font-bold">{pa.targa_veicolo_ritirato}</span>
                     </div>
-                    <div id="containerFour" className="flex flex-row items-start h-fit gap-2 text-sm">
-                      <div className="flex flex-row gap-2 bg-neutral-200 text-neutral-950 rounded-lg px-2">
-                        <span className="font-bold">{pa.vin_veicolo_ritirato}</span>
-                      </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      <span className="uppercase font-semibold text-brand">{pa.modello.marca} {pa.modello.modello}</span>
                     </div>
-                    <div id="containerFive" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Documento Veicolo: <span className="uppercase font-semibold text-brand">{pa.tipologia_documento_veicolo_ritirato}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Documento Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_documento_detentore} - {pa.numero_documento_detentore}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Tipologia Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_detentore}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Nazionalità: <span className="uppercase font-semibold text-brand">{pa.nazionalita_documento_detentore}</span>
-                      </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      CM³ {pa.cilindrata_veicolo_ritirato}
                     </div>
-                    <div id="containerSix" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Email: <span className="font-semibold text-brand">{pa.email_detentore}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Mobile: <span className="uppercase font-semibold text-brand">{pa.mobile_detentore}</span>
-                      </div>
-                      <div className="flex flex-row gap-2 border rounded-lg px-2">
-                        Tipologia Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_detentore}</span>
-                      </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      {pa.anno_veicolo_ritirato}
                     </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      KM {pa.km_veicolo_ritirato}
+                    </div>
+                  </div>
+                  <div id="containerFour" className="flex flex-row items-start h-fit gap-2 text-sm">
+                    <div className="flex flex-row gap-2 bg-neutral-200 text-neutral-950 rounded-lg px-2">
+                      <span className="font-bold">{pa.vin_veicolo_ritirato}</span>
+                    </div>
+                  </div>
+                  <div id="containerFive" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Documento Veicolo: <span className="uppercase font-semibold text-brand">{pa.tipologia_documento_veicolo_ritirato}</span>
+                    </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Documento Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_documento_detentore} - {pa.numero_documento_detentore}</span>
+                    </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Tipologia Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_detentore}</span>
+                    </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Nazionalità: <span className="uppercase font-semibold text-brand">{pa.nazionalita_documento_detentore}</span>
+                    </div>
+                  </div>
+                  <div id="containerSix" className="flex lg:flex-row flex-col items-start h-fit gap-2 text-sm">
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Email: <span className="font-semibold text-brand">{pa.email_detentore}</span>
+                    </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Mobile: <span className="uppercase font-semibold text-brand">{pa.mobile_detentore}</span>
+                    </div>
+                    <div className="flex flex-row gap-2 border rounded-lg px-2">
+                      Tipologia Detentore: <span className="uppercase font-semibold text-brand">{pa.tipologia_detentore}</span>
+                    </div>
+                  </div>
                 </div>
               )
             }) : (
@@ -201,17 +335,23 @@ import { useAdmin } from "@/app/admin/components/AdminContext";
             )}
         </div>
       </div>
-      {praticaAuto[0]?.note !== null && praticaAuto[0]?.note !== "" ?
-      <>
-      {/* DOCUMENTI */}
-      <div className="">
+      {/* NOTE */}
+      {notePraticaAuto.length > 0 ?
+      <div className="flex flex-col gap-2">
         <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">NOTE</h4>
-      </div>
-      <div className="flex flex-col w-full justify-between border border-brand rounded-xl p-5">
-        {praticaAuto[0]?.note}
-      </div>
-      </>
-      : null}
+          <div className="flex flex-col gap-2">
+          {notePraticaAuto.map(n => (
+            <div className={`flex flex-col border border-neutral-300 dark:border-neutral-800 rounded-lg p-4 gap-2`} key={n.id}>
+              <div className="flex flex-row items-center justify-between">
+                <p className="text-sm font-medium">{n.nota}</p>
+                {n.attiva && <FaCircle className="text-[0.5rem] text-red-700"/> }
+              </div>
+              <Separator/>
+              <FieldDescription className={`italic text-xs`}>{DataFormat(n.created_at)}</FieldDescription>
+            </div>
+            ))}
+          </div>
+      </div> : null}
       {/* DOCUMENTI */}
       <div className="">
         <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">DOCUMENTI</h4>
