@@ -4,12 +4,15 @@ import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner";
-import { FaPlusSquare, FaCar, FaMinusSquare, FaUser, FaSearch, FaFilter } from "react-icons/fa";
+import { FaPlusSquare, FaCar, FaMinusSquare, FaUser, FaSearch, FaFilter, FaCircle } from "react-icons/fa";
 import { TiArrowBack } from "react-icons/ti";
 import { FaBarcode, FaBuildingCircleArrowRight, FaCircleCheck } from "react-icons/fa6";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup } from "@/components/ui/select";
 import TargaDesign from "@/app/componenti/targaDesign";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator";
+import { DataFormat } from "@/app/componenti-sito/dataFormat";
 
 export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, statusAziende }) {
   const utente = useAdmin();
@@ -24,14 +27,14 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
   const [aziende, setAziende] = useState([])
   const [camion, setCamion] = useState([]);
   const [autisti, setAutisti] = useState([]);
+  const isAdmin = role === "admin" || role === "superadmin";
+  const isTrasporter = role === "transporter";
+  const isCompany = role === "company";
   const [formData, setFormData] = useState({
     camionRitiro: "",
     autistaRitiro: "",
     filtroData: dataOggiItalia(),
   });
-  const isAdmin = role === "admin" || role === "superadmin";
-  const isTrasporter = role === "transporter";
-  const isCompany = role === "company";
   //GESTIONE DATA PER QUERY
 
   function dataOggiItalia() {
@@ -138,7 +141,8 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
         .from("dati_veicolo_ritirato")
         .select(`*,
                 aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv),
-								modelloVeicolo:modello_veicolo(*)
+								modelloVeicolo:modello_veicolo(*),
+                note:note_veicolo_ritirato(*)
                 )`
         )
         .eq("pratica_completata", false)
@@ -170,7 +174,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
 
     fetchData();
   }, [role, uuidUtente, updateList, filterAzienda, dataSearchSubmit]);
-
+  console.log(veicoliDaRitirare)
   //CARICAMENTO VEICOLI RITIRATI
   useEffect(() => {
     if (!role) return;
@@ -448,8 +452,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
     setStatusAziende((prev) => !prev);
     alert("Trasporto Eliminato");
   }
-console.log("filteraz",veicoliDaRitirare.length)
-console.log()
+
   return (
     <>
       <div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
@@ -499,7 +502,7 @@ console.log()
           </div>
           {/* VEICOLI DA RITIRARE */}
           <div className={`flex flex-col gap-4 ${veicoliRitirati.length > 0 ? `xl:basis-6/12 w-full` : `xl:basis-12/12 w-full`}  p-1`}>
-            <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2 bg-white dark:bg-neutral-900">
+            <div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2 bg-neutral-50 dark:bg-neutral-900">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row justify-between">
                   <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
@@ -537,35 +540,67 @@ console.log()
                     <Button type="button" onClick={handleReset}><TiArrowBack/></Button>
                   </div>
                 </div>
-              </div>  
+              </div>
+              {/* ELENCO VEICOLI DA RITIRARE */}
               <div className="flex flex-col gap-2 overflow-auto">
                 {veicoliDaRitirare?.map((c, i) => (
-                  <div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border hover:border-brand transition p-3 rounded-xl">
-                    <div className="flex flex-wrap items-start gap-1">
-                      <div className="flex flex-wrap gap-2">
-                        <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
-											</div>
-                      <div className="flex flex-wrap gap-1">
-												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaUser className="text-orange-500"/>{c?.nome_detentore} {c?.cognome_detentore}</div>
-												<div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBarcode className="text-orange-500"/>{c?.cf_detentore}</div>
-											</div>
-                      <div className="flex flex-wrap gap-1 pe-5">
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
-                        <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
+                  <div key={c.uuid_veicolo_ritirato} className="flex flex-col border gap-2 hover:border-brand transition p-3 rounded-xl">
+                    <div className="flex flex-row justify-between xl:items-center gap-3 items-start p-3 rounded-xl">
+                      {/* DATI VEICOLO */}
+                      <div className="flex flex-wrap items-start gap-1">
+                        <div className="flex flex-wrap gap-2">
+                          <div className="w-36"><TargaDesign targa={c?.targa_veicolo_ritirato}/></div>
+                          <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBuildingCircleArrowRight className="text-sky-700"/>{c?.aziendaRitiro?.ragione_sociale_arv}</div>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaUser className="text-orange-500"/>{c?.nome_detentore} {c?.cognome_detentore}</div>
+                          <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaBarcode className="text-orange-500"/>{c?.cf_detentore}</div>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg"><FaCar className="text-brand"/>{c?.modelloVeicolo.marca} {c?.modelloVeicolo.modello}</div>
+                          <div className="flex flex-row items-center gap-1 text-xs border py-1 px-2 rounded-lg uppercase"><FaCircleCheck className="text-brand"/>{c?.stato_gravami}</div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-start p-1">
+                        <ButtonRitiraVeicolo
+                          onClick={() =>
+                            RitiroVeicolo(
+                              c?.uuid_veicolo_ritirato,
+                              formData?.camionRitiro,
+                              formData?.autistaRitiro
+                            )
+                          }
+                        />
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      <ButtonRitiraVeicolo
-                        onClick={() =>
-                          RitiroVeicolo(
-                            c?.uuid_veicolo_ritirato,
-                            formData?.camionRitiro,
-                            formData?.autistaRitiro
-                          )
-                        }
-                      />
+                    {c.note.length > 0 ?
+                    <>
+                    {/* NOTE */}
+                    <div className="flex flex-wrap gap-1 w-full">
+                      <div className="flex flex-row items-center justify-center font-bold text-white gap-1 text-xs bg-red-500 dark:hover:bg-muted py-1 px-2 rounded-lg w-full transition-all">
+                        <Dialog>
+                          <DialogTrigger className="flex flex-row items-center justify-center gap-1 w-full p-1">
+                            <FaCircle/> NOTE
+                          </DialogTrigger>
+                          <DialogContent>
+                            {c.note.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((n, i) => {
+                            return (
+                            <div className="flex flex-col gap-2" key={n.id}>
+                            <DialogHeader>
+                              <DialogTitle className="text-base">{n.nota}</DialogTitle>
+                              <DialogDescription className="text-xs italic">
+                                {DataFormat(n.created_at)}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <Separator/>
+                            </div>
+                            )
+                            })}
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </div>
+                    </> : null }
                   </div>
                 ))}
               </div>
