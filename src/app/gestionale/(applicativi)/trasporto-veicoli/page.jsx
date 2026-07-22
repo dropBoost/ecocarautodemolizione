@@ -5,6 +5,7 @@ import SECTIONtrasportoVeicoli from "@/app/gestionale/(applicativi)/trasporto-ve
 import SECTIONveicoliTransito from "@/app/gestionale/(applicativi)/trasporto-veicoli/componenti/veicoliTransito";
 import SECTIONcronologiaTrasporti from "@/app/gestionale/(applicativi)/trasporto-veicoli/componenti/cronologiaTrasporti";
 import SECTIONveicoliRitiratiTrasporto from "../notifiche/componenti/veicoliRitiratiTrasporto";
+import FotoVeicoliRitiratiTrasporto from "./componenti/fotoVeicoliTrasporto";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import { TiThMenu } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
@@ -16,6 +17,7 @@ export default function PAGEtrasportoVeicoli() {
   const [onDisplaySectionOne, setOnDisplaySectionOne] = useState(true);
   const [onDisplaySectionTwo, setOnDisplaySectionTwo] = useState(false);
   const [onDisplaySectionThree, setOnDisplaySectionThree] = useState(false);
+  const [onDisplaySectionFour, setOnDisplaySectionFour] = useState(false);
   const [statusAziende, setStatusAziende] = useState(false);
   const [open, setOpen] = useState(false)
 
@@ -23,18 +25,28 @@ export default function PAGEtrasportoVeicoli() {
     setOnDisplaySectionOne(true);
     setOnDisplaySectionTwo(false);
     setOnDisplaySectionThree(false)
+    setOnDisplaySectionFour(false)
     setOpen(false)
   }
   function ClickSectionTwo() {
     setOnDisplaySectionOne(false);
     setOnDisplaySectionTwo(true);
 		setOnDisplaySectionThree(false)
+    setOnDisplaySectionFour(false)
     setOpen(false)
   }
   function ClickSectionThree() {
     setOnDisplaySectionOne(false);
     setOnDisplaySectionTwo(false);
 		setOnDisplaySectionThree(true)
+    setOnDisplaySectionFour(false)
+    setOpen(false)
+  }
+  function ClickSectionFour() {
+    setOnDisplaySectionOne(false);
+    setOnDisplaySectionTwo(false);
+		setOnDisplaySectionThree(false)
+		setOnDisplaySectionFour(true)
     setOpen(false)
   }
   function ClickMenu () {
@@ -48,6 +60,7 @@ export default function PAGEtrasportoVeicoli() {
           <ButtonMenu click={ClickMenu} nome="MENU" section={onDisplaySectionOne} open={open} icon={<TiThMenu/>} iconTwo={<GrFormClose />}/>
           <div className={`${!open ? "hidden" : ""} dark:bg-neutral-950 bg-neutral-200 transition-all p-3 rounded-lg flex lg:flex-row flex-wrap w-full gap-3`}>
             <ButtonSection click={ClickSectionOne} nome="TRASPORTO VEICOLI" section={onDisplaySectionOne}/>
+            <ButtonSection click={ClickSectionFour} nome="FOTO VEICOLI" section={onDisplaySectionFour}/>
             {role == "admin" || role == "superadmin" ? <ButtonSection click={ClickSectionTwo} nome="VEICOLI IN TRANSITO" section={onDisplaySectionTwo}/> : null }
             {role == "admin" || role == "superadmin" ? <ButtonSection click={ClickSectionThree} nome="CRONOLOGIA TRASPORTI" section={onDisplaySectionThree}/> : null }
           </div>
@@ -55,6 +68,7 @@ export default function PAGEtrasportoVeicoli() {
         <div className="h-[1px] w-full bg-gradient-to-r from-brand to-brandDark" />
         <div className="flex flex-1 justify-start items-start w-full min-h-0">
           <SECTIONtrasportoVeicoli statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionOne}/>
+          <FotoVeicoliRitiratiTrasporto statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFour}/>
           {role == "admin" || role == "superadmin" ? <SECTIONveicoliTransito statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionTwo}/> : null }
           {role == "admin" || role == "superadmin" ? <SECTIONcronologiaTrasporti statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree}/> : null }
         </div>

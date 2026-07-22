@@ -58,21 +58,21 @@ import { toast } from "sonner";
         .order("created_at_veicolo_ritirato", {ascending: false})
 
       // filtro ricerca (targa)
-        if (dataSearchSubmit) {
-          // se vuoi match parziale (consigliato)
-          query = query.ilike("targa_veicolo_ritirato", `${dataSearchSubmit}%`);
-          // query = query.eq("targa_veicolo_ritirato", dataSearchSubmit.toUpperCase());
-    }
+      if (dataSearchSubmit) {
+        query = query.ilike("targa_veicolo_ritirato", `${dataSearchSubmit}%`);
+      }
 
-  const { data: praticheData, error } = await query;
+      const { data: praticheData, error } = await query;
 
       if (error) {
           console.error(error)
           toast.error("Errore nel caricamento delle pratiche auto")
           return
       }
+      
       setListPraticheAzienda(praticheData ?? [])
       })()
+
     }, [uuidAzienda, updateList, dataSearchSubmit])  
 
     useEffect(() => {

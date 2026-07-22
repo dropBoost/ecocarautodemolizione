@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { FaCheckSquare, FaSquare } from "react-icons/fa";
 import { useAdmin } from "@/app/admin/components/AdminContext";
 import TargaDesign from "@/app/componenti/targaDesign";
@@ -30,7 +29,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
         .select(
           `*,
 				aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv)
-				)`
+        `
         )
 				.eq("veicolo_ritirato", true)
 				.eq("veicolo_consegnato", false)
@@ -62,8 +61,9 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
     const fetchData = async () => {
       let query = supabase
         .from("dati_veicolo_ritirato")
-        .select(
-          `*, aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv))`
+        .select(`*, 
+          aziendaRitiro:azienda_ritiro_veicoli(ragione_sociale_arv)
+          `
         )
 				.eq("pratica_completata", false)
         .eq("veicolo_consegnato", true)
@@ -185,16 +185,10 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 	if (role == "admin" || role == "superadmin") {
 		return (
 			<>
-				<div className={`${onDisplay === true && veicoliInConsegna.length > 0 ? "" : "hidden"} w-full h-full`}>
+				<div className={`${onDisplay === true ? "" : "hidden"} w-full h-full`}>
 					<div className="flex xl:flex-row flex-col lg:gap-y-3 gap-y-1 w-full min-h-0">
-						{/* CRUSCOTTO */}
-						{/* <div className="flex flex-row w-full gap-4 min-h-0 p-5 rounded-2xl bg-neutral-950">
-							<div className="flex flex-row justify-between">
-								<h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
-									CRUSCOTTO
-								</h4>
-							</div>
-						</div> */}
+            {veicoliInConsegna.length > 0 ?
+            <>
 						{/* VEICOLI DA CONSEGNARE */}
 						<div className={`flex flex-col gap-4 ${veicoliConsegnati.length > 0 ? "xl:basis-6/12 basis-full" : "basis-full"}  p-1 h-full overflow-auto`}>
 							<div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
@@ -203,6 +197,7 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 										VEICOLI IN CONSEGNA
 									</h4>
 								</div>
+                
 								<div className="flex flex-col gap-2 overflow-auto">
 									{veicoliInConsegna?.map((c, i) => (
 										<div key={c.uuid_veicolo_ritirato} className="flex flex-row justify-between border hover:border-brand transition py-2 px-4 rounded-xl bg-white dark:bg-neutral-900">
@@ -219,12 +214,13 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 											</div>
 										</div>
 									))}
-								</div>
+								</div> 
 							</div>
 						</div>
+            </> : null}
 						{/* VEICOLI CONSEGNATI */}
 						{veicoliConsegnati.length > 0 ?
-						<div className={`flex flex-col gap-4 xl:basis-6/12 basis-full p-1 h-full overflow-auto`}>
+						<div className={`flex flex-col gap-4 ${veicoliInConsegna.length > 0 ? "xl:basis-6/12" : "basis-full"} basis-full p-1 h-full overflow-auto`}>
 							<div className="flex flex-col border border-brand p-5 rounded-2xl h-full gap-2">
 								<div className="flex flex-row justify-between items-start">
 									<h4 className="h-fit text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">
@@ -249,10 +245,6 @@ export default function SECTIONveicoliTransito({ onDisplay, setStatusAziende, st
 								</div>
 							</div>
 						</div> : null }
-						{/* INSERIMENTO AUTISTA
-						<div className="flex flex-col gap-4 w-full bg-neutral-950 p-5 rounded-2xl">
-							ciaoii
-						</div> */}
 					</div>
 				</div>
 			</>

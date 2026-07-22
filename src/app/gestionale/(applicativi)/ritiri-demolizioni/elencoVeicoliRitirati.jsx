@@ -14,17 +14,14 @@ export default function ElencoVeicoliRitirati({ onDisplay, statusAziende, setSta
   const uuidUtente = utente?.utente?.id
   const [aziendaRitiroVeicoli, setAziendaRitiroVeicoli] = useState([])
   const [datiVeicoloRitirato, setDatiVeicoloRitirato] = useState([])
-  // ricerca
   const [dataSearch, setDataSearch] = useState("")        // testo digitato
   const [dataSearchSubmit, setDataSearchSubmit] = useState("") // testo applicato
   const isAdmin = role === "admin" || role === "superadmin"
   const isTrasporter = role === "transporter"
   const isCompany = role === "company"
-  // paginazione
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
-  // calcolo indici per Supabase range (inclusivo)
   const { from, to } = useMemo(() => {
     const start = (page - 1) * pageSize
     return { from: start, to: start + pageSize - 1 }
@@ -32,7 +29,6 @@ export default function ElencoVeicoliRitirati({ onDisplay, statusAziende, setSta
 
   const escapeLike = (s) => s.replace(/([%_\\])/g, "\\$1")
 
-  // handlers ricerca
   function handleChangeSearchBar(e) {
     setDataSearch(e.target.value)
   }

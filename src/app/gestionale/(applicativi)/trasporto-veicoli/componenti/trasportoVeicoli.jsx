@@ -174,7 +174,7 @@ export default function SECTIONtrasportoVeicoli({ onDisplay, setStatusAziende, s
 
     fetchData();
   }, [role, uuidUtente, updateList, filterAzienda, dataSearchSubmit]);
-  console.log(veicoliDaRitirare)
+
   //CARICAMENTO VEICOLI RITIRATI
   useEffect(() => {
     if (!role) return;
