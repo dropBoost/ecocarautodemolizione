@@ -4,8 +4,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabaseClient"
-import { FaCar, FaCircle, FaDotCircle, FaUser } from "react-icons/fa";
-import { IoDocumentAttach } from "react-icons/io5";
+import { FaCircle, FaDotCircle } from "react-icons/fa";
 import { FaFilePdf } from "react-icons/fa6";
 import { BiCommentAdd } from "react-icons/bi";
 import Link from "next/link";
@@ -30,7 +29,9 @@ import { DataFormat } from "@/app/componenti-sito/dataFormat";
     const role = utente?.utente?.user_metadata?.ruolo
     const params = useParams();
     const uuidRitiroVeicolo = params?.uuidRitiroVeicolo;
-    const [praticaAuto, setPraticaAuto] = useState([])
+    const [praticaAuto, setPraticaAuto] = useState([])  
+    const [notePraticaAuto, setNotePraticaAuto] = useState([])  
+    const [datiDemolizione, setDatiDemolizione] = useState([])
     const [updateTracking, setUpdateTracking] = useState(false)
     const [sUpdateComponent,setSUpdateComponent] = useState(false)
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -70,6 +71,34 @@ import { DataFormat } from "@/app/componenti-sito/dataFormat";
         setPraticaAuto(praticheData ?? [])
         })()
     }, [uuidRitiroVeicolo, sUpdateComponent])  
+
+    // CARICAMENTO DEMOLIZIONI
+    useEffect(() => {
+    if (!uuidRitiroVeicolo) return;
+
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from("certificato_demolizione")
+        .select(`*,
+          datiVeicolo:dati_veicolo_ritirato(
+          targa_veicolo_ritirato)`)
+        .eq("uuid_veicolo_ritirato", uuidRitiroVeicolo)
+        .maybeSingle();
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error(error);
+        toast.error("Errore nel caricamento certificato di demolizione");
+        return;
+      }
+
+      setDatiDemolizione(data ? [data] : []);
+    })();
+
+      return () => { cancelled = true; };
+    }, [uuidRitiroVeicolo, sUpdateComponent]);
 
     const [formData, setFormData] = useState({
       note_pratica:"",
@@ -115,7 +144,11 @@ import { DataFormat } from "@/app/componenti-sito/dataFormat";
 
     }
 
+   
+    console.log(praticaAuto)
+    
   return (
+  <>
     <div className={`${praticaAuto[0] ? '' : 'hidden'} w-full h-full flex flex-1 flex-col gap-4 p-3`}>
       {/* AZIENDA RITIRO */}
       <div className="">
@@ -309,78 +342,91 @@ import { DataFormat } from "@/app/componenti-sito/dataFormat";
       <div className="">
         <h4 className="text-[0.6rem] font-bold text-dark dark:text-brand border border-brand px-3 py-2 w-fit rounded-xl">DOCUMENTI</h4>
       </div>
-      <div className="w-full">
+      <div className="w-full border rounded-xl p-4">
         <div id="mainImagecontainergridtwo" className="flex flex-row">
             {praticaAuto?.length ? praticaAuto.map((pa, index) => {
 
+              const isPdfDetentoreF = pa?.foto_documento_detentore_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfDetentoreR = pa?.foto_documento_detentore_r?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfVeicoloF = pa?.foto_documento_veicolo_ritirato_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfVeicoloR = pa?.foto_documento_veicolo_ritirato_r?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfComplementareF = pa?.foto_complementare_veicolo_ritirato_f?.slice(-3).toLowerCase() == "pdf" ? true : false
+              const isPdfComplementareR = pa?.foto_complementare_veicolo_ritirato_r?.slice(-3).toLowerCase() == "pdf" ? true : false
+
               return (
-                <div id="rowImageContainer" className={`flex flex-col items-start justify-center gap-4 w-full`} key={`${pa.uuid_veicolo_ritirato ?? index}`}>
-                  <div className="flex xl:flex-row flex-col gap-3 items-start border rounded-xl p-4 w-full">
-                    {pa.foto_documento_detentore_f || pa.foto_documento_detentore_r ? 
-                    <div className="flex items-center justify-center border border-brand h-full min-h-8 aspect-square rounded-lg">
-                      <FaUser className=""/>
-                    </div> : null}
-                    {pa?.foto_documento_detentore_f ? 
-                    <Link href={`${pa.foto_documento_detentore_f}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        DOCUMENTO DETENTORE FRONTE
-                      </Button>
-                    </Link> : null
-                    }
-                    {pa?.foto_documento_detentore_r ?
-                    <Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        DOCUMENTO DETENTORE RETRO
-                      </Button>
-                    </Link> : null
-                    }
-                  </div>
-                  <div className="flex xl:flex-row flex-col gap-3 items-start border rounded-xl p-4 w-full">
-                    {pa.foto_documento_veicolo_ritirato_f || pa.foto_documento_veicolo_ritirato_r ? 
-                    <div className="flex items-center justify-center border border-brand h-full min-h-8 aspect-square rounded-lg">
-                      <FaCar className=""/>
-                    </div> : null}
-                    {pa?.foto_documento_veicolo_ritirato_f ?
-                    <Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        VEICOLO FRONTE
-                      </Button>
-                    </Link> : null
-                    }  
-                    {pa?.foto_documento_veicolo_ritirato_r ?
-                    <Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        VEICOLO RETRO
-                      </Button>
-                    </Link> : null
-                    }
-                  </div>
-                  <div className="flex xl:flex-row flex-col gap-3 items-start border rounded-xl p-4 w-full">
-                    {pa.foto_complementare_veicolo_ritirato_f || pa.foto_complementare_veicolo_ritirato_r ? 
-                    <div className="flex items-center justify-center border border-brand h-full min-h-8 aspect-square rounded-lg">
-                      <IoDocumentAttach className=""/>
-                    </div> : null}
-                    {pa?.foto_complementare_veicolo_ritirato_f ?
-                    <Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        COMPLEMENTARE FRONTE
-                      </Button>
-                    </Link> : null
-                    }
-                    {pa?.foto_complementare_veicolo_ritirato_r ?
-                    <Link href={`${pa?.foto_complementare_veicolo_ritirato_r}?download`} target="_blank" className="">
-                      <Button variant="outline" className="hover:bg-brand">
-                        <FaFilePdf/>
-                        COMPLEMENTARE RETRO
-                      </Button>
-                    </Link> : null
-                    }
-                  </div>
+                <div id="rowImageContainer" className={`flex flex-wrap w-full`} key={`${pa.uuid_veicolo_ritirato ?? index}`}>
+									{pa?.foto_documento_detentore_f ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                        {!isPdfDetentoreF ? <Image src={pa.foto_documento_detentore_f} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager" alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
+											</div>
+												<Link href={`${pa.foto_documento_detentore_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													DETENTORE FRONTE
+												</Link>
+										</div>
+									</div> : null
+									}
+									{pa?.foto_documento_detentore_r ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                      {!isPdfDetentoreR ? <Image src={pa.foto_documento_detentore_r} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager"  alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
+											</div>
+												<Link href={`${pa.foto_documento_detentore_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													DETENTORE RETRO
+												</Link>
+										</div>
+									</div> : null
+									}
+									{pa?.foto_documento_veicolo_ritirato_f ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                      {!isPdfVeicoloF ? <Image src={pa.foto_documento_veicolo_ritirato_f} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager" alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
+											</div>
+												<Link href={`${pa.foto_documento_veicolo_ritirato_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													VEICOLO FRONTE
+												</Link>
+										</div>
+									</div> : null
+									}  
+									{pa?.foto_documento_veicolo_ritirato_r ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                      {!isPdfVeicoloR ? <Image src={pa.foto_documento_veicolo_ritirato_r} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager" alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}  
+											</div>
+												<Link href={`${pa.foto_documento_veicolo_ritirato_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													VEICOLO RETRO
+												</Link>
+										</div>
+									</div> : null
+									}
+									{pa?.foto_complementare_veicolo_ritirato_f ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                      {!isPdfComplementareF ? <Image src={pa.foto_complementare_veicolo_ritirato_f} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager" alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
+											</div>
+												<Link href={`${pa.foto_complementare_veicolo_ritirato_f}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													COMPLEMENTARE FRONTE
+												</Link>
+										</div>
+									</div> : null
+									}
+									{pa?.foto_complementare_veicolo_ritirato_r ? 
+									<div className="xl:basis-2/12 basis-6/12 p-1 flex flex-row items-start h-fit gap-2 text-sm">
+										<div className="flex flex-col gap-1 w-full">
+											<div className="relative w-full h-[200px] overflow-hidden rounded">
+                      {!isPdfComplementareR ? <Image src={pa.foto_complementare_veicolo_ritirato_r} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="eager" alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/> : <Image src={"/pdf_placeholder.webp"} fill alt={`${pa.uuid_veicolo_ritirato}`} className="object-cover object-center rounded"/>}
+											</div>
+												<Link href={`${pa?.foto_complementare_veicolo_ritirato_r}?download`} target="_blank" className="flex flex-row items-center justify-center uppercase font-bold bg-brand py-2 px-1 rounded-b-lg">
+													COMPLEMENTARE RETRO
+												</Link>
+										</div>
+									</div> : null
+									}
                 </div>
               )
             }) : (
@@ -521,6 +567,7 @@ import { DataFormat } from "@/app/componenti-sito/dataFormat";
         <ReadTracking uuidRitiroVeicolo={uuidRitiroVeicolo} updateTracking={updateTracking}/>
       </div>
     </div>
+  </>
   )
 }
 

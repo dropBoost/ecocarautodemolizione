@@ -60,7 +60,7 @@ export default function PAGEtrasportoVeicoli() {
           <ButtonMenu click={ClickMenu} nome="MENU" section={onDisplaySectionOne} open={open} icon={<TiThMenu/>} iconTwo={<GrFormClose />}/>
           <div className={`${!open ? "hidden" : ""} dark:bg-neutral-950 bg-neutral-200 transition-all p-3 rounded-lg flex lg:flex-row flex-wrap w-full gap-3`}>
             <ButtonSection click={ClickSectionOne} nome="TRASPORTO VEICOLI" section={onDisplaySectionOne}/>
-            <ButtonSection click={ClickSectionFour} nome="FOTO VEICOLI" section={onDisplaySectionFour}/>
+            {/* <ButtonSection click={ClickSectionFour} nome="FOTO VEICOLI" section={onDisplaySectionFour}/> */}
             {role == "admin" || role == "superadmin" ? <ButtonSection click={ClickSectionTwo} nome="VEICOLI IN TRANSITO" section={onDisplaySectionTwo}/> : null }
             {role == "admin" || role == "superadmin" ? <ButtonSection click={ClickSectionThree} nome="CRONOLOGIA TRASPORTI" section={onDisplaySectionThree}/> : null }
           </div>
@@ -68,7 +68,7 @@ export default function PAGEtrasportoVeicoli() {
         <div className="h-[1px] w-full bg-gradient-to-r from-brand to-brandDark" />
         <div className="flex flex-1 justify-start items-start w-full min-h-0">
           <SECTIONtrasportoVeicoli statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionOne}/>
-          <FotoVeicoliRitiratiTrasporto statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFour}/>
+          {/* <FotoVeicoliRitiratiTrasporto statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFour}/> */}
           {role == "admin" || role == "superadmin" ? <SECTIONveicoliTransito statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionTwo}/> : null }
           {role == "admin" || role == "superadmin" ? <SECTIONcronologiaTrasporti statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree}/> : null }
         </div>

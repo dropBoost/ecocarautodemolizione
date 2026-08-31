@@ -99,7 +99,7 @@ export default function PAGEritiriDemolizioni() {
         <div className={`${!open ? "hidden" : ""} dark:bg-neutral-950 bg-neutral-200 transition-all p-3 rounded-lg flex lg:flex-row flex-wrap w-full gap-3`}>
           {isAdmin || isCompany ? <ButtonSection click={ClickSectionOne} nome="INSERIMENTO RITIRO VEICOLO" section={onDisplaySectionOne}/> : null}
           {isAdmin || isCompany ? <ButtonSection click={ClickSectionTwo} nome="ELENCO RITIRI" section={onDisplaySectionTwo}/> : null}
-          {isAdmin || isCompany ? <ButtonSection click={ClickSectionSix} nome="FOTO VEICOLI" section={onDisplaySectionSix}/> : null}
+          {/* {isAdmin || isCompany ? <ButtonSection click={ClickSectionSix} nome="FOTO VEICOLI" section={onDisplaySectionSix}/> : null} */}
           {isAdmin ? <ButtonSection click={ClickSectionThree} nome="ATTESA DI RITIRO" section={onDisplaySectionThree}/> : null}
           {isAdmin ? <ButtonSection click={ClickSectionFour} nome="MODIFICA PRATICA" section={onDisplaySectionFour}/> : null}
           {isAdmin ? <ButtonSection click={ClickSectionFive} nome="CERCA TARGA" section={onDisplaySectionFive}/> : null}
@@ -109,7 +109,7 @@ export default function PAGEritiriDemolizioni() {
       <div className="flex flex-1 justify-start items-start w-full min-h-0">
         {isAdmin || isCompany ? <InserimentoVeicoliRitirati statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionOne}/> : null}
         {isAdmin || isCompany ? <ElencoVeicoliRitirati statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionTwo}/> : null}
-        {isAdmin || isCompany ? <FotoVeicoliRitirati statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionSix}/> : null}
+        {/* {isAdmin || isCompany ? <FotoVeicoliRitirati statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionSix}/> : null} */}
         {isAdmin ? <PAGEveicoliAttesaRitiro statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionThree}/> : null }
         {isAdmin ? <ModificaPratica statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFour}/> : null }
         {isAdmin ? <CercaTarga statusAziende={statusAziende} setStatusAziende={setStatusAziende} onDisplay={onDisplaySectionFive}/> : null }

@@ -23,7 +23,7 @@ export default function LayoutGestionale({ children }) {
       }
 
       if (!data.session) {
-        router.push('admin/login')
+        router.push('/admin/login')
       } else {
         setUtente(data.session.user)
         setChecking(false)
