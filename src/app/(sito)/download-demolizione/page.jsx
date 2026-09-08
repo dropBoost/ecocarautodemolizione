@@ -67,10 +67,10 @@ export default function Download () {
                   <div className="flex justify-end items-center mt-2">
                     <Link href={`/download-demolizione/${veicoloRitirato[0]?.uuid_veicolo_ritirato}`}>
                         <button className="flex flex-row items-center justify-center gap-2 border border-companyPrimary hover:bg-companyPrimary text-neutral-800 hover:text-neutral-200 px-5 py-1 text-xs rounded-xl font-semibold transition disabled:opacity-60 lg:w-fit w-full h-8">
-                            <FaFileDownload/> SCARICA
+                            <FaFileDownload/> PROCEDI
                         </button>
                     </Link>
-                  </div> : <span className="text-xs text-end text-xs text-neutral-600">{statoRicerca}</span> }
+                  </div> : <span className="text-xs text-end text-neutral-600">{statoRicerca}</span> }
               </form>
             </div>
           </div>
